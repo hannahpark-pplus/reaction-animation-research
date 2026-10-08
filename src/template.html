@@ -3,575 +3,276 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Reaction Animation Research — Motion Spec</title>
+<title>Reaction Selection Animations — Research</title>
 <style>
 :root {
   color-scheme: light;
-  --surface-0: #f4f3f0;
-  --surface-1: #fcfcfb;
-  --surface-2: #efeeea;
-  --border: #dcdad4;
-  --text-primary: #0b0b0b;
-  --text-secondary: #52514e;
-  --text-muted: #7a7974;
-  --series-1: #2a78d6;
-  --series-1-soft: #cde2fb;
-  --ref: #9a9993;
-  --accent: #0b0b0b;
-  --hi: #e34948;
-  --ok: #0ca30c; --warn: #b07800; --low: #d03b3b;
+  --surface-0: #f4f3f0; --surface-1: #fcfcfb; --surface-2: #efeeea; --border: #dcdad4;
+  --text-primary: #0b0b0b; --text-secondary: #52514e; --text-muted: #7a7974;
+  --series-1: #2a78d6; --series-1-soft: #cde2fb; --hold: #c9c7c0; --hi: #e34948; --accent: #0b0b0b;
   --mono: ui-monospace, SFMono-Regular, Menlo, monospace;
+}
+:root[data-theme="dark"] {
+  color-scheme: dark;
+  --surface-0: #111110; --surface-1: #1a1a19; --surface-2: #242422; --border: #383835;
+  --text-primary: #fff; --text-secondary: #c3c2b7; --text-muted: #8f8e86;
+  --series-1: #3987e5; --series-1-soft: #184f95; --hold: #4a4945; --hi: #e66767; --accent: #fff;
 }
 @media (prefers-color-scheme: dark) {
   :root:where(:not([data-theme="light"])) {
     color-scheme: dark;
     --surface-0: #111110; --surface-1: #1a1a19; --surface-2: #242422; --border: #383835;
-    --text-primary: #ffffff; --text-secondary: #c3c2b7; --text-muted: #8f8e86;
-    --series-1: #3987e5; --series-1-soft: #184f95; --ref: #77766f; --accent: #fff; --hi: #e66767;
-    --warn: #c98500;
+    --text-primary: #fff; --text-secondary: #c3c2b7; --text-muted: #8f8e86;
+    --series-1: #3987e5; --series-1-soft: #184f95; --hold: #4a4945; --hi: #e66767; --accent: #fff;
   }
-}
-:root[data-theme="dark"] {
-  color-scheme: dark;
-  --surface-0: #111110; --surface-1: #1a1a19; --surface-2: #242422; --border: #383835;
-  --text-primary: #ffffff; --text-secondary: #c3c2b7; --text-muted: #8f8e86;
-  --series-1: #3987e5; --series-1-soft: #184f95; --ref: #77766f; --accent: #fff; --hi: #e66767;
-  --warn: #c98500;
 }
 * { box-sizing: border-box; }
 html, body { margin: 0; background: var(--surface-0); color: var(--text-primary);
-  font: 14px/1.45 -apple-system, BlinkMacSystemFont, "Inter", "Segoe UI", sans-serif; }
+  font: 15px/1.5 -apple-system, BlinkMacSystemFont, "Inter", "Segoe UI", sans-serif; }
 button { font: inherit; color: inherit; }
-header { display: flex; align-items: center; gap: 16px; padding: 14px 24px; border-bottom: 1px solid var(--border);
-  background: var(--surface-1); position: sticky; top: 0; z-index: 10; }
+header { display: flex; align-items: center; gap: 16px; padding: 14px 28px; border-bottom: 1px solid var(--border);
+  background: var(--surface-1); position: sticky; top: 0; z-index: 10; flex-wrap: wrap; }
 header h1 { font-size: 16px; margin: 0; font-weight: 650; }
-header .sub { color: var(--text-muted); font-size: 12px; }
 nav { display: flex; gap: 4px; flex-wrap: wrap; margin-left: auto; }
-nav button, .chip { border: 1px solid var(--border); background: var(--surface-1); padding: 5px 11px; border-radius: 999px; cursor: pointer; font-size: 13px; }
+nav button { border: 1px solid var(--border); background: var(--surface-1); padding: 5px 12px; border-radius: 999px; cursor: pointer; font-size: 13px; }
 nav button[aria-pressed="true"] { background: var(--accent); color: var(--surface-1); border-color: var(--accent); }
 #themeBtn { border: 1px solid var(--border); background: none; border-radius: 8px; padding: 5px 9px; cursor: pointer; }
-main { padding: 20px 24px 60px; max-width: 1500px; margin: 0 auto; }
+main { padding: 28px 28px 80px; max-width: 1240px; margin: 0 auto; }
+.card { background: var(--surface-1); border: 1px solid var(--border); border-radius: 14px; padding: 20px; }
+h2 { font-size: 26px; margin: 0 0 6px; letter-spacing: -.01em; }
+h3 { font-size: 16px; margin: 0 0 12px; }
+.lede { font-size: 16px; color: var(--text-secondary); max-width: 70ch; margin: 0 0 22px; }
 .muted { color: var(--text-muted); }
-.sec { color: var(--text-secondary); }
 .mono { font-family: var(--mono); font-variant-numeric: tabular-nums; }
-.card { background: var(--surface-1); border: 1px solid var(--border); border-radius: 12px; padding: 16px; }
-h2 { font-size: 20px; margin: 0 0 4px; }
-h3 { font-size: 15px; margin: 0 0 8px; }
-h4 { font-size: 12px; text-transform: uppercase; letter-spacing: .06em; color: var(--text-muted); margin: 14px 0 6px; font-weight: 600; }
 
-/* App view */
-.app-grid { display: grid; grid-template-columns: auto minmax(0, 1fr); gap: 20px; align-items: start; }
-@media (max-width: 980px) { .app-grid { grid-template-columns: 1fr; } }
+/* overview */
+.takeaways { display: grid; grid-template-columns: repeat(auto-fill, minmax(min(220px, 100%), 1fr)); gap: 12px; margin-bottom: 18px; }
+.takeaways .card { padding: 16px; }
+.takeaways b { display: block; font-size: 24px; letter-spacing: -.01em; margin-bottom: 4px; font-variant-numeric: tabular-nums; }
+.takeaways p { margin: 0; font-size: 13.5px; color: var(--text-secondary); }
+.ov-list { display: grid; gap: 8px; }
+.ov-row { display: grid; grid-template-columns: 120px 1fr 240px; gap: 16px; align-items: center; padding: 10px 12px; border-radius: 10px; cursor: pointer; }
+.ov-row:hover { background: var(--surface-2); }
+.ov-row .name { font-weight: 650; }
+.ov-row .style { color: var(--text-secondary); font-size: 14px; }
+.ov-bar { display: flex; align-items: center; gap: 8px; }
+.ov-bar i { display: block; height: 14px; border-radius: 4px; background: var(--series-1); }
+.ov-bar span { font-family: var(--mono); font-size: 13px; white-space: nowrap; }
+@media (max-width: 760px) { .ov-row { grid-template-columns: 1fr; gap: 4px; } }
+.scale-note { font-size: 12px; color: var(--text-muted); margin-top: 10px; }
+
+/* app view */
+.app-head { display: flex; gap: 28px; align-items: flex-end; flex-wrap: wrap; margin-bottom: 20px; }
+.app-head .big { font-size: 44px; font-weight: 700; letter-spacing: -.02em; line-height: 1; font-variant-numeric: tabular-nums; }
+.app-head .lbl { font-size: 12px; color: var(--text-muted); text-transform: uppercase; letter-spacing: .06em; margin-top: 6px; }
+.app-head .style-big { font-size: 22px; font-weight: 650; line-height: 1.2; }
+.app-grid { display: grid; grid-template-columns: auto minmax(0, 1fr); gap: 24px; align-items: start; }
+@media (max-width: 900px) { .app-grid { grid-template-columns: 1fr; } }
 .player { position: sticky; top: 80px; }
-.phone { background: #000; border-radius: 28px; padding: 8px; width: fit-content; margin: 0 auto; }
-.phone video { height: calc(100vh - 250px); min-height: 360px; max-width: 100%; display: block; border-radius: 22px; aspect-ratio: 1290/2796; background:#000; }
-.controls { display: flex; flex-wrap: wrap; gap: 6px; align-items: center; margin-top: 10px; }
-.controls button { border: 1px solid var(--border); background: var(--surface-1); border-radius: 8px; padding: 4px 9px; cursor: pointer; }
-.controls button[aria-pressed="true"] { background: var(--accent); color: var(--surface-1); }
-.readout { font-family: var(--mono); font-size: 13px; margin-top: 8px; display: flex; justify-content: space-between; }
-.kbd { font-size: 11px; color: var(--text-muted); margin-top: 6px; }
+.phone { background: #000; border-radius: 26px; padding: 7px; width: fit-content; }
+.phone video { height: min(560px, calc(100vh - 230px)); display: block; border-radius: 20px; aspect-ratio: 1290/2796; background: #000; }
+.zoom { position: relative; overflow: hidden; border-radius: 16px; background: #000; width: 400px; max-width: 100%; }
+.zoom video { position: absolute; max-width: none; }
+.ctrl { display: flex; gap: 6px; margin-top: 10px; flex-wrap: wrap; align-items: center; }
+.ctrl button { border: 1px solid var(--border); background: var(--surface-1); border-radius: 8px; padding: 4px 10px; cursor: pointer; font-size: 13px; }
+.ctrl button[aria-pressed="true"] { background: var(--accent); color: var(--surface-1); border-color: var(--accent); }
+.ctrl .ms { font-family: var(--mono); font-size: 13px; margin-left: auto; }
+.cap { font-size: 12px; color: var(--text-muted); margin-top: 6px; max-width: 280px; }
 
-.timeline { position: relative; user-select: none; }
-.tl-svg { width: 100%; display: block; overflow: visible; cursor: pointer; }
-.tl-svg text { font-size: 11px; fill: var(--text-secondary); }
-.tl-svg .grid { stroke: var(--border); stroke-width: 1; }
-.tl-svg .bar { fill: var(--series-1); rx: 4; }
-.tl-svg .bar.dim { fill: var(--series-1-soft); }
-.tl-svg .marker { stroke: var(--hi); stroke-width: 2; }
-.tl-svg .playhead { stroke: var(--text-primary); stroke-width: 1.5; }
-.tl-svg .row:hover .bar { filter: brightness(1.15); }
-.tl-svg .lbl { fill: var(--text-primary); font-size: 12px; }
+.facts { display: grid; gap: 10px; margin-bottom: 16px; }
+.fact { display: grid; grid-template-columns: 150px 1fr; gap: 12px; font-size: 14px; }
+.fact b { color: var(--text-muted); font-weight: 600; font-size: 13px; }
 
-.summary { font-size: 15px; color: var(--text-secondary); max-width: 80ch; margin: 6px 0 14px; }
-.kv { display: flex; gap: 18px; flex-wrap: wrap; margin-bottom: 14px; }
-.kv div b { display: block; font-size: 22px; font-weight: 650; font-variant-numeric: tabular-nums; }
-.kv div span { font-size: 12px; color: var(--text-muted); }
+.tl svg { width: 100%; display: block; overflow: visible; }
+.tl text { font-size: 11px; fill: var(--text-muted); }
+.tl .grid { stroke: var(--border); }
+.tl .bar { fill: var(--series-1); }
+.tl .bar.hold { fill: var(--hold); }
+.tl .inst { fill: var(--series-1); }
+.tl .num { font-size: 11px; fill: #fff; font-weight: 700; }
+.tl .ph { stroke: var(--hi); stroke-width: 2; }
 
-.anims { display: grid; grid-template-columns: repeat(auto-fill, minmax(min(420px, 100%), 1fr)); gap: 14px; margin-top: 14px; }
-.anim h3 { display: flex; justify-content: space-between; gap: 8px; align-items: baseline; }
-.badge { font-size: 11px; padding: 1px 8px; border-radius: 999px; border: 1px solid currentColor; white-space: nowrap; font-weight: 600; }
-.badge.high { color: var(--ok); } .badge.medium { color: var(--warn); } .badge.low { color: var(--low); }
-table { border-collapse: collapse; width: 100%; font-size: 13px; }
-th, td { text-align: left; padding: 5px 8px; border-bottom: 1px solid var(--border); vertical-align: top; }
-th { color: var(--text-muted); font-weight: 600; font-size: 12px; }
-td.num, th.num { text-align: right; font-family: var(--mono); font-variant-numeric: tabular-nums; }
-.stats { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; margin: 6px 0 4px; }
-.stats div { background: var(--surface-2); border-radius: 8px; padding: 6px 8px; }
-.stats b { display: block; font-family: var(--mono); font-size: 15px; }
-.stats span { font-size: 11px; color: var(--text-muted); }
-.easing { white-space: pre-line; font-family: var(--mono); font-size: 12px; background: var(--surface-2); border-radius: 6px; padding: 6px 8px; margin-top: 6px; word-break: break-all; }
-.row-btns { display: flex; gap: 6px; margin-top: 10px; flex-wrap: wrap; }
-.row-btns button { border: 1px solid var(--border); background: var(--surface-1); border-radius: 8px; padding: 4px 10px; cursor: pointer; font-size: 12px; }
-.row-btns button:hover { border-color: var(--text-secondary); }
-.viz-pair { display: grid; grid-template-columns: 1fr 140px; gap: 10px; margin-top: 10px; align-items: stretch; }
-.chart svg { width: 100%; display: block; overflow: visible; }
-.chart svg text { font-size: 10px; fill: var(--text-muted); }
-.chart .axis { stroke: var(--border); }
-.chart .meas { fill: none; stroke: var(--series-1); stroke-width: 2; }
-.chart .dot { fill: var(--series-1); stroke: var(--surface-1); stroke-width: 2; }
-.chart .fit { fill: none; stroke: var(--ref); stroke-width: 1.5; stroke-dasharray: 4 3; }
-.legend { display: flex; gap: 12px; font-size: 11px; color: var(--text-secondary); margin-top: 4px; }
-.legend i { display: inline-block; width: 14px; height: 0; border-top: 2px solid var(--series-1); vertical-align: middle; margin-right: 4px; }
-.legend i.fit { border-top: 1.5px dashed var(--ref); }
-.replica { background: var(--surface-2); border-radius: 10px; position: relative; overflow: hidden; min-height: 140px; display:flex; align-items:center; justify-content:center; }
-.replica .shape { width: 44px; height: 44px; border-radius: 50%; background: var(--series-1); display:flex; align-items:center; justify-content:center; color:#fff; font-size: 20px; }
-.replica .cap { position: absolute; bottom: 4px; left: 6px; right: 6px; font-size: 10px; color: var(--text-muted); text-align: center; }
-.notes { font-size: 12.5px; color: var(--text-secondary); margin-top: 8px; }
-.gallery { display: flex; gap: 12px; overflow-x: auto; padding-bottom: 6px; }
-.gallery figure { margin: 0; flex: 0 0 auto; max-width: 260px; cursor: pointer; }
-.gallery img { max-height: 260px; max-width: 260px; border-radius: 8px; border: 1px solid var(--border); display: block; }
-.gallery figcaption { font-size: 12px; color: var(--text-secondary); margin-top: 4px; }
-ul.tight { margin: 4px 0; padding-left: 18px; } ul.tight li { margin: 3px 0; }
-.two { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin-top: 14px; }
-@media (max-width: 1200px) { .two { grid-template-columns: 1fr; } }
-.tip { position: fixed; pointer-events: none; background: var(--surface-1); border: 1px solid var(--border); border-radius: 8px; padding: 6px 9px; font-size: 12px; box-shadow: 0 4px 16px rgba(0,0,0,.15); z-index: 50; display: none; max-width: 280px; }
-.tip b { font-family: var(--mono); }
-.toast { position: fixed; bottom: 18px; left: 50%; transform: translateX(-50%); background: var(--accent); color: var(--surface-1); padding: 8px 14px; border-radius: 8px; font-size: 13px; opacity: 0; transition: opacity .2s; pointer-events: none; }
-.toast.on { opacity: 1; }
-.ov-table td, .ov-table th { white-space: nowrap; }
-.ov-table tr.click { cursor: pointer; } .ov-table tr.click:hover td { background: var(--surface-2); }
-.method { font-size: 13px; color: var(--text-secondary); }
-.method li { margin: 4px 0; }
+.steps { list-style: none; margin: 16px 0 0; padding: 0; display: grid; gap: 10px; }
+.step { display: grid; grid-template-columns: 30px 1fr; gap: 12px; padding: 12px 14px; border: 1px solid var(--border); border-radius: 12px; background: var(--surface-1); }
+.step .n { width: 26px; height: 26px; border-radius: 50%; background: var(--series-1); color: #fff; font-weight: 700; font-size: 13px; display: flex; align-items: center; justify-content: center; }
+.step .top { display: flex; gap: 10px; align-items: baseline; flex-wrap: wrap; }
+.step .title { font-weight: 650; }
+.step .time { font-family: var(--mono); font-size: 13px; color: var(--text-secondary); }
+.step .what { color: var(--text-secondary); margin-top: 2px; }
+.ease { display: inline-flex; gap: 8px; align-items: center; margin-top: 8px; font-size: 12.5px; padding: 3px 9px 3px 4px; border-radius: 999px; background: var(--surface-2); }
+.ease svg { width: 22px; height: 22px; }
+.ease .css { font-family: var(--mono); color: var(--text-muted); font-size: 11.5px; }
+.note { margin-top: 16px; font-size: 14px; color: var(--text-secondary); background: var(--surface-2); border-radius: 10px; padding: 12px 14px; }
+.foot { margin-top: 30px; font-size: 13px; color: var(--text-muted); max-width: 80ch; }
+.tip { position: fixed; pointer-events: none; background: var(--surface-1); border: 1px solid var(--border); border-radius: 8px; padding: 6px 9px; font-size: 12px; box-shadow: 0 4px 16px rgba(0,0,0,.15); z-index: 50; display: none; max-width: 260px; }
 </style>
 </head>
 <body>
 <header>
-  <div>
-    <h1>Reaction Animation Research — Motion Spec</h1>
-    <div class="sub">Measured frame-by-frame from 60 fps iPhone screen recordings · units: pt (1 pt = 3 px) and ms</div>
-  </div>
+  <h1>Reaction selection animations</h1>
   <nav id="nav"></nav>
   <button id="themeBtn" title="Toggle light/dark">◐</button>
 </header>
 <main id="main"></main>
 <div class="tip" id="tip"></div>
-<div class="toast" id="toast"></div>
-
 <script>
-const DATA = /*DATA*/[];
-const FPS = 60;
-
-const $ = (s, el = document) => el.querySelector(s);
+const R = /*RECIPES*/{};
+const APPS = /*APPS*/[];
+const $ = s => document.querySelector(s);
 const h = (tag, attrs = {}, ...kids) => {
   const el = document.createElement(tag);
   for (const [k, v] of Object.entries(attrs)) {
     if (k === "class") el.className = v; else if (k === "html") el.innerHTML = v;
     else if (k.startsWith("on")) el.addEventListener(k.slice(2), v); else if (v != null) el.setAttribute(k, v);
   }
-  for (const kid of kids.flat()) if (kid != null) el.append(kid.nodeType ? kid : document.createTextNode(kid));
+  for (const c of kids.flat()) if (c != null) el.append(c.nodeType ? c : document.createTextNode(c));
   return el;
 };
 const S = (tag, attrs = {}) => { const el = document.createElementNS("http://www.w3.org/2000/svg", tag); for (const [k, v] of Object.entries(attrs)) el.setAttribute(k, v); return el; };
-const fmt = (v, d = 0) => v == null || v === "" ? "—" : (typeof v === "number" ? (Number.isInteger(v) && d === 0 ? String(v) : v.toFixed(d).replace(/\.0+$/, "").replace(/(\.\d*?)0+$/, "$1")) : String(v));
-const esc = s => String(s ?? "").replace(/[&<>"]/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]));
 const tip = $("#tip");
-function showTip(e, html) { tip.innerHTML = html; tip.style.display = "block"; const x = Math.min(e.clientX + 14, innerWidth - tip.offsetWidth - 8); tip.style.left = x + "px"; tip.style.top = (e.clientY + 14) + "px"; }
-function hideTip() { tip.style.display = "none"; }
-function toast(msg) { const t = $("#toast"); t.textContent = msg; t.classList.add("on"); setTimeout(() => t.classList.remove("on"), 1400); }
+const showTip = (e, html) => { tip.innerHTML = html; tip.style.display = "block"; tip.style.left = Math.min(e.clientX + 14, innerWidth - tip.offsetWidth - 8) + "px"; tip.style.top = e.clientY + 14 + "px"; };
+const hideTip = () => tip.style.display = "none";
+$("#themeBtn").onclick = () => { const r = document.documentElement; const dark = r.dataset.theme ? r.dataset.theme === "dark" : matchMedia("(prefers-color-scheme: dark)").matches; r.dataset.theme = dark ? "light" : "dark"; };
 
-// theme
-$("#themeBtn").onclick = () => {
-  const r = document.documentElement; const dark = r.dataset.theme ? r.dataset.theme === "dark" : matchMedia("(prefers-color-scheme: dark)").matches;
-  r.dataset.theme = dark ? "light" : "dark";
-};
-
-// derived metrics
-function animsOf(d) { return (d.animations || []).filter(a => a.start_s != null); }
-function triggerT(d) {
-  const c = d.representative_cycle || {}; const ints = (d.interactions || []).filter(i => i.t >= (c.start ?? -1) && i.t <= (c.end ?? 1e9));
-  return ints.length ? ints[0].t : (c.start ?? 0);
-}
-function cycleMetrics(d) {
-  const c = d.representative_cycle || {};
-  const isLoop = a => a.loop_period_ms || /idle|loop/i.test(a.id + " " + a.name);
-  const isUndo = a => /\b(unlike|un-like|remove|unreact)/i.test(a.id + " " + a.name);
-  const as = animsOf(d).filter(a => a.start_s >= (c.start ?? -1) - 0.05 && a.start_s <= (c.end ?? 1e9) + 0.05 && !isLoop(a) && !isUndo(a));
-  if (!as.length) return {};
-  const t0 = triggerT(d);
-  const first = Math.min(...as.map(a => a.start_s)), last = Math.max(...as.map(a => a.end_s ?? a.start_s + (a.duration_ms || 0) / 1000));
-  const peaks = (d.animations || []).flatMap(a => (a.properties || []).filter(p => /scale/i.test(p.prop) && typeof p.peak === "number" && typeof p.to === "number" && p.to)
-    .map(p => (p.peak / p.to - 1) * 100));
-  return { t0, first, last, total: Math.round((last - first) * 1000), count: (d.animations || []).length,
-    longest: Math.max(...(d.animations || []).filter(a => !isLoop(a)).map(a => a.duration_ms || 0)), overshoot: peaks.length ? Math.max(...peaks) : null };
-}
-
-// ---------- NAV ----------
 let current = location.hash.slice(1) || "overview";
 function renderNav() {
   const nav = $("#nav"); nav.innerHTML = "";
-  const items = [["overview", "Overview"], ...DATA.map(d => [d.id, d.app])];
-  for (const [id, label] of items) nav.append(h("button", { "aria-pressed": String(id === current), onclick: () => go(id) }, label));
+  for (const [id, label] of [["overview", "Overview"], ...APPS.map(a => [a.id, a.app])])
+    nav.append(h("button", { "aria-pressed": String(id === current), onclick: () => go(id) }, label));
 }
-function go(id) { current = id; location.hash = id; renderNav(); render(); scrollTo(0, 0); }
-addEventListener("hashchange", () => { const id = location.hash.slice(1) || "overview"; if (id !== current) { current = id; renderNav(); render(); } });
-
+function go(id) { location.hash = id; }
+addEventListener("hashchange", () => { current = location.hash.slice(1) || "overview"; renderNav(); render(); scrollTo(0, 0); });
 function render() {
   const main = $("#main"); main.innerHTML = "";
-  if (current === "overview" || !DATA.find(d => d.id === current)) renderOverview(main); else renderApp(main, DATA.find(d => d.id === current));
+  const app = APPS.find(a => a.id === current);
+  app ? renderApp(main, app) : renderOverview(main);
 }
 
-// ---------- OVERVIEW ----------
-function renderOverview(main) {
-  main.append(h("h2", {}, "Overview"));
-  main.append(h("p", { class: "summary" }, `${DATA.length} apps · ${DATA.reduce((s, d) => s + (d.animations || []).length, 0)} measured animation phases. Click an app to scrub its recording frame-by-frame next to the spec. "Delay" on each phase is measured from the touch that triggers that phase (e.g. the selection tap for a fly-out), not from the start of the cycle.`));
-
-  const rows = DATA.map(d => ({ d, m: cycleMetrics(d) }));
-  // bar chart: trigger → settled
-  const card = h("div", { class: "card" }, h("h3", {}, "Motion span of one full reaction cycle (ms)"), h("p", { class: "muted", style: "margin:-4px 0 8px;font-size:12px" }, "First animated phase starting → last phase settling, in each app's representative cycle (open picker → select → settle where the app has a picker). Idle emoji loops and unlike/remove phases excluded."));
-  card.append(barChart(rows.filter(r => r.m.total).map(r => ({ label: r.d.app, value: r.m.total, id: r.d.id, sub: r.d.trigger }))));
-  main.append(card);
-
-  const t = h("table", { class: "ov-table" });
-  t.append(h("thead", {}, h("tr", {}, ...["App", "Trigger", "Phases", "Motion span (cycle)", "Longest phase", "Max scale peak vs. rest"].map((x, i) => h("th", { class: i > 1 ? "num" : "" }, x)))));
-  const tb = h("tbody");
-  for (const { d, m } of rows) tb.append(h("tr", { class: "click", onclick: () => go(d.id) },
-    h("td", {}, h("b", {}, d.app)), h("td", { class: "sec", style: "white-space:normal;max-width:360px" }, d.trigger || "—"),
-    h("td", { class: "num" }, fmt(m.count)),
-    h("td", { class: "num" }, m.total ? m.total + " ms" : "—"), h("td", { class: "num" }, m.longest ? m.longest + " ms" : "—"),
-    h("td", { class: "num" }, m.overshoot != null ? "+" + m.overshoot.toFixed(0) + "%" : "—")));
-  t.append(tb);
-  main.append(h("div", { class: "card", style: "margin-top:14px;overflow-x:auto" }, h("h3", { style: "display:flex;justify-content:space-between" }, "Comparison table", h("span", {}, h("button", { class: "chip", onclick: exportCSV }, "Download all phases (CSV)"), " ", h("button", { class: "chip", onclick: exportJSON }, "Download JSON"))), t));
-
-  main.append(h("div", { class: "card method", style: "margin-top:14px" }, h("h3", {}, "How these numbers were measured"), h("ul", { class: "tight", html: `
-    <li>Each recording was decoded at its native ~60 fps (one frame ≈ 16.7 ms). Timings are frame-accurate to ±1 frame (±17 ms).</li>
-    <li>Sizes/positions are converted from the 1290×2796 px recording to iOS points (÷3), so they drop straight into a 430×932 pt artboard.</li>
-    <li>Motion was located with frame differencing; element bounds/centroids were tracked per frame with pixel masks, then normalized to fit an easing curve.</li>
-    <li>Easing values are <i>fits</i> to the measured samples (dashed line vs. measured line in each card) — treat them as a starting point to tune by eye.</li>
-    <li>Confidence badges: <b>high</b> = directly measured; <b>medium</b> = measured but partly occluded or few frames; <b>low</b> = inferred.</li>`})));
-}
-function barChart(items) {
-  const W = 900, rowH = 30, L = 110, R = 70, H = items.length * rowH + 24;
-  const max = Math.max(...items.map(i => i.value)) * 1.05;
-  const svg = S("svg", { viewBox: `0 0 ${W} ${H}`, class: "tl-svg" });
-  const x = v => L + (W - L - R) * v / max;
-  const step = max > 2000 ? 500 : 250;
-  for (let v = 0; v <= max; v += step) { svg.append(S("line", { x1: x(v), x2: x(v), y1: 0, y2: H - 20, class: "grid" })); const t = S("text", { x: x(v), y: H - 6, "text-anchor": "middle" }); t.textContent = v; svg.append(t); }
-  items.sort((a, b) => b.value - a.value).forEach((it, i) => {
-    const y = i * rowH + 4; const g = S("g", { class: "row" });
-    const lab = S("text", { x: L - 8, y: y + 15, "text-anchor": "end", class: "lbl" }); lab.textContent = it.label;
-    const r = S("rect", { x: L, y: y + 4, width: Math.max(2, x(it.value) - L), height: 16, class: "bar", rx: 4 });
-    const v = S("text", { x: x(it.value) + 6, y: y + 16 }); v.textContent = it.value + " ms";
-    const hit = S("rect", { x: 0, y, width: W, height: rowH, fill: "transparent" });
-    hit.addEventListener("mousemove", e => showTip(e, `<b>${esc(it.label)}</b><br>${it.value} ms trigger → settled<br><span class="muted">${esc(it.sub || "")}</span>`));
-    hit.addEventListener("mouseleave", hideTip); hit.addEventListener("click", () => { hideTip(); go(it.id); }); hit.style.cursor = "pointer";
-    g.append(lab, r, v, hit); svg.append(g);
-  });
+// small easing glyph
+function easeIcon(key) {
+  const svg = S("svg", { viewBox: "0 0 22 22" });
+  svg.append(S("rect", { x: 1, y: 1, width: 20, height: 20, rx: 5, fill: "var(--surface-1)" }));
+  const paths = {
+    "ease-out": "M4 18 C 6 6, 10 4, 18 4", "ease-in": "M4 18 C 12 18, 16 16, 18 4", "ease-in-out": "M4 18 C 11 18, 11 4, 18 4",
+    "overshoot": "M4 18 C 7 0, 12 1, 18 6", "linear": "M4 18 L 18 4", "instant": "M4 18 L 11 18 L 11 4 L 18 4", "hold": "M4 11 L 18 11" };
+  svg.append(S("path", { d: paths[key] || paths.linear, fill: "none", stroke: "var(--series-1)", "stroke-width": 2, "stroke-linecap": "round" }));
+  if (key === "overshoot") svg.append(S("line", { x1: 3, x2: 19, y1: 6, y2: 6, stroke: "var(--border)", "stroke-dasharray": "2 2" }));
   return svg;
 }
-function rowsForExport() {
-  const out = [];
-  for (const d of DATA) for (const a of d.animations || []) {
-    const props = (a.properties || []).map(p => `${p.prop}: ${fmt(p.from, 3)}${p.peak != null ? " → " + fmt(p.peak, 3) : ""} → ${fmt(p.to, 3)}${p.unit ? " " + p.unit : ""}`).join("; ");
-    out.push({ app: d.app, phase: a.name, element: a.element, video_start_s: a.start_s, video_end_s: a.end_s, delay_from_trigger_ms: a.delay_from_trigger_ms, duration_ms: a.duration_ms,
-      properties: props, easing: a.easing, easing_css: a.easing_css, spring_damping: a.spring?.damping_ratio, spring_response_s: a.spring?.response_s, stagger_ms: a.stagger_ms, loop_period_ms: a.loop_period_ms, confidence: a.confidence, notes: a.notes });
-  }
-  return out;
-}
-function download(name, text, type) { const a = h("a", { href: URL.createObjectURL(new Blob([text], { type })), download: name }); document.body.append(a); a.click(); a.remove(); }
-function exportCSV() {
-  const rows = rowsForExport(); const cols = Object.keys(rows[0] || {});
-  const q = v => v == null ? "" : /[",\n]/.test(String(v)) ? `"${String(v).replace(/"/g, '""')}"` : String(v);
-  download("reaction-animation-specs.csv", [cols.join(","), ...rows.map(r => cols.map(c => q(r[c])).join(","))].join("\n"), "text/csv");
-}
-function exportJSON() { download("reaction-animation-specs.json", JSON.stringify(DATA, null, 2), "application/json"); }
+const fmtT = s => s.t0 === s.t1 ? `at ${s.t0} ms` : `${s.t0}–${s.t1} ms`;
 
-// ---------- APP VIEW ----------
-let rafId = null;
-function renderApp(main, d) {
-  cancelAnimationFrame(rafId);
-  const m = cycleMetrics(d);
-  const grid = h("div", { class: "app-grid" });
-  // player
-  const video = h("video", { src: `video/${d.id}.mp4`, playsinline: "", muted: "", preload: "auto" });
-  video.muted = true;
-  const timeEl = h("span"), frameEl = h("span");
-  let loopRange = null, speed = 1;
-  const speedBtns = [0.1, 0.25, 0.5, 1].map(s => h("button", { "aria-pressed": String(s === 1), onclick: () => setSpeed(s) }, s + "×"));
-  function setSpeed(s) { speed = s; video.playbackRate = s; speedBtns.forEach(b => b.setAttribute("aria-pressed", String(b.textContent === s + "×"))); }
-  const playBtn = h("button", { onclick: () => video.paused ? video.play() : video.pause() }, "▶ Play");
-  video.addEventListener("play", () => playBtn.textContent = "❚❚ Pause"); video.addEventListener("pause", () => playBtn.textContent = "▶ Play");
-  const step = n => { video.pause(); video.currentTime = Math.max(0, Math.min(video.duration || 1e9, video.currentTime + n / FPS)); };
-  const loopBtn = h("button", { "aria-pressed": "false", onclick: () => setLoop(loopRange ? null : [d.representative_cycle.start, d.representative_cycle.end], "cycle") }, "⟲ Loop cycle");
-  function setLoop(r, kind) {
-    loopRange = r; loopBtn.setAttribute("aria-pressed", String(!!r && kind === "cycle"));
-    if (r) { video.currentTime = r[0]; video.play(); }
-  }
-  const player = h("div", { class: "player" },
-    h("div", { class: "phone" }, video),
-    h("div", { class: "controls" }, playBtn, h("button", { onclick: () => step(-1), title: "Back 1 frame (←)" }, "◀ 1f"), h("button", { onclick: () => step(1), title: "Forward 1 frame (→)" }, "1f ▶"), loopBtn),
-    h("div", { class: "controls" }, h("span", { class: "muted", style: "font-size:12px" }, "Speed"), ...speedBtns),
-    h("div", { class: "readout" }, timeEl, frameEl),
-    h("div", { class: "kbd" }, "Space play/pause · ← → step one frame · Shift+← → step 10 frames"));
-  grid.append(player);
+function renderOverview(main) {
+  main.append(h("h2", {}, "What happens after you pick a reaction"),
+    h("p", { class: "lede" }, "We recorded seven apps and measured, frame by frame, the animation that plays the moment a reaction is selected. Here's what they have in common — and how each one does it. Pick an app above for its step-by-step recipe."));
+  const tk = h("div", { class: "takeaways" });
+  for (const t of R.takeaways) tk.append(h("div", { class: "card" }, h("b", {}, t.big), h("p", {}, t.text)));
+  main.append(h("h3", {}, "Common specs across all 7 apps"), tk);
 
-  // right side
-  const right = h("div");
-  right.append(h("h2", {}, d.app), h("p", { class: "summary" }, d.summary || ""));
-  right.append(h("div", { class: "kv" },
-    kvItem(m.total ? m.total + " ms" : "—", "motion span of the cycle"),
-    kvItem(fmt(m.count), "animation phases"),
-    kvItem(m.overshoot != null ? "+" + m.overshoot.toFixed(0) + "%" : "—", "max scale peak vs. rest")));
-  right.append(h("p", { class: "sec", style: "margin-top:-6px" }, h("b", {}, "Trigger: "), d.trigger || "—"));
-
-  // full-video timeline
-  const fullTL = h("div", { class: "card" }, h("h3", {}, "Whole recording — red ticks are touches; click to seek"));
-  const fullSvgWrap = h("div", { class: "timeline" }); fullTL.append(fullSvgWrap);
-  right.append(fullTL);
-  // cycle gantt
-  const gantt = h("div", { class: "card", style: "margin-top:14px" }, h("h3", {}, "Representative cycle — phase timing (ms from trigger)"));
-  const ganttWrap = h("div", { class: "timeline" }); gantt.append(ganttWrap);
-  right.append(gantt);
-
-  // animations
-  const animWrap = h("div", { class: "anims" });
-  (d.animations || []).forEach(a => animWrap.append(animCard(d, a, video, setLoop, setSpeed)));
-  right.append(h("h4", {}, "Animation phases"), animWrap);
-
-  // elements + gallery
-  const two = h("div", { class: "two" });
-  if ((d.elements || []).length) {
-    const t = h("table"); t.append(h("thead", {}, h("tr", {}, ...["Element", "W pt", "H pt", "Radius pt", "Fill", "Notes"].map((x, i) => h("th", { class: i && i < 4 ? "num" : "" }, x)))));
-    const tb = h("tbody");
-    for (const e of d.elements) tb.append(h("tr", {}, h("td", {}, h("b", {}, e.name)), h("td", { class: "num" }, fmt(e.w_pt, 1)), h("td", { class: "num" }, fmt(e.h_pt, 1)), h("td", { class: "num" }, fmt(e.radius_pt, 1)),
-      h("td", { class: "mono" }, e.fill ? h("span", {}, h("span", { style: `display:inline-block;width:10px;height:10px;border-radius:3px;border:1px solid var(--border);background:${e.fill};margin-right:5px;vertical-align:-1px` }), e.fill) : "—"), h("td", { class: "sec" }, e.notes || "")));
-    t.append(tb); two.append(h("div", { class: "card", style: "overflow-x:auto" }, h("h3", {}, "Element dimensions"), t));
-  }
-  const obs = h("div", { class: "card" }, h("h3", {}, "Observations"), h("ul", { class: "tight" }, ...(d.observations || []).map(o => h("li", {}, o))));
-  if ((d.open_questions || []).length) obs.append(h("h4", {}, "Can't tell from the recording"), h("ul", { class: "tight" }, ...d.open_questions.map(o => h("li", { class: "sec" }, o))));
-  two.append(obs);
-  right.append(two);
-  if ((d.keyframe_images || []).length) {
-    const gal = h("div", { class: "gallery" });
-    for (const k of d.keyframe_images) gal.append(h("figure", { onclick: () => { video.pause(); video.currentTime = k.t; }, title: "Click to jump the video here" },
-      h("img", { src: k.file, alt: k.caption, loading: "lazy" }), h("figcaption", {}, h("span", { class: "mono" }, k.t.toFixed(3) + " s "), k.caption)));
-    right.append(h("div", { class: "card", style: "margin-top:14px" }, h("h3", {}, "Key frames (click to jump)"), gal));
-  }
-  grid.append(right); main.append(grid);
-
-  // timelines
-  let dur = 0; const fullParts = {}, ganttParts = {};
-  video.addEventListener("loadedmetadata", () => { dur = video.duration; drawFull(); });
-  function drawFull() {
-    fullSvgWrap.innerHTML = "";
-    const W = 900, H = 58, x = t => 10 + (W - 20) * t / dur;
-    const svg = S("svg", { viewBox: `0 0 ${W} ${H}`, class: "tl-svg" });
-    svg.append(S("rect", { x: 10, y: 22, width: W - 20, height: 10, rx: 5, fill: "var(--surface-2)" }));
-    const c = d.representative_cycle; if (c) svg.append(S("rect", { x: x(c.start), y: 20, width: x(c.end) - x(c.start), height: 14, rx: 4, class: "bar dim" }));
-    for (let s = 0; s <= dur; s++) { const t = S("text", { x: x(s), y: 50, "text-anchor": "middle" }); t.textContent = s + "s"; svg.append(t); }
-    for (const a of animsOf(d)) svg.append(S("rect", { x: x(a.start_s), y: 24, width: Math.max(1.5, x(a.end_s ?? a.start_s) - x(a.start_s)), height: 6, class: "bar" }));
-    for (const it of d.interactions || []) {
-      const g = S("g"); g.append(S("line", { x1: x(it.t), x2: x(it.t), y1: 6, y2: 36, class: "marker" }));
-      const hit = S("rect", { x: x(it.t) - 6, y: 0, width: 12, height: 40, fill: "transparent" });
-      hit.addEventListener("mousemove", e => showTip(e, `<b>${it.t.toFixed(3)} s</b><br>${esc(it.label)}`)); hit.addEventListener("mouseleave", hideTip);
-      hit.addEventListener("click", e => { e.stopPropagation(); video.pause(); video.currentTime = it.t; });
-      g.append(hit); svg.append(g);
-    }
-    const ph = S("line", { y1: 2, y2: 40, class: "playhead" }); svg.append(ph); fullParts.ph = ph; fullParts.x = x;
-    svg.addEventListener("click", e => { const r = svg.getBoundingClientRect(); const t = ((e.clientX - r.left) / r.width * W - 10) / (W - 20) * dur; video.pause(); video.currentTime = Math.max(0, Math.min(dur, t)); });
-    fullSvgWrap.append(svg);
-  }
-  function drawGantt() {
-    ganttWrap.innerHTML = "";
-    const c = d.representative_cycle; if (!c) return;
-    const t0 = triggerT(d);
-    const as = animsOf(d).filter(a => a.start_s >= c.start - 0.05 && a.start_s <= c.end + 0.05);
-    if (!as.length) { ganttWrap.append(h("p", { class: "muted" }, "No phases inside the representative cycle.")); return; }
-    const lo = Math.min(c.start, t0), hi = c.end;
-    const W = 900, L = 250, R = 70, rowH = 26, H = as.length * rowH + 30;
-    const x = t => L + (W - L - R) * (t - lo) / (hi - lo);
-    const svg = S("svg", { viewBox: `0 0 ${W} ${H}`, class: "tl-svg" });
-    const span = (hi - lo) * 1000; const stepMs = span > 2500 ? 500 : span > 1200 ? 200 : 100;
-    for (let ms = Math.ceil((lo - t0) * 1000 / stepMs) * stepMs; ms <= (hi - t0) * 1000; ms += stepMs) {
-      const xx = x(t0 + ms / 1000); svg.append(S("line", { x1: xx, x2: xx, y1: 0, y2: H - 18, class: "grid" }));
-      const t = S("text", { x: xx, y: H - 4, "text-anchor": "middle" }); t.textContent = ms; svg.append(t);
-    }
-    svg.append(S("line", { x1: x(t0), x2: x(t0), y1: 0, y2: H - 18, class: "marker" }));
-    as.sort((a, b) => a.start_s - b.start_s).forEach((a, i) => {
-      const y = i * rowH + 4; const g = S("g", { class: "row" });
-      const lab = S("text", { x: L - 8, y: y + 14, "text-anchor": "end", class: "lbl" }); lab.textContent = a.name.length > 38 ? a.name.slice(0, 37) + "…" : a.name;
-      const end = a.end_s ?? a.start_s + (a.duration_ms || 0) / 1000;
-      const r = S("rect", { x: x(a.start_s), y: y + 3, width: Math.max(2, x(end) - x(a.start_s)), height: 15, class: a.loop_period_ms ? "bar dim" : "bar", rx: 4 });
-      const v = S("text", { x: x(end) + 5, y: y + 14 }); v.textContent = (a.duration_ms ?? Math.round((end - a.start_s) * 1000)) + " ms";
-      const hit = S("rect", { x: 0, y, width: W, height: rowH, fill: "transparent" }); hit.style.cursor = "pointer";
-      hit.addEventListener("mousemove", e => showTip(e, `<b>${esc(a.name)}</b><br>starts <b>+${Math.round((a.start_s - t0) * 1000)} ms</b> after trigger<br>lasts <b>${a.duration_ms ?? "?"} ms</b><br><span class="muted">${esc(a.easing || "")}</span><br><span class="muted">Click to play this phase at 0.25×</span>`));
-      hit.addEventListener("mouseleave", hideTip);
-      hit.addEventListener("click", () => playPhase(a, video, setLoop, setSpeed));
-      g.append(lab, r, v, hit); svg.append(g);
-    });
-    const ph = S("line", { y1: 0, y2: H - 18, class: "playhead" }); svg.append(ph); ganttParts.ph = ph; ganttParts.x = x; ganttParts.lo = lo; ganttParts.hi = hi;
-    ganttWrap.append(svg);
-  }
-  drawGantt();
-
-  function tick() {
-    const t = video.currentTime;
-    if (loopRange && t >= loopRange[1]) { video.currentTime = loopRange[0]; if (loopRange.once) { video.pause(); loopRange = null; } }
-    const t0 = triggerT(d);
-    timeEl.textContent = t.toFixed(3) + " s"; frameEl.textContent = "frame " + Math.round(t * FPS) + (d.representative_cycle ? `  ·  ${(t - t0) * 1000 >= 0 ? "+" : ""}${Math.round((t - t0) * 1000)} ms vs trigger` : "");
-    if (fullParts.ph) { const xx = fullParts.x(t); fullParts.ph.setAttribute("x1", xx); fullParts.ph.setAttribute("x2", xx); }
-    if (ganttParts.ph) { const vis = t >= ganttParts.lo && t <= ganttParts.hi; ganttParts.ph.style.display = vis ? "" : "none"; if (vis) { const xx = ganttParts.x(t); ganttParts.ph.setAttribute("x1", xx); ganttParts.ph.setAttribute("x2", xx); } }
-    rafId = requestAnimationFrame(tick);
-  }
-  tick();
-  document.onkeydown = e => {
-    if (e.target.closest("input,textarea")) return;
-    if (e.key === " ") { e.preventDefault(); video.paused ? video.play() : video.pause(); }
-    if (e.key === "ArrowLeft") { e.preventDefault(); step(e.shiftKey ? -10 : -1); }
-    if (e.key === "ArrowRight") { e.preventDefault(); step(e.shiftKey ? 10 : 1); }
-  };
-  if (d.representative_cycle) video.addEventListener("loadeddata", () => { video.currentTime = d.representative_cycle.start; }, { once: true });
-}
-function valCell(v) {
-  const td = h("td", { class: "num" });
-  if (typeof v === "string" && /^#[0-9a-f]{3,8}$/i.test(v.trim())) td.append(h("span", { style: `display:inline-block;width:10px;height:10px;border-radius:3px;border:1px solid var(--border);background:${v};margin-right:5px;vertical-align:-1px` }), v);
-  else td.append(fmt(v, 3));
-  return td;
-}
-function kvItem(v, l) { return h("div", {}, h("b", {}, v), h("span", {}, l)); }
-function playPhase(a, video, setLoop, setSpeed) {
-  const s = Math.max(0, a.start_s - 0.15), e = (a.end_s ?? a.start_s + (a.duration_ms || 300) / 1000) + 0.2;
-  setSpeed(0.25); const r = [s, e]; r.once = true; setLoop(r, "phase"); video.closest(".player")?.scrollIntoView({ block: "nearest" });
-}
-
-function specText(d, a) {
-  const lines = [`${d.app} — ${a.name}`, `Element: ${a.element || "—"}`, `Delay from trigger: ${a.delay_from_trigger_ms ?? "—"} ms`, `Duration: ${a.duration_ms ?? "—"} ms`];
-  for (const p of a.properties || []) lines.push(`${p.prop}: ${fmt(p.from, 3)}${p.peak != null ? " → peak " + fmt(p.peak, 3) : ""} → ${fmt(p.to, 3)}${p.unit ? " " + p.unit : ""}`);
-  if (a.easing) lines.push(`Easing: ${a.easing}`); if (a.easing_css) lines.push(`CSS: ${a.easing_css}`);
-  if (a.spring) lines.push(`Spring: damping ratio ${a.spring.damping_ratio}, response ${a.spring.response_s}s`);
-  if (a.stagger_ms) lines.push(`Stagger: ${a.stagger_ms} ms`); if (a.loop_period_ms) lines.push(`Loop period: ${a.loop_period_ms} ms`);
-  if (a.notes) lines.push(`Notes: ${a.notes}`);
-  return lines.join("\n");
-}
-
-function animCard(d, a, video, setLoop, setSpeed) {
-  const t0 = triggerT(d);
-  const card = h("div", { class: "card anim" });
-  card.append(h("h3", {}, h("span", {}, a.name), h("span", { class: "badge " + (a.confidence || "") }, (a.confidence || "?") + " confidence")));
-  if (a.element) card.append(h("div", { class: "sec", style: "font-size:12.5px;margin-top:-4px" }, a.element));
-  card.append(h("div", { class: "stats" },
-    h("div", {}, h("b", {}, a.delay_from_trigger_ms != null ? "+" + a.delay_from_trigger_ms : (a.start_s != null ? "+" + Math.round((a.start_s - t0) * 1000) : "—")), h("span", {}, "ms after its trigger")),
-    h("div", {}, h("b", {}, fmt(a.duration_ms)), h("span", {}, "ms duration")),
-    h("div", {}, h("b", {}, a.stagger_ms ? a.stagger_ms : "—"), h("span", {}, "ms stagger")),
-    h("div", {}, h("b", {}, a.loop_period_ms ? a.loop_period_ms : "—"), h("span", {}, "ms loop"))));
-  if ((a.properties || []).length) {
-    const t = h("table"); t.append(h("thead", {}, h("tr", {}, h("th", {}, "Property"), h("th", { class: "num" }, "From"), h("th", { class: "num" }, "Peak"), h("th", { class: "num" }, "To"), h("th", {}, "Unit"))));
-    const tb = h("tbody"); for (const p of a.properties) tb.append(h("tr", {}, h("td", {}, p.prop), valCell(p.from), valCell(p.peak), valCell(p.to), h("td", { class: "muted" }, p.unit || "")));
-    t.append(tb); card.append(t);
-  }
-  const ez = [];
-  if (a.easing) ez.push(a.easing);
-  if (a.easing_css) ez.push("css: " + a.easing_css);
-  if (a.spring && a.spring.damping_ratio != null) ez.push(`spring: damping ${a.spring.damping_ratio} · response ${a.spring.response_s}s`);
-  if (ez.length) card.append(h("div", { class: "easing" }, ez.join("\n")));
-  const pair = h("div", { class: "viz-pair" });
-  pair.append(h("div", { class: "chart" }, sampleChart(a)));
-  pair.append(replica(a));
-  card.append(pair);
-  if (a.notes) card.append(h("div", { class: "notes" }, a.notes));
-  card.append(h("div", { class: "row-btns" },
-    a.start_s != null ? h("button", { onclick: () => playPhase(a, video, setLoop, setSpeed) }, "▶ Watch at 0.25×") : null,
-    a.start_s != null ? h("button", { onclick: () => { video.pause(); video.currentTime = a.start_s; } }, "⇤ Jump to start frame") : null,
-    h("button", { onclick: () => { navigator.clipboard?.writeText(specText(d, a)); toast("Spec copied"); } }, "Copy spec")));
-  return card;
-}
-
-// cubic-bezier evaluator (y for given x)
-function cssEasing(str) {
-  if (!str) return null;
-  const m = /cubic-bezier\([^)]*\)|steps\([^)]*\)|\b(?:ease-in-out|ease-in|ease-out|ease|linear)\b/.exec(str);
-  if (!m) return null;
-  const el = document.createElement("div"); el.style.transitionTimingFunction = m[0];
-  return el.style.transitionTimingFunction ? m[0] : null;
-}
-function bezierFn(css) {
-  const m = /cubic-bezier\(\s*([-\d.]+)\s*,\s*([-\d.]+)\s*,\s*([-\d.]+)\s*,\s*([-\d.]+)\s*\)/.exec(css || "");
-  const named = { linear: [0, 0, 1, 1], ease: [.25, .1, .25, 1], "ease-in": [.42, 0, 1, 1], "ease-out": [0, 0, .58, 1], "ease-in-out": [.42, 0, .58, 1] };
-  const p = m ? m.slice(1).map(Number) : named[(css || "").trim()]; if (!p) return null;
-  const [x1, y1, x2, y2] = p; const B = (t, a, b) => 3 * a * t * (1 - t) ** 2 + 3 * b * t * t * (1 - t) + t ** 3;
-  return x => { let lo = 0, hi = 1, t = x; for (let i = 0; i < 30; i++) { t = (lo + hi) / 2; if (B(t, x1, x2) < x) lo = t; else hi = t; } return B(t, y1, y2); };
-}
-function springFn(z, resp) { // normalized step response, response = period of undamped osc
-  const w = 2 * Math.PI / resp;
-  return t => { if (z < 0.999) { const wd = w * Math.sqrt(1 - z * z); return 1 - Math.exp(-z * w * t) * (Math.cos(wd * t) + z * w / wd * Math.sin(wd * t)); } return 1 - Math.exp(-w * t) * (1 + w * t); };
-}
-
-function sampleChart(a) {
-  const raw = a.samples?.points || [];
-  const W = 280, H = 140, L = 34, B = 18, T = 8, R = 6;
-  const svg = S("svg", { viewBox: `0 0 ${W} ${H}` });
-  const rgb = raw.filter(p => Array.isArray(p) && typeof p[1] === "string" && /^\s*\d+\s*,\s*\d+\s*,\s*\d+\s*$/.test(p[1]));
-  if (rgb.length >= 2) { // color samples → swatch strip
-    const wrap = h("div"); const strip = h("div", { style: "display:flex;height:44px;border-radius:6px;overflow:hidden;border:1px solid var(--border)" });
-    for (const p of rgb) { const c = h("div", { style: `flex:1;background:rgb(${p[1]})` }); c.addEventListener("mousemove", e => showTip(e, `<b>${p[0]} ms</b> · rgb(${p[1]})`)); c.addEventListener("mouseleave", hideTip); strip.append(c); }
-    wrap.append(h("div", { class: "muted", style: "font-size:10px;margin-bottom:4px" }, a.samples.prop), strip, h("div", { class: "legend" }, `${rgb[0][0]} ms → ${rgb[rgb.length - 1][0]} ms, measured per frame`));
-    return wrap;
-  }
-  const pts = raw.filter(p => Array.isArray(p) && Number.isFinite(p[0]) && Number.isFinite(p[1]));
-  if (pts.length < 2) { const t = S("text", { x: W / 2, y: H / 2, "text-anchor": "middle" }); t.textContent = "No per-frame samples recorded"; svg.append(t); return svg; }
-  const prop = (a.properties || []).find(p => p.prop === a.samples.prop) || {};
-  const tmin = Math.min(0, ...pts.map(p => p[0]));
-  const dur = a.duration_ms || Math.max(...pts.map(p => p[0]));
-  let fit = null;
-  const from = typeof prop.from === "number" ? prop.from : pts[0][1], to = typeof prop.to === "number" ? prop.to : pts[pts.length - 1][1];
-  if (a.spring && a.spring.damping_ratio != null && a.spring.response_s) { const f = springFn(a.spring.damping_ratio, a.spring.response_s); fit = t => from + (to - from) * f(t / 1000); }
-  else { const f = bezierFn(a.easing_css); if (f) fit = t => from + (to - from) * f(Math.min(1, t / dur)); }
-  const tmax = Math.max(dur, ...pts.map(p => p[0]));
-  const fitPts = fit ? Array.from({ length: 61 }, (_, i) => [i / 60 * tmax, fit(i / 60 * tmax)]).filter(p => Number.isFinite(p[1])) : [];
-  const ys = [...pts.map(p => p[1]), ...fitPts.map(p => p[1])]; let ymin = Math.min(...ys), ymax = Math.max(...ys); if (ymin === ymax) { ymin -= 1; ymax += 1; }
-  const pad = (ymax - ymin) * 0.08; ymin -= pad; ymax += pad;
-  const x = t => L + (W - L - R) * (t - tmin) / (tmax - tmin), y = v => T + (H - T - B) * (1 - (v - ymin) / (ymax - ymin));
-  svg.append(S("line", { x1: L, x2: W - R, y1: H - B, y2: H - B, class: "axis" }), S("line", { x1: L, x2: L, y1: T, y2: H - B, class: "axis" }));
-  [ymin + pad, ymax - pad].forEach(v => { const t = S("text", { x: L - 4, y: y(v) + 3, "text-anchor": "end" }); t.textContent = fmt(+v.toFixed(2), 2); svg.append(t); });
-  [tmin, tmax].forEach((v, i) => { const t = S("text", { x: x(v), y: H - 4, "text-anchor": i ? "end" : "start" }); t.textContent = Math.round(v) + " ms"; svg.append(t); });
-  const lab = S("text", { x: L + 4, y: T + 8 }); lab.textContent = `${a.samples.prop}${a.samples.unit ? " (" + a.samples.unit + ")" : ""}`; svg.append(lab);
-  if (fitPts.length) svg.append(S("path", { d: "M" + fitPts.map(p => `${x(p[0]).toFixed(1)},${y(p[1]).toFixed(1)}`).join("L"), class: "fit" }));
-  svg.append(S("path", { d: "M" + pts.map(p => `${x(p[0]).toFixed(1)},${y(p[1]).toFixed(1)}`).join("L"), class: "meas" }));
-  if (pts.length <= 40) pts.forEach(p => svg.append(S("circle", { cx: x(p[0]), cy: y(p[1]), r: 2.5, class: "dot" })));
-  const cross = S("line", { y1: T, y2: H - B, stroke: "var(--text-muted)", "stroke-width": 1, style: "display:none" }); svg.append(cross);
-  const hit = S("rect", { x: L, y: T, width: W - L - R, height: H - T - B, fill: "transparent" }); svg.append(hit);
-  hit.addEventListener("mousemove", e => {
-    const r = svg.getBoundingClientRect(); const t = tmin + ((e.clientX - r.left) / r.width * W - L) / (W - L - R) * (tmax - tmin);
-    let best = pts[0]; for (const p of pts) if (Math.abs(p[0] - t) < Math.abs(best[0] - t)) best = p;
-    cross.style.display = ""; cross.setAttribute("x1", x(best[0])); cross.setAttribute("x2", x(best[0]));
-    showTip(e, `<b>${Math.round(best[0])} ms</b> · measured ${a.samples.prop} <b>${fmt(+best[1].toFixed(3), 3)}</b>${fit ? `<br>fitted curve ${fmt(+fit(best[0]).toFixed(3), 3)}` : ""}`);
+  const list = h("div", { class: "ov-list" });
+  const max = Math.max(...APPS.map(a => R.apps[a.id].total_ms));
+  [...APPS].sort((a, b) => R.apps[a.id].total_ms - R.apps[b.id].total_ms).forEach(a => {
+    const r = R.apps[a.id];
+    list.append(h("div", { class: "ov-row", onclick: () => go(a.id), title: "Open the recipe" },
+      h("div", { class: "name" }, a.app), h("div", { class: "style" }, r.style),
+      h("div", { class: "ov-bar" }, h("i", { style: `width:${(r.total_ms / max * 150).toFixed(0)}px` }), h("span", {}, r.total_ms + " ms"))));
   });
-  hit.addEventListener("mouseleave", () => { cross.style.display = "none"; hideTip(); });
-  const wrap = h("div"); wrap.append(svg, h("div", { class: "legend" }, h("span", {}, h("i"), "measured"), fit ? h("span", {}, h("i", { class: "fit" }), "fitted easing") : null));
-  return wrap;
+  main.append(h("div", { class: "card" }, h("h3", {}, "Total selection animation length, shortest to longest"), list,
+    h("div", { class: "scale-note" }, "Measured from the tap on the reaction to the last thing that moves. Click a row for the full recipe.")));
+  main.append(h("p", { class: "foot" }, "How this was measured: each iPhone recording was stepped through at its native 60 fps (one frame ≈ 17 ms, so times are accurate to about ±17 ms). Sizes are in iOS points on a 430 pt-wide iPhone screen. Easing names describe the measured motion; the cubic-bezier values next to them are a good starting point to fine-tune by eye."));
 }
 
-// Basic replica — animates an abstract shape using the measured from/peak/to values
-function replica(a) {
-  const box = h("div", { class: "replica", title: "Abstract replica of this phase using the measured values (slowed 2×)" });
-  const shape = h("div", { class: "shape" }); const cap = h("div", { class: "cap" }, "replica · 0.5× speed");
-  box.append(shape, cap);
-  const props = (a.properties || []).filter(p => typeof p.from === "number" && typeof p.to === "number");
-  const kind = n => { n = n.toLowerCase();
-    if (n === "scale") return "s"; if (n === "scalex") return "sx"; if (n === "scaley") return "sy";
-    if (n.includes("translatex") || n === "x") return "tx"; if (n.includes("translatey") || n === "y") return "ty";
-    if (n.includes("rotat")) return "r"; if (n.includes("opacity")) return "o"; return null; };
-  const used = props.filter(p => kind(p.prop));
-  if (!used.length) { shape.style.opacity = .35; cap.textContent = "no transform values to replicate"; return box; }
-  const clamp = (v, m) => Math.max(-m, Math.min(m, v));
-  const state = pick => {
-    const v = { s: 1, sx: null, sy: null, tx: 0, ty: 0, r: 0, o: 1 };
-    for (const p of used) v[kind(p.prop)] = pick(p);
-    return { transform: `translate(${clamp(v.tx, 60)}px, ${clamp(v.ty, 50)}px) rotate(${v.r}deg) scale(${v.sx ?? v.s}, ${v.sy ?? v.s})`, opacity: v.o };
+function renderApp(main, app) {
+  const r = R.apps[app.id];
+  main.append(h("h2", {}, app.app));
+  main.append(h("div", { class: "app-head" },
+    h("div", {}, h("div", { class: "big" }, r.total_ms + " ms"), h("div", { class: "lbl" }, "total length")),
+    h("div", { style: "flex:1;min-width:260px" }, h("div", { class: "style-big" }, r.style), h("div", { class: "lbl" }, "style"))));
+  main.append(h("p", { class: "lede" }, r.style_desc));
+
+  const grid = h("div", { class: "app-grid" });
+  // player — loops just the selection moment
+  const video = h("video", { src: `video/${app.id}.mp4`, playsinline: "", muted: "", autoplay: "", preload: "auto" });
+  video.muted = true;
+  const [c0, c1] = r.clip;
+  const msEl = h("span", { class: "ms" });
+  let speed = 0.25;
+  const speedBtns = [0.1, 0.25, 0.5, 1].map(s => h("button", { "aria-pressed": String(s === speed), onclick: () => { speed = s; video.playbackRate = s; speedBtns.forEach(b => b.setAttribute("aria-pressed", String(b.dataset.s == s))); }, "data-s": s }, s === 1 ? "Real speed" : s + "×"));
+  const pp = h("button", { onclick: () => video.paused ? video.play() : video.pause() }, "Pause");
+  video.addEventListener("play", () => pp.textContent = "Pause"); video.addEventListener("pause", () => pp.textContent = "Play");
+  video.addEventListener("loadedmetadata", () => { video.currentTime = c0; video.playbackRate = speed; video.play().catch(() => {}); });
+  // zoomed view: crop the phone screen to this app's action area (focus rect in pt on a 430 × 932 pt screen)
+  const [fx, fy, fw, fh] = r.focus, ZW = 400, k = ZW / fw;
+  const frame = h("div");
+  const setView = zoomed => {
+    frame.innerHTML = ""; viewBtns.forEach(b => b.setAttribute("aria-pressed", String((b.dataset.v === "zoom") === zoomed)));
+    if (zoomed) { video.removeAttribute("style"); Object.assign(video.style, { width: 430 * k + "px", height: 932 * k + "px", left: -fx * k + "px", top: -fy * k + "px" });
+      frame.className = "zoom"; frame.style.height = fh * k + "px"; frame.append(video); }
+    else { video.removeAttribute("style"); frame.className = "phone"; frame.style.height = ""; frame.append(video); }
+    if (video.readyState) video.play().catch(() => {});
   };
-  const hasPeak = used.some(p => typeof p.peak === "number");
-  const easing = cssEasing(a.easing_css) || "ease-out";
-  // With a measured peak: ease-out into the peak at 60% of the duration, ease-in-out to settle.
-  const kfs = hasPeak
-    ? [{ ...state(p => p.from), offset: 0, easing: "cubic-bezier(.2,.7,.3,1)" },
-       { ...state(p => typeof p.peak === "number" ? p.peak : p.to), offset: 0.6, easing: "ease-in-out" },
-       { ...state(p => p.to), offset: 1 }]
-    : [{ ...state(p => p.from), offset: 0, easing }, { ...state(p => p.to), offset: 1 }];
-  const dur = Math.max(80, a.duration_ms || 300) * 2;
-  const run = () => { if (!box.isConnected) return; shape.animate(kfs, { duration: dur, fill: "forwards" }).onfinish = () => setTimeout(run, 700); };
-  setTimeout(run, 300);
-  return box;
-}
+  const viewBtns = [h("button", { "data-v": "zoom", onclick: () => setView(true) }, "Zoomed in"), h("button", { "data-v": "full", onclick: () => setView(false) }, "Full screen")];
+  setView(true);
+  grid.append(h("div", { class: "player" }, frame,
+    h("div", { class: "ctrl" }, ...viewBtns),
+    h("div", { class: "ctrl" }, pp, ...speedBtns), h("div", { class: "ctrl" }, h("span", { class: "muted", style: "font-size:12px" }, "Time since tap"), msEl),
+    h("div", { class: "cap" }, "Loops just the selection moment from the screen recording. Slowed down by default so each step is easy to see.")));
 
+  const right = h("div");
+  right.append(h("div", { class: "facts" },
+    h("div", { class: "fact" }, h("b", {}, "0 ms is"), h("span", {}, r.zero)),
+    h("div", { class: "fact" }, h("b", {}, "Same for every reaction?"), h("span", {}, r.same_for_all)),
+    h("div", { class: "fact" }, h("b", {}, "Size"), h("span", {}, r.icon_size))));
+
+  // timeline
+  const tl = h("div", { class: "card tl" }, h("h3", {}, "Timeline"));
+  const W = 760, L = 28, Rr = 20, rowH = 26, steps = r.steps, H = steps.length * rowH + 26, T = r.total_ms;
+  const x = ms => L + (W - L - Rr) * ms / T;
+  const svg = S("svg", { viewBox: `0 0 ${W} ${H}` });
+  const stepMs = T > 700 ? 100 : 50;
+  for (let ms = 0; ms <= T; ms += stepMs) { svg.append(S("line", { x1: x(ms), x2: x(ms), y1: 0, y2: H - 18, class: "grid" })); const t = S("text", { x: x(ms), y: H - 4, "text-anchor": "middle" }); t.textContent = ms; svg.append(t); }
+  if (T % stepMs) { const t = S("text", { x: x(T), y: H - 4, "text-anchor": "middle", style: "font-weight:700;fill:var(--text-primary)" }); t.textContent = T; svg.append(t); }
+  steps.forEach((s, i) => {
+    const y = i * rowH + 4;
+    const g = S("g");
+    const lab = S("text", { x: 4, y: y + 14, style: "font-weight:700;fill:var(--text-secondary)" }); lab.textContent = i + 1; g.append(lab);
+    if (s.t0 === s.t1) {
+      const cx = x(s.t0); g.append(S("path", { d: `M${cx} ${y + 2} l8 8 l-8 8 l-8 -8 z`, class: "inst" }));
+    } else g.append(S("rect", { x: x(s.t0), y: y + 3, width: Math.max(3, x(s.t1) - x(s.t0)), height: 15, rx: 4, class: "bar" + (s.ease === "hold" ? " hold" : "") }));
+    const hit = S("rect", { x: 0, y, width: W, height: rowH, fill: "transparent" });
+    hit.addEventListener("mousemove", e => showTip(e, `<b>${i + 1}. ${s.title}</b><br>${fmtT(s)}<br>${R.easings[s.ease]?.label || ""}`)); hit.addEventListener("mouseleave", hideTip);
+    g.append(hit); svg.append(g);
+  });
+  const ph = S("line", { y1: 0, y2: H - 18, class: "ph" }); svg.append(ph);
+  tl.append(svg, h("div", { class: "scale-note" }, "Bars = something is moving · ◆ = instant change · red line = where the video is right now"));
+  right.append(tl);
+
+  // step cards
+  const ol = h("ol", { class: "steps" });
+  steps.forEach((s, i) => {
+    const e = R.easings[s.ease] || {};
+    ol.append(h("li", { class: "step" }, h("div", { class: "n" }, i + 1), h("div", {},
+      h("div", { class: "top" }, h("span", { class: "title" }, s.title), h("span", { class: "time" }, fmtT(s) + (s.t0 !== s.t1 ? ` · ${s.t1 - s.t0} ms` : ""))),
+      h("div", { class: "what" }, s.what),
+      h("div", { class: "ease" }, easeIcon(s.ease), h("b", {}, e.label), h("span", {}, "— " + e.desc), e.css ? h("span", { class: "css" }, e.css) : null))));
+  });
+  right.append(ol);
+  if (r.variant) right.append(h("div", { class: "note" }, h("b", {}, "Also seen: "), r.variant));
+  grid.append(right);
+  main.append(grid);
+
+  // loop + playhead
+  let raf;
+  const tick = () => {
+    if (!video.isConnected) return cancelAnimationFrame(raf);
+    if (video.currentTime >= c1 || video.currentTime < c0 - 0.05) video.currentTime = c0;
+    const ms = Math.round((video.currentTime - r.zero_s) * 1000);
+    msEl.textContent = (ms >= 0 ? "+" : "") + ms + " ms";
+    const vis = ms >= 0 && ms <= T; ph.style.display = vis ? "" : "none";
+    if (vis) { ph.setAttribute("x1", x(ms)); ph.setAttribute("x2", x(ms)); }
+    raf = requestAnimationFrame(tick);
+  };
+  tick();
+}
 renderNav(); render();
 </script>
 </body>

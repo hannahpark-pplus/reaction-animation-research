@@ -1,0 +1,443 @@
+{
+  "easings": {
+    "instant": {
+      "label": "Instant",
+      "desc": "Cut — no animation, happens on one frame",
+      "css": null
+    },
+    "ease-out": {
+      "label": "Ease out",
+      "desc": "Fast start, soft stop",
+      "css": "cubic-bezier(0.2, 0.8, 0.3, 1)"
+    },
+    "ease-in": {
+      "label": "Ease in",
+      "desc": "Slow start, fast finish",
+      "css": "cubic-bezier(0.4, 0, 1, 1)"
+    },
+    "ease-in-out": {
+      "label": "Ease in-out",
+      "desc": "Soft start and soft stop",
+      "css": "cubic-bezier(0.45, 0, 0.55, 1)"
+    },
+    "overshoot": {
+      "label": "Overshoot",
+      "desc": "Goes past the final size, then settles back",
+      "css": "cubic-bezier(0.34, 1.56, 0.64, 1)"
+    },
+    "linear": {
+      "label": "Linear",
+      "desc": "Constant speed",
+      "css": "linear"
+    },
+    "hold": {
+      "label": "Hold",
+      "desc": "Nothing moves",
+      "css": null
+    }
+  },
+  "takeaways": [
+    {
+      "big": "333–1000 ms",
+      "text": "Range across the 7 apps; median 865 ms. Facebook's fly-out is the quickest (333 ms). Simple one-icon taps (Reddit, Instagram) take 400–500 ms. Bursts and picker apps that end in a button or badge pop (X, YouTube, LinkedIn, WhatsApp) take 850–1000 ms."
+    },
+    {
+      "big": "Instant result",
+      "text": "Facebook, Instagram, Reddit and X switch the label/count/color on the very first frame and play the animation on top. YouTube swaps to the filled icon at ~117 ms. LinkedIn and WhatsApp wait until the flying icon or closing menu finishes, showing the new reaction at 800 ms and 533 ms."
+    },
+    {
+      "big": "108–153%",
+      "text": "Most apps \"pop\" the chosen icon: it grows past full size and settles back to 100%. Overshoot peaks ranged from 108% (Facebook) to 153% (WhatsApp); 120% was the most common (YouTube, LinkedIn)."
+    },
+    {
+      "big": "Fast → soft",
+      "text": "The shared rhythm: a quick ease-out launch (85–200 ms) followed by a slower ease-in-out settle. Nothing bounces more than twice."
+    },
+    {
+      "big": "Goes somewhere",
+      "text": "In the three apps with a reaction picker (Facebook, LinkedIn, WhatsApp) the chosen emoji travels toward where the reaction will live — the button, the count, or a badge on the message."
+    }
+  ],
+  "apps": {
+    "v1": {
+      "style": "Pop → arc → shrink away",
+      "style_desc": "The picked emoji does a tiny pop, flies up and over in an arc toward the reaction count, and shrinks to nothing on the way. The tray drops away underneath it.",
+      "total_ms": 333,
+      "zero": "the tap on an emoji in the tray",
+      "same_for_all": "Yes — all six reactions (Love, Care, Haha, Wow, Sad, Angry) use identical timing, the same arc height and land on the same spot, no matter which slot they start from.",
+      "clip": [
+        3.62,
+        4.25
+      ],
+      "icon_size": "Emoji in the tray: 40 × 40 pt",
+      "steps": [
+        {
+          "t0": 0,
+          "t1": 67,
+          "title": "Tray drops away",
+          "what": "The tray and the other five emojis slide down ~15 pt and fade out. The unpicked emojis also shrink to 25%.",
+          "ease": "ease-in"
+        },
+        {
+          "t0": 0,
+          "t1": 55,
+          "title": "Picked emoji pops",
+          "what": "Grows from 100% to 108%.",
+          "ease": "ease-out"
+        },
+        {
+          "t0": 0,
+          "t1": 333,
+          "title": "Flies in an arc",
+          "what": "Rises ~85 pt (highest point at 117 ms), then curves down to the reaction-count area at the bottom-left of the post.",
+          "ease": "ease-in-out"
+        },
+        {
+          "t0": 55,
+          "t1": 333,
+          "title": "Shrinks to nothing",
+          "what": "Shrinks from 108% to 0% while flying, so it vanishes as it lands.",
+          "ease": "ease-out"
+        },
+        {
+          "t0": 17,
+          "t1": 17,
+          "title": "Button updates",
+          "what": "The Like button switches to the reaction's icon and colored name (e.g. red \"Love\"). The count text updates ~50 ms later. Both are instant.",
+          "ease": "instant"
+        }
+      ],
+      "zero_s": 3.745,
+      "focus": [
+        0,
+        515,
+        430,
+        215
+      ]
+    },
+    "v2": {
+      "style": "Squash → pop with tilt + ray burst",
+      "style_desc": "The outline thumb squashes down, then the filled thumb springs up bigger than normal while tipping back, holds for a beat and settles. A ring of short rays bursts outward behind it.",
+      "total_ms": 884,
+      "zero": "the tap on the Like button (the motion starts when the finger lifts)",
+      "same_for_all": "Yes — the feed card and the watch page matched to within one frame. Unlike and dislike have no animation (instant swap).",
+      "clip": [
+        15.8,
+        16.95
+      ],
+      "icon_size": "Thumb icon: ~24 pt",
+      "steps": [
+        {
+          "t0": 67,
+          "t1": 117,
+          "title": "Outline thumb squashes",
+          "what": "Shrinks from 100% to 32% and tilts 9°.",
+          "ease": "ease-in"
+        },
+        {
+          "t0": 117,
+          "t1": 284,
+          "title": "Filled thumb pops up",
+          "what": "Swaps to the filled thumb and grows from 32% to 120%, tipping back ~12°.",
+          "ease": "ease-out"
+        },
+        {
+          "t0": 284,
+          "t1": 484,
+          "title": "Holds big",
+          "what": "Stays at 120%.",
+          "ease": "hold"
+        },
+        {
+          "t0": 484,
+          "t1": 884,
+          "title": "Settles",
+          "what": "Returns to 100% with a small wobble (tilts to −6°, then upright).",
+          "ease": "ease-in-out"
+        },
+        {
+          "t0": 200,
+          "t1": 617,
+          "title": "Ray burst",
+          "what": "10 rays (alternating long red #FF0033 and short pink #FF2893) shoot out to ~21 pt from the center, shrink into dots and fade.",
+          "ease": "ease-out"
+        }
+      ],
+      "variant": "On one comedy video the thumb briefly turned into a laughing emoji with circling dots before popping (no ray burst). YouTube appears to theme this by content.",
+      "zero_s": 15.878,
+      "focus": [
+        110,
+        315,
+        270,
+        170
+      ]
+    },
+    "v3": {
+      "style": "Arc fly-to-button → button pop",
+      "style_desc": "The picked icon flies in a small arc down into the Like button and shrinks away. A beat later the button swaps to the new reaction and pops in slightly oversized.",
+      "total_ms": 950,
+      "zero": "the tap on a reaction in the tray",
+      "same_for_all": "Yes — all five reactions picked (Like, Celebrate, Support, Love, Insightful) follow the same timing.",
+      "clip": [
+        4.65,
+        5.85
+      ],
+      "icon_size": "Icons in the tray: 44 × 44 pt",
+      "steps": [
+        {
+          "t0": 0,
+          "t1": 0,
+          "title": "Tray disappears",
+          "what": "The tray and the unpicked icons vanish instantly. Only the picked icon stays.",
+          "ease": "instant"
+        },
+        {
+          "t0": 0,
+          "t1": 590,
+          "title": "Icon flies to the Like button",
+          "what": "Arcs up ~36 pt, then down into the Like button (~74 pt below where it started), shrinking from 100% to 0%.",
+          "ease": "ease-in-out"
+        },
+        {
+          "t0": 683,
+          "t1": 733,
+          "title": "Old button shrinks out",
+          "what": "The gray \"Like\" shrinks to 35% and fades.",
+          "ease": "ease-in"
+        },
+        {
+          "t0": 733,
+          "t1": 800,
+          "title": "Short pause",
+          "what": "The button is empty for 67 ms.",
+          "ease": "hold"
+        },
+        {
+          "t0": 800,
+          "t1": 950,
+          "title": "New reaction pops in",
+          "what": "The button now shows the reaction's icon, label and color. It grows from 0% to 120% and snaps back to 100%.",
+          "ease": "overshoot"
+        }
+      ],
+      "zero_s": 4.76,
+      "focus": [
+        0,
+        465,
+        430,
+        215
+      ]
+    },
+    "v4": {
+      "style": "Press squish → menu closes → badge double-bounce",
+      "style_desc": "The tapped emoji squishes like a button, the reaction bar and menu fold away, then the reaction badge pops onto the message with a playful double bounce.",
+      "total_ms": 1000,
+      "zero": "the tap on an emoji in the reaction bar",
+      "same_for_all": "Yes — 👍, ❤️ and 😂 all matched within 1–2 frames. Removing a reaction skips the squish and the badge.",
+      "clip": [
+        4.5,
+        5.7
+      ],
+      "icon_size": "Reaction badge emoji: ~20 pt; bar emojis: ~36 pt",
+      "steps": [
+        {
+          "t0": 0,
+          "t1": 166,
+          "title": "Emoji squishes",
+          "what": "The tapped emoji presses down to 69% and springs back to 100%.",
+          "ease": "ease-out"
+        },
+        {
+          "t0": 150,
+          "t1": 183,
+          "title": "Selection circle",
+          "what": "A 42 pt gray (#444) circle fades in behind the emoji.",
+          "ease": "ease-out"
+        },
+        {
+          "t0": 266,
+          "t1": 383,
+          "title": "Menu closes",
+          "what": "The bar collapses toward the left, the menu shrinks into its corner, the message settles from 105% back to 100%, and the background un-dims.",
+          "ease": "ease-in-out"
+        },
+        {
+          "t0": 533,
+          "t1": 1000,
+          "title": "Badge double-bounces in",
+          "what": "The badge under the message grows 0% → 153% (by 150 ms) → 104% (233 ms) → 122% (333 ms) → 100% (467 ms).",
+          "ease": "ease-in-out"
+        }
+      ],
+      "zero_s": 4.577,
+      "focus": [
+        0,
+        250,
+        430,
+        280
+      ]
+    },
+    "v5": {
+      "style": "Jump & drop",
+      "style_desc": "The filled heart hops up out of the Like button, growing to twice its size with a little tilt, then drops softly back into place. No big heart over the photo in this recording.",
+      "total_ms": 483,
+      "zero": "the like",
+      "same_for_all": "Yes — both likes matched to the frame. The heart's gradient color is different each time (orange→red, purple→magenta).",
+      "clip": [
+        2.75,
+        3.45
+      ],
+      "icon_size": "Heart icon: ~22 pt (peaks at ~44 pt)",
+      "steps": [
+        {
+          "t0": 0,
+          "t1": 0,
+          "title": "Count +1",
+          "what": "The like count updates instantly.",
+          "ease": "instant"
+        },
+        {
+          "t0": 0,
+          "t1": 150,
+          "title": "Heart jumps out",
+          "what": "The filled heart rises 83 pt above the button, grows from 100% to 203% and fades in. It tilts 18° to the left and is upright again by the top.",
+          "ease": "ease-out"
+        },
+        {
+          "t0": 150,
+          "t1": 483,
+          "title": "Drops back in",
+          "what": "Falls back into the button and shrinks to 100%. Soft landing — no bounce.",
+          "ease": "ease-in-out"
+        },
+        {
+          "t0": 0,
+          "t1": 333,
+          "title": "Button icon reacts",
+          "what": "The outline heart in the button squishes to 71%, grows to 106% and fades out underneath the flying heart.",
+          "ease": "ease-out"
+        }
+      ],
+      "variant": "About 850 ms after the like, the gradient blends to the standard Instagram red (#FE0028). This was cut off by the next tap, so its length (~300 ms) is a rough estimate.",
+      "zero_s": 2.83,
+      "focus": [
+        0,
+        430,
+        230,
+        180
+      ]
+    },
+    "v6": {
+      "style": "Hop",
+      "style_desc": "The arrow fills orange and does a single quick hop up, dips just below its resting spot and settles. No scaling, no particles.",
+      "total_ms": 400,
+      "zero": "the tap on the up-arrow",
+      "same_for_all": "Yes — both upvotes matched frame for frame. Downvote is the mirror image: purple (#6A5BFE), only 6 pt down, ~383 ms. Removing a vote is instant.",
+      "clip": [
+        0.7,
+        1.25
+      ],
+      "icon_size": "Arrow icon: ~20 pt",
+      "steps": [
+        {
+          "t0": 0,
+          "t1": 0,
+          "title": "Fill + score change",
+          "what": "The arrow fills solid orange (#FF4500), and the score goes +1 and turns dark orange — instantly.",
+          "ease": "instant"
+        },
+        {
+          "t0": 0,
+          "t1": 85,
+          "title": "Hops up",
+          "what": "Moves up 14 pt.",
+          "ease": "ease-out"
+        },
+        {
+          "t0": 85,
+          "t1": 317,
+          "title": "Drops a little too far",
+          "what": "Comes down to ~3 pt below its resting spot.",
+          "ease": "ease-in-out"
+        },
+        {
+          "t0": 317,
+          "t1": 400,
+          "title": "Settles",
+          "what": "Back to its resting spot.",
+          "ease": "ease-out"
+        }
+      ],
+      "zero_s": 0.78,
+      "focus": [
+        0,
+        655,
+        215,
+        110
+      ]
+    },
+    "v7": {
+      "style": "Burst: ring + particles + heart pop",
+      "style_desc": "The classic Twitter heart: a pink dot swells into a circle that hollows out into a ring, the heart pops up from inside it, and a ring of tiny colored dots sprays outward.",
+      "total_ms": 865,
+      "zero": "the tap on the heart",
+      "same_for_all": "Yes — all three likes had identical timing (the feed version is just smaller). Unliking has no burst: the gray outline jumps to ~158%, then shrinks back over ~300 ms.",
+      "clip": [
+        10.7,
+        11.75
+      ],
+      "icon_size": "Heart icon: ~19 pt; burst circle: 28 pt",
+      "steps": [
+        {
+          "t0": 0,
+          "t1": 0,
+          "title": "Count +1, turns pink",
+          "what": "The count updates and turns pink (#F91880) instantly.",
+          "ease": "instant"
+        },
+        {
+          "t0": 0,
+          "t1": 200,
+          "title": "Dot swells into a circle",
+          "what": "A tiny dot grows into a 28 pt circle, shifting from crimson (#DF2A67) to lavender (#CC8EF4).",
+          "ease": "ease-out"
+        },
+        {
+          "t0": 166,
+          "t1": 323,
+          "title": "Circle hollows into a ring",
+          "what": "The center opens up until it's a thin ring, then it's gone.",
+          "ease": "linear"
+        },
+        {
+          "t0": 200,
+          "t1": 350,
+          "title": "Heart pops in",
+          "what": "The filled pink heart grows from 16% to 98% inside the ring.",
+          "ease": "ease-out"
+        },
+        {
+          "t0": 350,
+          "t1": 865,
+          "title": "Heart settles",
+          "what": "Gently dips to 89% (around 520–630 ms) and eases back to 100%.",
+          "ease": "ease-in-out"
+        },
+        {
+          "t0": 200,
+          "t1": 833,
+          "title": "Particles spray out",
+          "what": "14 small dots in 7 pairs (evenly spaced around the heart) fly out from 15 to 24 pt, shrinking and fading.",
+          "ease": "ease-out"
+        }
+      ],
+      "zero_s": 10.757,
+      "focus": [
+        110,
+        560,
+        220,
+        140
+      ]
+    }
+  }
+}
