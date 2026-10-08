@@ -73,6 +73,8 @@ h3 { font-size: 16px; margin: 0 0 12px; }
 .phone video { height: min(560px, calc(100vh - 230px)); display: block; border-radius: 20px; aspect-ratio: 1290/2796; background: #000; }
 .zoom { position: relative; overflow: hidden; border-radius: 16px; background: #000; width: 400px; max-width: 100%; }
 .zoom video { position: absolute; max-width: none; }
+.zoom, .phone { cursor: pointer; position: relative; }
+.play-ov { position: absolute; inset: 0; display: none; align-items: center; justify-content: center; font-size: 34px; color: #fff; background: rgba(0,0,0,.35); border-radius: inherit; }
 .ctrl { display: flex; gap: 6px; margin-top: 10px; flex-wrap: wrap; align-items: center; }
 .ctrl button { border: 1px solid var(--border); background: var(--surface-1); border-radius: 8px; padding: 4px 10px; cursor: pointer; font-size: 13px; }
 .ctrl button[aria-pressed="true"] { background: var(--accent); color: var(--surface-1); border-color: var(--accent); }
@@ -80,7 +82,7 @@ h3 { font-size: 16px; margin: 0 0 12px; }
 .cap { font-size: 12px; color: var(--text-muted); margin-top: 6px; max-width: 280px; }
 
 .facts { display: grid; gap: 10px; margin-bottom: 16px; }
-.fact { display: grid; grid-template-columns: 150px 1fr; gap: 12px; font-size: 14px; }
+.fact { display: grid; grid-template-columns: 110px 1fr; gap: 12px; font-size: 14px; }
 .fact b { color: var(--text-muted); font-weight: 600; font-size: 13px; }
 
 .tl svg { width: 100%; display: block; overflow: visible; }
@@ -109,7 +111,7 @@ h3 { font-size: 16px; margin: 0 0 12px; }
 </head>
 <body>
 <header>
-  <h1>Reaction selection animations</h1>
+  <h1>Reaction animations</h1>
   <nav id="nav"></nav>
   <button id="themeBtn" title="Toggle light/dark">◐</button>
 </header>
@@ -162,11 +164,11 @@ function easeIcon(key) {
 const fmtT = s => s.t0 === s.t1 ? `at ${s.t0} ms` : `${s.t0}–${s.t1} ms`;
 
 function renderOverview(main) {
-  main.append(h("h2", {}, "What happens after you pick a reaction"),
-    h("p", { class: "lede" }, "We recorded seven apps and measured, frame by frame, the animation that plays the moment a reaction is selected. Here's what they have in common — and how each one does it. Pick an app above for its step-by-step recipe."));
+  main.append(h("h2", {}, "Reaction selection animations"),
+    h("p", { class: "lede" }, "Measured frame by frame from 7 apps."));
   const tk = h("div", { class: "takeaways" });
   for (const t of R.takeaways) tk.append(h("div", { class: "card" }, h("b", {}, t.big), h("p", {}, t.text)));
-  main.append(h("h3", {}, "Common specs across all 7 apps"), tk);
+  main.append(tk);
 
   const list = h("div", { class: "ov-list" });
   const max = Math.max(...APPS.map(a => R.apps[a.id].total_ms));
@@ -176,18 +178,16 @@ function renderOverview(main) {
       h("div", { class: "name" }, a.app), h("div", { class: "style" }, r.style),
       h("div", { class: "ov-bar" }, h("i", { style: `width:${(r.total_ms / max * 150).toFixed(0)}px` }), h("span", {}, r.total_ms + " ms"))));
   });
-  main.append(h("div", { class: "card" }, h("h3", {}, "Total selection animation length, shortest to longest"), list,
-    h("div", { class: "scale-note" }, "Measured from the tap on the reaction to the last thing that moves. Click a row for the full recipe.")));
-  main.append(h("p", { class: "foot" }, "How this was measured: each iPhone recording was stepped through at its native 60 fps (one frame ≈ 17 ms, so times are accurate to about ±17 ms). Sizes are in iOS points on a 430 pt-wide iPhone screen. Easing names describe the measured motion; the cubic-bezier values next to them are a good starting point to fine-tune by eye."));
+  main.append(h("div", { class: "card" }, h("h3", {}, "Total length"), list));
+  main.append(h("p", { class: "foot" }, "Times ±17 ms (60 fps). Sizes in pt on a 430 pt-wide iPhone."));
 }
 
 function renderApp(main, app) {
   const r = R.apps[app.id];
   main.append(h("h2", {}, app.app));
   main.append(h("div", { class: "app-head" },
-    h("div", {}, h("div", { class: "big" }, r.total_ms + " ms"), h("div", { class: "lbl" }, "total length")),
+    h("div", {}, h("div", { class: "big" }, r.total_ms + " ms"), h("div", { class: "lbl" }, "total")),
     h("div", { style: "flex:1;min-width:260px" }, h("div", { class: "style-big" }, r.style), h("div", { class: "lbl" }, "style"))));
-  main.append(h("p", { class: "lede" }, r.style_desc));
 
   const grid = h("div", { class: "app-grid" });
   // player — loops just the selection moment
@@ -195,36 +195,35 @@ function renderApp(main, app) {
   video.muted = true;
   const [c0, c1] = r.clip;
   const msEl = h("span", { class: "ms" });
-  let speed = 0.25;
-  const speedBtns = [0.1, 0.25, 0.5, 1].map(s => h("button", { "aria-pressed": String(s === speed), onclick: () => { speed = s; video.playbackRate = s; speedBtns.forEach(b => b.setAttribute("aria-pressed", String(b.dataset.s == s))); }, "data-s": s }, s === 1 ? "Real speed" : s + "×"));
-  const pp = h("button", { onclick: () => video.paused ? video.play() : video.pause() }, "Pause");
-  video.addEventListener("play", () => pp.textContent = "Pause"); video.addEventListener("pause", () => pp.textContent = "Play");
-  video.addEventListener("loadedmetadata", () => { video.currentTime = c0; video.playbackRate = speed; video.play().catch(() => {}); });
+  let speed = 1;
+  const speedBtns = [1, 0.5, 0.25, 0.1].map(s => h("button", { "aria-pressed": String(s === speed), onclick: () => { speed = s; video.playbackRate = s; speedBtns.forEach(b => b.setAttribute("aria-pressed", String(b.dataset.s == s))); }, "data-s": s }, s + "×"));
+  const playIcon = h("div", { class: "play-ov", html: "&#9654;" });
+  let userPaused = false;
+  const toggle = () => { userPaused = !video.paused; userPaused ? video.pause() : video.play(); };
+  video.addEventListener("loadedmetadata", () => { video.currentTime = c0; video.playbackRate = speed; });
+  video.addEventListener("canplay", () => { if (!video.dataset.started) { video.dataset.started = 1; video.play().catch(() => {}); } });
   // zoomed view: crop the phone screen to this app's action area (focus rect in pt on a 430 × 932 pt screen)
   const [fx, fy, fw, fh] = r.focus, ZW = 400, k = ZW / fw;
-  const frame = h("div");
+  const frame = h("div", { onclick: toggle, title: "Click to play / pause" });
   const setView = zoomed => {
     frame.innerHTML = ""; viewBtns.forEach(b => b.setAttribute("aria-pressed", String((b.dataset.v === "zoom") === zoomed)));
     if (zoomed) { video.removeAttribute("style"); Object.assign(video.style, { width: 430 * k + "px", height: 932 * k + "px", left: -fx * k + "px", top: -fy * k + "px" });
-      frame.className = "zoom"; frame.style.height = fh * k + "px"; frame.append(video); }
-    else { video.removeAttribute("style"); frame.className = "phone"; frame.style.height = ""; frame.append(video); }
+      frame.className = "zoom"; frame.style.height = fh * k + "px"; frame.append(video, playIcon); }
+    else { video.removeAttribute("style"); frame.className = "phone"; frame.style.height = ""; frame.append(video, playIcon); }
     if (video.readyState) video.play().catch(() => {});
   };
-  const viewBtns = [h("button", { "data-v": "zoom", onclick: () => setView(true) }, "Zoomed in"), h("button", { "data-v": "full", onclick: () => setView(false) }, "Full screen")];
+  const viewBtns = [h("button", { "data-v": "zoom", onclick: () => setView(true) }, "Zoom"), h("button", { "data-v": "full", onclick: () => setView(false) }, "Full")];
   setView(true);
   grid.append(h("div", { class: "player" }, frame,
-    h("div", { class: "ctrl" }, ...viewBtns),
-    h("div", { class: "ctrl" }, pp, ...speedBtns), h("div", { class: "ctrl" }, h("span", { class: "muted", style: "font-size:12px" }, "Time since tap"), msEl),
-    h("div", { class: "cap" }, "Loops just the selection moment from the screen recording. Slowed down by default so each step is easy to see.")));
+    h("div", { class: "ctrl" }, ...viewBtns, h("span", { style: "width:8px" }), ...speedBtns, msEl)));
 
   const right = h("div");
   right.append(h("div", { class: "facts" },
-    h("div", { class: "fact" }, h("b", {}, "0 ms is"), h("span", {}, r.zero)),
-    h("div", { class: "fact" }, h("b", {}, "Same for every reaction?"), h("span", {}, r.same_for_all)),
+    h("div", { class: "fact" }, h("b", {}, "Same for all"), h("span", {}, r.same_for_all)),
     h("div", { class: "fact" }, h("b", {}, "Size"), h("span", {}, r.icon_size))));
 
   // timeline
-  const tl = h("div", { class: "card tl" }, h("h3", {}, "Timeline"));
+  const tl = h("div", { class: "card tl" });
   const W = 760, L = 28, Rr = 20, rowH = 26, steps = r.steps, H = steps.length * rowH + 26, T = r.total_ms;
   const x = ms => L + (W - L - Rr) * ms / T;
   const svg = S("svg", { viewBox: `0 0 ${W} ${H}` });
@@ -243,7 +242,7 @@ function renderApp(main, app) {
     g.append(hit); svg.append(g);
   });
   const ph = S("line", { y1: 0, y2: H - 18, class: "ph" }); svg.append(ph);
-  tl.append(svg, h("div", { class: "scale-note" }, "Bars = something is moving · ◆ = instant change · red line = where the video is right now"));
+  tl.append(svg);
   right.append(tl);
 
   // step cards
@@ -252,11 +251,11 @@ function renderApp(main, app) {
     const e = R.easings[s.ease] || {};
     ol.append(h("li", { class: "step" }, h("div", { class: "n" }, i + 1), h("div", {},
       h("div", { class: "top" }, h("span", { class: "title" }, s.title), h("span", { class: "time" }, fmtT(s) + (s.t0 !== s.t1 ? ` · ${s.t1 - s.t0} ms` : ""))),
-      h("div", { class: "what" }, s.what),
-      h("div", { class: "ease" }, easeIcon(s.ease), h("b", {}, e.label), h("span", {}, "— " + e.desc), e.css ? h("span", { class: "css" }, e.css) : null))));
+      s.what ? h("div", { class: "what" }, s.what) : null,
+      h("div", { class: "ease" }, easeIcon(s.ease), h("b", {}, e.label), h("span", { class: "muted" }, e.desc), e.css ? h("span", { class: "css" }, e.css) : null))));
   });
   right.append(ol);
-  if (r.variant) right.append(h("div", { class: "note" }, h("b", {}, "Also seen: "), r.variant));
+  if (r.variant) right.append(h("div", { class: "note" }, r.variant));
   grid.append(right);
   main.append(grid);
 
@@ -267,6 +266,8 @@ function renderApp(main, app) {
     if (video.currentTime >= c1 || video.currentTime < c0 - 0.05) video.currentTime = c0;
     const ms = Math.round((video.currentTime - r.zero_s) * 1000);
     msEl.textContent = (ms >= 0 ? "+" : "") + ms + " ms";
+    if (video.paused && !userPaused && video.readyState >= 3 && document.visibilityState === "visible" && !video.dataset.trying) { video.dataset.trying = 1; video.play().catch(() => {}).finally(() => delete video.dataset.trying); }
+    playIcon.style.display = video.paused ? "flex" : "none";
     const vis = ms >= 0 && ms <= T; ph.style.display = vis ? "" : "none";
     if (vis) { ph.setAttribute("x1", x(ms)); ph.setAttribute("x2", x(ms)); }
     raf = requestAnimationFrame(tick);
