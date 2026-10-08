@@ -1,0 +1,1105 @@
+{
+ "id": "v4",
+ "app": "WhatsApp",
+ "video": "ScreenRecording_10-08-2026 11-49-10_1.MP4",
+ "fps": 60,
+ "summary": "WhatsApp on iOS 26, dark mode, reacting to a 'Missed video call' bubble. Long-pressing the bubble gives it a grey press highlight, then lifts it as a context-menu preview: the bubble scales to 1.05x, the background dims, a Liquid Glass reaction bar grows out of a circle at its left end and stretches right while 7 emojis pop in left to right on a bouncy spring, and the Reply/Pin/Report/Delete menu scales out from its top-left corner. When you tap an emoji, it squashes, a grey selection circle appears behind it, everything collapses back in about 100 ms, and roughly 270 ms later a reaction badge grows out of the bubble's bottom-left with a double bounce. Tapping the already-selected emoji removes the reaction: the circle vanishes, the same dismiss plays, and no badge comes back.",
+ "trigger": "Long-press on a message bubble. The grey highlight starts, then the preview lifts about 200 ms later and the glass bar appears about 235 ms after the highlight starts (touch-down itself isn't visible). Then tap an emoji in the bar.",
+ "interactions": [
+  {
+   "t": 0.583,
+   "label": "Video starts with the menu already open. Tap thumbs-up: ADD (press squash 0.583, dismiss 0.85, 👍 badge pops at 1.13)"
+  },
+  {
+   "t": 2.28,
+   "label": "Long-press bubble (highlight 2.280, preview 2.497, badge hides at 2.513, bar visible about 2.55)"
+  },
+  {
+   "t": 3.03,
+   "label": "Tap the selected 👍: REMOVE (circle disappears 3.030 to 3.047, dismiss 3.212, no badge)"
+  },
+  {
+   "t": 3.778,
+   "label": "Long-press bubble (highlight 3.778, preview 3.978, glass circle 4.012)"
+  },
+  {
+   "t": 4.577,
+   "label": "Tap ❤️: ADD (squash 4.58 to 4.68, selection circle 4.727, dismiss 4.843, badge 5.110 to 5.58)"
+  },
+  {
+   "t": 5.675,
+   "label": "Long-press bubble (highlight 5.675, preview 5.875)"
+  },
+  {
+   "t": 6.7,
+   "label": "Tap the selected ❤️: REMOVE (dismiss about 6.83)"
+  },
+  {
+   "t": 7.557,
+   "label": "Long-press bubble (highlight 7.557, preview 7.773)"
+  },
+  {
+   "t": 8.638,
+   "label": "Tap ❤️: ADD (dismiss about 8.90, badge 9.12)"
+  },
+  {
+   "t": 9.753,
+   "label": "Long-press bubble (highlight 9.753, preview 9.970)"
+  },
+  {
+   "t": 10.75,
+   "label": "Tap the selected ❤️: REMOVE (dismiss about 10.94)"
+  },
+  {
+   "t": 11.502,
+   "label": "Long-press bubble (highlight 11.502, preview 11.702)"
+  },
+  {
+   "t": 12.5,
+   "label": "Tap 😂: ADD (dismiss about 12.78, badge 13.03)"
+  },
+  {
+   "t": 13.598,
+   "label": "Long-press bubble (highlight 13.598, preview 13.798)"
+  },
+  {
+   "t": 14.55,
+   "label": "Tap the selected 😂: REMOVE (dismiss about 14.73)"
+  },
+  {
+   "t": 15.05,
+   "label": "Control Center pulled down (end of recording, ignore)"
+  }
+ ],
+ "representative_cycle": {
+  "start": 3.778,
+  "end": 5.6
+ },
+ "elements": [
+  {
+   "name": "Message bubble (incoming, 'Missed video call')",
+   "w_pt": 254,
+   "h_pt": 55,
+   "radius_pt": 18,
+   "fill": "#1E1E1E",
+   "notes": "At rest, the lower bubble's top edge is at y≈347 pt and its left edge at x≈17 pt. The press highlight brightens the fill to about #2D2D2D. The radius is an estimate."
+  },
+  {
+   "name": "Reaction bar (Liquid Glass capsule)",
+   "w_pt": 335,
+   "h_pt": 55,
+   "radius_pt": 27.5,
+   "fill": "glass, about #1C1C1C over the content beneath, with a light rim",
+   "notes": "Settled frame: x 16 to 351 pt, y 263 to 319 pt. It sits over the previous message (the upper bubble), whose content shows through blurred and refracted; the red call icon makes a red rim glow at the left end. It holds 7 emojis plus a '+' button. The slot pitch is 42.7 pt; the first emoji is centred at x≈36 pt and the heart at x≈85 pt. The emoji glyphs are about 29 pt tall."
+  },
+  {
+   "name": "Selected-reaction circle",
+   "w_pt": 42,
+   "h_pt": 42,
+   "radius_pt": 21,
+   "fill": "#444444",
+   "notes": "Sits behind the reaction you currently have. It's there from the moment the bar opens if a reaction already exists, appears in about 33 ms on select, and disappears in 1 frame on deselect."
+  },
+  {
+   "name": "Context menu",
+   "w_pt": 249,
+   "h_pt": 179,
+   "radius_pt": 22,
+   "fill": "#141414",
+   "notes": "x 17 to 265 pt, y 412 to 591 pt, about 9 pt below the lifted bubble. Rows: Reply, Pin, Report, Delete (Delete in red #E5545F-ish). The radius is an estimate (low confidence)."
+  },
+  {
+   "name": "Background dim",
+   "w_pt": 430,
+   "h_pt": 932,
+   "radius_pt": 0,
+   "fill": "black overlay at about 20% opacity",
+   "notes": "Wallpaper luminance falls 13.4 to 10.8 (−19%) and pattern contrast falls 7.1 to 6.0, so it's mostly a dim with at most a very slight blur."
+  },
+  {
+   "name": "Reaction badge (pill under bubble)",
+   "w_pt": 35,
+   "h_pt": 26,
+   "radius_pt": 13,
+   "fill": "#1E1E1E pill with a ring in the chat-background colour",
+   "notes": "x 26 to 61 pt, y 395 to 421 pt. It overlaps the bubble's bottom edge by about 4 pt. The emoji inside is about 15 to 16 pt, centred at (43.7, 407) pt."
+  }
+ ],
+ "animations": [
+  {
+   "id": "press-highlight",
+   "name": "Bubble press highlight",
+   "element": "Message bubble (incoming, 'Missed video call')",
+   "start_s": 3.778,
+   "end_s": 3.912,
+   "duration_ms": 134,
+   "delay_from_trigger_ms": 0,
+   "properties": [
+    {
+     "prop": "fill luminance",
+     "from": 30,
+     "to": 45,
+     "unit": "8-bit L (#1E1E1E→#2D2D2D)"
+    }
+   ],
+   "easing": "close to linear or a gentle ease-out, then held until the preview lifts (about 200 ms after the highlight starts)",
+   "easing_css": "cubic-bezier(0.25,0.1,0.25,1)",
+   "spring": null,
+   "stagger_ms": 0,
+   "loop_period_ms": null,
+   "samples": {
+    "prop": "fill luminance",
+    "unit": "8-bit",
+    "points": [
+     [
+      -16,
+      30.0
+     ],
+     [
+      0,
+      31.5
+     ],
+     [
+      17,
+      33.3
+     ],
+     [
+      50,
+      36.2
+     ],
+     [
+      84,
+      39.8
+     ],
+     [
+      134,
+      44.8
+     ],
+     [
+      184,
+      44.8
+     ],
+     [
+      200,
+      30.3
+     ]
+    ]
+   },
+   "confidence": "high",
+   "notes": "The same 134 ms ramp and about 200 ms hold appear in all 7 long-presses (2.280, 3.778, 5.675, 7.557, 9.753, 11.502, 13.598). The highlight snaps off in 1 frame (3.978) when the lifted preview copy replaces the bubble."
+  },
+  {
+   "id": "bubble-lift",
+   "name": "Bubble lifts (preview scale)",
+   "element": "Message bubble (incoming, 'Missed video call')",
+   "start_s": 3.995,
+   "end_s": 4.195,
+   "duration_ms": 200,
+   "delay_from_trigger_ms": 217,
+   "properties": [
+    {
+     "prop": "scale",
+     "from": 1.0,
+     "to": 1.05,
+     "unit": ""
+    },
+    {
+     "prop": "translateX (title left edge)",
+     "from": 0,
+     "to": 4,
+     "unit": "pt"
+    },
+    {
+     "prop": "translateY",
+     "from": 0,
+     "to": -0.7,
+     "unit": "pt"
+    }
+   ],
+   "easing": "ease-out, no overshoot",
+   "easing_css": "cubic-bezier(0.2,0.8,0.3,1)",
+   "spring": {
+    "damping_ratio": 1.0,
+    "response_s": 0.3
+   },
+   "stagger_ms": 0,
+   "loop_period_ms": null,
+   "samples": {
+    "prop": "scale",
+    "unit": "",
+    "points": [
+     [
+      0,
+      1.0
+     ],
+     [
+      17,
+      1.006
+     ],
+     [
+      33,
+      1.017
+     ],
+     [
+      50,
+      1.022
+     ],
+     [
+      67,
+      1.028
+     ],
+     [
+      83,
+      1.034
+     ],
+     [
+      100,
+      1.039
+     ],
+     [
+      117,
+      1.039
+     ],
+     [
+      133,
+      1.045
+     ],
+     [
+      150,
+      1.045
+     ],
+     [
+      167,
+      1.045
+     ],
+     [
+      183,
+      1.051
+     ],
+     [
+      200,
+      1.051
+     ]
+    ]
+   },
+   "confidence": "medium",
+   "notes": "Measured from the width of the title text (178 to 187 px). Dismiss reverses it over 4.843 to 4.960 (117 ms)."
+  },
+  {
+   "id": "dim-in",
+   "name": "Background dims",
+   "element": "Background dim",
+   "start_s": 3.995,
+   "end_s": 4.095,
+   "duration_ms": 100,
+   "delay_from_trigger_ms": 217,
+   "properties": [
+    {
+     "prop": "opacity (black overlay)",
+     "from": 0,
+     "to": 0.2,
+     "unit": ""
+    }
+   ],
+   "easing": "ease-out",
+   "easing_css": "cubic-bezier(0.2,0.8,0.3,1)",
+   "spring": null,
+   "stagger_ms": 0,
+   "loop_period_ms": null,
+   "samples": {
+    "prop": "wallpaper mean luminance",
+    "unit": "8-bit",
+    "points": [
+     [
+      0,
+      13.3
+     ],
+     [
+      33,
+      12.3
+     ],
+     [
+      67,
+      11.9
+     ],
+     [
+      100,
+      10.8
+     ],
+     [
+      133,
+      10.8
+     ]
+    ]
+   },
+   "confidence": "medium",
+   "notes": "Dim out on dismiss: 4.877 to 4.943 (about 67 ms)."
+  },
+  {
+   "id": "bar-in",
+   "name": "Glass reaction bar grows (circle → capsule)",
+   "element": "Reaction bar (Liquid Glass capsule)",
+   "start_s": 4.012,
+   "end_s": 4.327,
+   "duration_ms": 315,
+   "delay_from_trigger_ms": 234,
+   "properties": [
+    {
+     "prop": "width",
+     "from": 61,
+     "peak": 345,
+     "to": 335,
+     "unit": "pt"
+    },
+    {
+     "prop": "height",
+     "from": 57,
+     "to": 55,
+     "unit": "pt"
+    },
+    {
+     "prop": "left edge",
+     "from": 16,
+     "to": 16,
+     "unit": "pt"
+    },
+    {
+     "prop": "opacity",
+     "from": 1,
+     "to": 1,
+     "unit": ""
+    }
+   ],
+   "easing": "Appears as a full-height glass circle (about 61 pt) at the left end, holds for about 33 ms, then stretches right with an accelerating, ease-in-like start (4.045 to 4.145), overshoots 3% at 4.162 to 4.212 and relaxes over about 120 ms with no undershoot",
+   "easing_css": "cubic-bezier(0.55,0,0.25,1.12)",
+   "spring": {
+    "damping_ratio": 0.75,
+    "response_s": 0.3
+   },
+   "stagger_ms": 0,
+   "loop_period_ms": null,
+   "samples": {
+    "prop": "width",
+    "unit": "pt",
+    "points": [
+     [
+      0,
+      60.7
+     ],
+     [
+      16,
+      60.7
+     ],
+     [
+      33,
+      67.3
+     ],
+     [
+      50,
+      79.0
+     ],
+     [
+      66,
+      99.0
+     ],
+     [
+      83,
+      130.7
+     ],
+     [
+      100,
+      184.0
+     ],
+     [
+      116,
+      272.3
+     ],
+     [
+      133,
+      330.7
+     ],
+     [
+      150,
+      345.3
+     ],
+     [
+      166,
+      345.3
+     ],
+     [
+      183,
+      345.3
+     ],
+     [
+      200,
+      345.3
+     ],
+     [
+      216,
+      344.7
+     ],
+     [
+      233,
+      343.3
+     ],
+     [
+      250,
+      341.3
+     ],
+     [
+      266,
+      338.7
+     ],
+     [
+      281,
+      337.3
+     ],
+     [
+      298,
+      336.0
+     ],
+     [
+      315,
+      335.3
+     ],
+     [
+      331,
+      335.3
+     ]
+    ]
+   },
+   "confidence": "medium",
+   "notes": "The circle appears in a single frame at full size and opacity; there's no visible fade. Emoji content also overshoots horizontally: the content span is 939 px at peak vs 890 px settled (+5.5%). The '+' button appears at the right end at 4.128, already near full size."
+  },
+  {
+   "id": "emoji-pop",
+   "name": "Emojis pop in (staggered L→R)",
+   "element": "Reaction bar (Liquid Glass capsule)",
+   "start_s": 4.062,
+   "end_s": 4.45,
+   "duration_ms": 300,
+   "delay_from_trigger_ms": 284,
+   "properties": [
+    {
+     "prop": "scale",
+     "from": 0,
+     "peak": 1.2,
+     "to": 1.0,
+     "unit": ""
+    },
+    {
+     "prop": "undershoot",
+     "from": 1.0,
+     "to": 0.96,
+     "unit": ""
+    }
+   ],
+   "easing": "underdamped spring: 20% overshoot, then about 4% undershoot. Peak about 117 ms after an emoji first appears; settled at about 300 ms",
+   "easing_css": "cubic-bezier(0.34,1.56,0.64,1)",
+   "spring": {
+    "damping_ratio": 0.46,
+    "response_s": 0.22
+   },
+   "stagger_ms": 17,
+   "loop_period_ms": null,
+   "samples": {
+    "prop": "scale (❤️, slot 2)",
+    "unit": "",
+    "points": [
+     [
+      0,
+      0.0
+     ],
+     [
+      17,
+      0.36
+     ],
+     [
+      34,
+      0.71
+     ],
+     [
+      50,
+      0.93
+     ],
+     [
+      67,
+      1.07
+     ],
+     [
+      84,
+      1.16
+     ],
+     [
+      100,
+      1.2
+     ],
+     [
+      117,
+      1.2
+     ],
+     [
+      134,
+      1.2
+     ],
+     [
+      150,
+      1.18
+     ],
+     [
+      167,
+      1.13
+     ],
+     [
+      184,
+      1.07
+     ],
+     [
+      200,
+      1.0
+     ],
+     [
+      215,
+      0.96
+     ],
+     [
+      232,
+      0.96
+     ],
+     [
+      249,
+      0.96
+     ],
+     [
+      265,
+      0.96
+     ],
+     [
+      282,
+      0.98
+     ],
+     [
+      299,
+      0.98
+     ],
+     [
+      315,
+      1.0
+     ],
+     [
+      332,
+      1.0
+     ]
+    ]
+   },
+   "confidence": "high",
+   "notes": "First-visible frames: 👍 about 4.062, ❤️ 4.095, 😂 4.112, 😮 4.128, 😢 4.145, 🙏 4.178, 👏 4.195. That's about 1 frame (17 ms) per emoji, roughly 130 ms across all 7. Every emoji has the same 1.2x peak and a 0.95 to 0.96 dip. The spring fit uses log decrement 0.20/0.04, so ζ≈0.46, and a 250 ms damped period."
+  },
+  {
+   "id": "menu-in",
+   "name": "Context menu scales in",
+   "element": "Context menu",
+   "start_s": 4.028,
+   "end_s": 4.162,
+   "duration_ms": 134,
+   "delay_from_trigger_ms": 250,
+   "properties": [
+    {
+     "prop": "scale (anchor top-left)",
+     "from": 0.17,
+     "peak": 1.02,
+     "to": 1.0,
+     "unit": ""
+    },
+    {
+     "prop": "opacity",
+     "from": 0,
+     "to": 1,
+     "unit": ""
+    }
+   ],
+   "easing": "fast spring: about 2% overshoot at 4.11 to 4.15. Labels become visible at 4.095",
+   "easing_css": "cubic-bezier(0.3,1.3,0.5,1)",
+   "spring": {
+    "damping_ratio": 0.8,
+    "response_s": 0.2
+   },
+   "stagger_ms": 0,
+   "loop_period_ms": null,
+   "samples": {
+    "prop": "width fraction",
+    "unit": "",
+    "points": [
+     [
+      0,
+      0.17
+     ],
+     [
+      17,
+      0.68
+     ],
+     [
+      34,
+      0.82
+     ],
+     [
+      50,
+      0.98
+     ],
+     [
+      67,
+      0.98
+     ],
+     [
+      84,
+      1.02
+     ],
+     [
+      100,
+      1.02
+     ],
+     [
+      117,
+      1.02
+     ],
+     [
+      134,
+      1.0
+     ]
+    ]
+   },
+   "confidence": "medium",
+   "notes": "Measured from the right edge of the diff bounding box, so it's a combined opacity and scale proxy."
+  },
+  {
+   "id": "emoji-press",
+   "name": "Tapped emoji squash (add only)",
+   "element": "Reaction bar (Liquid Glass capsule)",
+   "start_s": 4.577,
+   "end_s": 4.743,
+   "duration_ms": 166,
+   "delay_from_trigger_ms": 0,
+   "properties": [
+    {
+     "prop": "scale",
+     "from": 1.0,
+     "peak": 0.69,
+     "to": 1.0,
+     "unit": ""
+    }
+   ],
+   "easing": "press: about 33 ms to 0.69 (ease-out). Hold about 33 ms. Release: about 50 ms back to 0.95, then about 50 ms more to 1.0",
+   "easing_css": "cubic-bezier(0.2,0.8,0.3,1)",
+   "spring": null,
+   "stagger_ms": 0,
+   "loop_period_ms": null,
+   "samples": {
+    "prop": "scale (❤️ height)",
+    "unit": "",
+    "points": [
+     [
+      0,
+      1.0
+     ],
+     [
+      16,
+      0.74
+     ],
+     [
+      33,
+      0.69
+     ],
+     [
+      50,
+      0.69
+     ],
+     [
+      66,
+      0.74
+     ],
+     [
+      83,
+      0.85
+     ],
+     [
+      100,
+      0.95
+     ],
+     [
+      116,
+      0.95
+     ],
+     [
+      133,
+      0.95
+     ],
+     [
+      150,
+      0.98
+     ],
+     [
+      166,
+      1.0
+     ]
+    ]
+   },
+   "confidence": "high",
+   "notes": "Seen in every ADD (0.583 👍, 4.593 ❤️, 8.638 ❤️, 12.500 😂). No squash shows in any REMOVE tap, either because the deselect fires on touch-down or because the squash is suppressed."
+  },
+  {
+   "id": "select-circle",
+   "name": "Selection circle appears",
+   "element": "Selected-reaction circle",
+   "start_s": 4.727,
+   "end_s": 4.76,
+   "duration_ms": 33,
+   "delay_from_trigger_ms": 150,
+   "properties": [
+    {
+     "prop": "opacity",
+     "from": 0,
+     "to": 1,
+     "unit": ""
+    }
+   ],
+   "easing": "quick fade, maybe with a slight scale",
+   "easing_css": "ease-out",
+   "spring": null,
+   "stagger_ms": 0,
+   "loop_period_ms": null,
+   "samples": {
+    "prop": "grey pixel count (normalised)",
+    "unit": "",
+    "points": [
+     [
+      0,
+      0.0
+     ],
+     [
+      17,
+      0.13
+     ],
+     [
+      33,
+      0.75
+     ],
+     [
+      50,
+      1.0
+     ]
+    ]
+   },
+   "confidence": "medium",
+   "notes": "On REMOVE the circle disappears in 1 frame (3.030 to 3.047) and the dismiss follows 165 ms later."
+  },
+  {
+   "id": "dismiss",
+   "name": "Dismiss: bar collapses, menu shrinks, bubble settles",
+   "element": "Reaction bar (Liquid Glass capsule)",
+   "start_s": 4.843,
+   "end_s": 4.96,
+   "duration_ms": 117,
+   "delay_from_trigger_ms": 266,
+   "properties": [
+    {
+     "prop": "bar opacity×area",
+     "from": 1,
+     "to": 0,
+     "unit": ""
+    },
+    {
+     "prop": "bar content translateY",
+     "from": 0,
+     "to": 4,
+     "unit": "pt"
+    },
+    {
+     "prop": "bar width (collapses toward left / tapped emoji)",
+     "from": 335,
+     "to": 61,
+     "unit": "pt"
+    },
+    {
+     "prop": "menu scale (anchor top-left)",
+     "from": 1,
+     "to": 0.1,
+     "unit": ""
+    },
+    {
+     "prop": "bubble scale",
+     "from": 1.05,
+     "to": 1.0,
+     "unit": ""
+    }
+   ],
+   "easing": "ease-in-out, quick: the bar is gone in 85 to 100 ms (4.843 to 4.927), the menu in 100 ms (4.843 to 4.943), the bubble back in 117 ms",
+   "easing_css": "cubic-bezier(0.4,0,0.2,1)",
+   "spring": null,
+   "stagger_ms": 0,
+   "loop_period_ms": null,
+   "samples": {
+    "prop": "bar emoji opacity×area",
+    "unit": "",
+    "points": [
+     [
+      0,
+      1.0
+     ],
+     [
+      16,
+      0.93
+     ],
+     [
+      33,
+      0.76
+     ],
+     [
+      50,
+      0.55
+     ],
+     [
+      66,
+      0.34
+     ],
+     [
+      83,
+      0.14
+     ],
+     [
+      100,
+      0.03
+     ],
+     [
+      116,
+      0.0
+     ]
+    ]
+   },
+   "confidence": "medium",
+   "notes": "The dismiss is identical for ADD and REMOVE (C1 at 3.212: same 6-frame curve). The tapped emoji drifts left and down toward the bar's origin as it shrinks. The upper bubble reappears, sharp, under the fading glass. Menu-close width samples: [[0, 1.0], [16, 0.97], [33, 0.86], [50, 0.75], [66, 0.64], [83, 0.51], [100, 0.29], [116, 0.08], [133, 0.0]]"
+  },
+  {
+   "id": "badge-pop",
+   "name": "Reaction badge pops (add only)",
+   "element": "Reaction badge (pill under bubble)",
+   "start_s": 5.11,
+   "end_s": 5.577,
+   "duration_ms": 467,
+   "delay_from_trigger_ms": 533,
+   "properties": [
+    {
+     "prop": "emoji scale",
+     "from": 0,
+     "peak": 1.53,
+     "to": 1.0,
+     "unit": ""
+    },
+    {
+     "prop": "second bounce",
+     "from": 1.04,
+     "peak": 1.22,
+     "to": 1.0,
+     "unit": ""
+    },
+    {
+     "prop": "emoji centre Y",
+     "from": -4,
+     "to": 0,
+     "unit": "pt (starts at the bubble's bottom-left corner, about 5 pt up-left of the final centre)"
+    },
+    {
+     "prop": "pill opacity",
+     "from": 0,
+     "to": 1,
+     "unit": ""
+    }
+   ],
+   "easing": "Keyframed double bounce, not a single spring. Grows nearly linearly for 150 ms to 1.53x (5.26), drops to 1.04 (5.343 to 5.36), rises again to 1.22 (5.443) and settles at 1.0 by 5.577 with no undershoot. The pill appears in about 33 ms around 5.21 to 5.243",
+   "easing_css": "keyframes: 0ms 0 → 150ms 1.53 → 233ms 1.04 → 333ms 1.22 → 467ms 1.0 (each segment ease-in-out)",
+   "spring": null,
+   "stagger_ms": 0,
+   "loop_period_ms": null,
+   "samples": {
+    "prop": "emoji scale (height / settled 45 px)",
+    "unit": "",
+    "points": [
+     [
+      0,
+      0.067
+     ],
+     [
+      17,
+      0.156
+     ],
+     [
+      33,
+      0.356
+     ],
+     [
+      50,
+      0.489
+     ],
+     [
+      67,
+      0.6
+     ],
+     [
+      83,
+      0.778
+     ],
+     [
+      100,
+      0.956
+     ],
+     [
+      117,
+      1.156
+     ],
+     [
+      133,
+      1.378
+     ],
+     [
+      150,
+      1.533
+     ],
+     [
+      167,
+      1.444
+     ],
+     [
+      183,
+      1.356
+     ],
+     [
+      200,
+      1.222
+     ],
+     [
+      217,
+      1.133
+     ],
+     [
+      233,
+      1.044
+     ],
+     [
+      250,
+      1.044
+     ],
+     [
+      267,
+      1.089
+     ],
+     [
+      283,
+      1.133
+     ],
+     [
+      300,
+      1.178
+     ],
+     [
+      317,
+      1.2
+     ],
+     [
+      333,
+      1.222
+     ],
+     [
+      350,
+      1.178
+     ],
+     [
+      367,
+      1.133
+     ],
+     [
+      383,
+      1.111
+     ],
+     [
+      400,
+      1.089
+     ],
+     [
+      417,
+      1.044
+     ],
+     [
+      433,
+      1.044
+     ],
+     [
+      450,
+      1.022
+     ],
+     [
+      467,
+      1.0
+     ],
+     [
+      483,
+      1.0
+     ],
+     [
+      500,
+      1.0
+     ]
+    ]
+   },
+   "confidence": "medium",
+   "notes": "Starts 267 ms after the dismiss begins (4.843) and about 150 ms after the preview has fully gone. The delay ranges 230 to 280 ms across the 4 ADD cycles (0.85→1.13, 4.84→5.11, 8.90→9.12, 12.78→13.03). There's no emoji flying from the bar to the bubble. The faint diagonal streak in the heatmap is this badge growing and drifting, not a fly-over. Before 5.21 the height samples come from a width proxy."
+  }
+ ],
+ "keyframe_images": [
+  {
+   "t": 4.112,
+   "file": "img/v4_bar-stretch.png",
+   "caption": "Glass bar mid-stretch: left circle stretching right, 👍 ❤️ 😂 popping in, menu already scaled out"
+  },
+  {
+   "t": 4.212,
+   "file": "img/v4_emoji-overshoot.png",
+   "caption": "Emojis at their ~1.2x spring peak; the bar at +3% width overshoot"
+  },
+  {
+   "t": 4.443,
+   "file": "img/v4_menu-open.png",
+   "caption": "Settled open state: lifted 1.05x bubble, glass bar, Reply/Pin/Report/Delete menu, dimmed wallpaper"
+  },
+  {
+   "t": 4.777,
+   "file": "img/v4_selected.png",
+   "caption": "❤️ selected: grey #444 circle behind it, just before the dismiss"
+  },
+  {
+   "t": 5.26,
+   "file": "img/v4_badge-peak.png",
+   "caption": "❤️ badge at its 1.53x peak over the pill"
+  },
+  {
+   "t": 5.692,
+   "file": "img/v4_badge-settled.png",
+   "caption": "Badge settled: 16 pt emoji in a 35×26 pt pill overlapping the bubble's bottom-left"
+  }
+ ],
+ "observations": [
+  "The whole sequence is iOS 26 system context-menu motion (Liquid Glass) plus WhatsApp's own badge pop. The glass bar refracts the message underneath it; the red call icon causes the red rim at the bar's left end.",
+  "The bar is anchored at the left, over the previous message. It is born as a circle the height of the bar and stretches to the right, like a droplet elongating, rather than scaling uniformly.",
+  "The emoji stagger is about 1 frame (17 ms) each, so the wave across all 7 takes about 130 ms. Each emoji uses the same underdamped spring (1.2x peak, ζ≈0.46).",
+  "The existing reaction badge hides in a single frame when the preview lifts (2.513, 5.892, 10.003, 13.832). Inside the menu, your current reaction is shown only by the grey circle in the bar.",
+  "Add and remove share the same dismiss. Add has a press squash (0.69x), then the circle fades in about 150 ms after touch-down, then the dismiss about 115 ms later, then the badge pop about 270 ms after that. Remove has no squash: the circle vanishes, then the dismiss follows about 165 ms later, and no badge comes back.",
+  "The badge uses a two-bounce keyframe (1.53 → 1.04 → 1.22 → 1.0), which reads as a 'boing'. The 1.53x first peak is far bigger than the bar's emoji springs.",
+  "Pattern across the 8 cycles: add 👍, remove 👍, add ❤️, remove ❤️, add ❤️, remove ❤️, add 😂, remove 😂. Timing is consistent across cycles to within ±1 to 2 frames."
+ ],
+ "open_questions": [
+  "'Change reaction' (replacing one reaction with another directly) never happens in this recording; every add starts from no reaction. We can't tell whether a change morphs the badge or re-pops it.",
+  "The recording has no touch indicators, so the touch-down before the grey highlight and the exact tap/release moments are inferred from the visual response.",
+  "The Liquid Glass refraction, blur radius and rim highlight can't be measured from video. Reproduce them as a frosted capsule (about 20 to 30 pt blur, 1 px light rim).",
+  "Corner radii for the bubble and menu are estimates.",
+  "The badge pill's own scale-in happens within 2 frames and is partly hidden by the emoji overshoot. Opacity vs. scale can't be separated.",
+  "The bar-dismiss width trajectory is hard to separate from its fade. It's reported as the opacity×area proxy."
+ ]
+}

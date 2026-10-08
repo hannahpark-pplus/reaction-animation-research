@@ -1,0 +1,1453 @@
+{
+ "id": "v1",
+ "app": "Facebook",
+ "video": "ScreenRecording_10-08-2026 10-58-30_1.MP4",
+ "fps": 60,
+ "summary": "Facebook feed post, light mode. Long-pressing Like shows a grey press highlight. A white pill tray with 7 animated reactions then springs up above the action row (167 ms, ~6% overshoot), while the row is replaced by helper text. Tapping a reaction shows its name label. On release the tray and the other emojis drop away in ~67 ms. The chosen emoji then follows a fixed 333 ms arc: it pops to 1.08x, rises 85 pt and swoops left and down to a fixed point near (88, 652) pt, shrinking to nothing. The button label and count swap instantly. The recording runs the same cycle for Love, Care, Haha, Wow, Sad and Angry, each followed by an un-react tap.",
+ "trigger": "Long-press Like button. The tray appears 50-133 ms after the press highlight shows, but the real touch-down is probably earlier. Then tap a reaction. Tap the reacted button again to remove the reaction.",
+ "interactions": [
+  {
+   "t": 1.782,
+   "label": "Tap to un-Like (post starts Liked)"
+  },
+  {
+   "t": 2.547,
+   "label": "Long-press Like -> tray"
+  },
+  {
+   "t": 3.745,
+   "label": "Select Love"
+  },
+  {
+   "t": 5.26,
+   "label": "Tap to remove Love"
+  },
+  {
+   "t": 6.092,
+   "label": "Long-press Like -> tray"
+  },
+  {
+   "t": 7.108,
+   "label": "Select Care"
+  },
+  {
+   "t": 8.24,
+   "label": "Tap to remove Care"
+  },
+  {
+   "t": 9.138,
+   "label": "Long-press Like -> tray"
+  },
+  {
+   "t": 10.186,
+   "label": "Select Haha"
+  },
+  {
+   "t": 11.203,
+   "label": "Tap to remove Haha"
+  },
+  {
+   "t": 11.902,
+   "label": "Long-press Like -> tray"
+  },
+  {
+   "t": 12.885,
+   "label": "Select Wow"
+  },
+  {
+   "t": 13.9,
+   "label": "Tap to remove Wow"
+  },
+  {
+   "t": 14.715,
+   "label": "Long-press Like -> tray"
+  },
+  {
+   "t": 15.746,
+   "label": "Select Sad"
+  },
+  {
+   "t": 16.863,
+   "label": "Tap to remove Sad"
+  },
+  {
+   "t": 17.512,
+   "label": "Long-press Like -> tray"
+  },
+  {
+   "t": 18.345,
+   "label": "Select Angry"
+  },
+  {
+   "t": 19.493,
+   "label": "Tap to remove Angry"
+  },
+  {
+   "t": 20.625,
+   "label": "Control Center pulled down (end of recording, ignore)"
+  }
+ ],
+ "representative_cycle": {
+  "start": 2.5,
+  "end": 4.1
+ },
+ "elements": [
+  {
+   "name": "Reaction tray",
+   "w_pt": 328,
+   "h_pt": 52,
+   "radius_pt": 26,
+   "fill": "#F8F8FA",
+   "notes": "Pill, x 51-379 pt (centred on 430-pt screen), top 620 pt, bottom ~672 pt, overlapping the bottom of the photo. Soft shadow ~3-5 pt below (244->253 grey). Opaque at rest."
+  },
+  {
+   "name": "Reaction emoji (x7)",
+   "w_pt": 40,
+   "h_pt": 40,
+   "radius_pt": 20,
+   "fill": "animated sticker",
+   "notes": "Order: Like, Love, Care, Haha, Wow, Sad, Angry. Centres x = 77, 123, 169, 215, 261, 307, 353 pt (46 pt pitch, 6 pt gaps), y = 646 pt. 6 pt inset from the tray ends."
+  },
+  {
+   "name": "Reaction name tooltip",
+   "w_pt": 38,
+   "h_pt": 20,
+   "radius_pt": 10,
+   "fill": "rgba(0,0,0,~0.4)",
+   "notes": "White ~13 pt semibold text (e.g. 'Love'), centred 44 pt above the touched emoji (y ~592-612 pt), ~8 pt above the tray."
+  },
+  {
+   "name": "Like button press highlight",
+   "w_pt": 137,
+   "h_pt": 33,
+   "radius_pt": 7,
+   "fill": "#E3E3E3",
+   "notes": "x 3-140 pt, y 700-733 pt. Covers the Like third of the action row."
+  },
+  {
+   "name": "Action row / helper text",
+   "w_pt": 430,
+   "h_pt": 33,
+   "radius_pt": 0,
+   "fill": "#FFFFFF",
+   "notes": "'Slide finger across' -> 'Tap to select a reaction', grey ~15 pt, centred, at the action row's y (~716 pt)."
+  }
+ ],
+ "animations": [
+  {
+   "id": "press",
+   "name": "Like button press highlight",
+   "element": "Like button press highlight",
+   "start_s": 2.547,
+   "end_s": 2.68,
+   "duration_ms": 133,
+   "delay_from_trigger_ms": 0,
+   "properties": [
+    {
+     "prop": "background",
+     "from": "#FEFEFE",
+     "to": "#E3E3E3",
+     "unit": ""
+    },
+    {
+     "prop": "opacity",
+     "from": 0,
+     "to": 1,
+     "unit": "",
+     "notes": "Instant (1 frame) on touch-down. On long-press it vanishes instantly on the frame the tray starts (2.680). On a plain tap (un-react) it holds until release, then fades out over ~83 ms."
+    }
+   ],
+   "easing": "step on; long-press: step off; tap: ease-in fade-out (227->230->233->238->245->254 grey level over 5 frames)",
+   "easing_css": "on: steps(1); tap fade-out: 83ms cubic-bezier(0.5,0,1,1)",
+   "spring": null,
+   "stagger_ms": 0,
+   "loop_period_ms": null,
+   "samples": {
+    "prop": "highlight grey level (8-bit) during un-react tap at 5.260 s",
+    "unit": "0-255",
+    "points": [
+     [
+      0,
+      227
+     ],
+     [
+      17,
+      227
+     ],
+     [
+      33,
+      227
+     ],
+     [
+      50,
+      227
+     ],
+     [
+      67,
+      230
+     ],
+     [
+      83,
+      233
+     ],
+     [
+      100,
+      238
+     ],
+     [
+      117,
+      245
+     ],
+     [
+      133,
+      254
+     ]
+    ]
+   },
+   "confidence": "high",
+   "notes": "Hold before the tray opens varies across the 6 long-presses (133, 67, 50, 83, 83, 83 ms, measured from highlight-on to tray start). So highlight-on is probably not the real touch-down. iOS scroll views delay the highlight. The real long-press threshold is likely ~250-400 ms but cannot be measured."
+  },
+  {
+   "id": "row-swap-in",
+   "name": "Action row swaps to helper text",
+   "element": "Action row / helper text",
+   "start_s": 2.68,
+   "end_s": 2.68,
+   "duration_ms": 0,
+   "delay_from_trigger_ms": 133,
+   "properties": [
+    {
+     "prop": "content",
+     "from": "Like / Comment / Share",
+     "to": "'Slide finger across' (grey, centred)",
+     "unit": ""
+    },
+    {
+     "prop": "content",
+     "from": "'Slide finger across'",
+     "to": "'Tap to select a reaction'",
+     "unit": "",
+     "notes": "Swaps at ~2.963 s, about 283 ms after the tray starts. Probably fires when the finger lifts with no reaction under it."
+    }
+   ],
+   "easing": "instant (no cross-fade)",
+   "easing_css": "steps(1)",
+   "spring": null,
+   "stagger_ms": 0,
+   "loop_period_ms": null,
+   "samples": null,
+   "confidence": "high",
+   "notes": "The row snaps back to Like/Comment/Share, with the new reaction label, on the release frame."
+  },
+  {
+   "id": "tray-in",
+   "name": "Reaction tray appears",
+   "element": "Reaction tray",
+   "start_s": 2.68,
+   "end_s": 2.847,
+   "duration_ms": 167,
+   "delay_from_trigger_ms": 133,
+   "properties": [
+    {
+     "prop": "opacity",
+     "from": 0.4,
+     "to": 1,
+     "unit": "",
+     "notes": "Estimated from the tray-gap pixel over the dark photo: 0.43, 0.59, 0.81, 0.93, 0.99, 1.0 at 0-83 ms. Real start is ~0 one frame earlier."
+    },
+    {
+     "prop": "translateY (top edge)",
+     "from": 22,
+     "peak": -1.5,
+     "to": 0,
+     "unit": "pt",
+     "notes": "Top edge 642 -> 631 -> 624 -> 620.7 -> 619.0 -> 618.5 (overshoot) -> 619.3 -> 620 pt"
+    },
+    {
+     "prop": "width",
+     "from": 328,
+     "to": 328,
+     "unit": "pt",
+     "notes": "Full width from the first frame (x 51-379). No horizontal scale."
+    },
+    {
+     "prop": "visible height",
+     "from": 12,
+     "to": 52,
+     "unit": "pt",
+     "notes": "The first 1-2 frames look clipped or reveal from a thin sliver (2.680: 657-668 pt only). Low confidence on how the clip is built."
+    }
+   ],
+   "easing": "spring, ~6% overshoot (shared with the emojis)",
+   "easing_css": "cubic-bezier(0.3, 1.35, 0.6, 1)",
+   "spring": {
+    "damping_ratio": 0.67,
+    "response_s": 0.17
+   },
+   "stagger_ms": 0,
+   "loop_period_ms": null,
+   "samples": {
+    "prop": "tray top edge y",
+    "unit": "pt",
+    "points": [
+     [
+      17,
+      642.3
+     ],
+     [
+      33,
+      631.0
+     ],
+     [
+      50,
+      624.3
+     ],
+     [
+      67,
+      620.7
+     ],
+     [
+      83,
+      620.7
+     ],
+     [
+      100,
+      619.0
+     ],
+     [
+      117,
+      618.5
+     ],
+     [
+      133,
+      619.0
+     ],
+     [
+      150,
+      619.3
+     ],
+     [
+      167,
+      620.0
+     ],
+     [
+      200,
+      620.0
+     ]
+    ]
+   },
+   "confidence": "medium",
+   "notes": "Frame 2.763 is an exact duplicate of 2.747, probably a dropped or duplicated recorder frame. t_ms is measured from 2.680, the first frame with the tray visible."
+  },
+  {
+   "id": "emoji-in",
+   "name": "Tray emojis pop in",
+   "element": "Reaction emoji (x7)",
+   "start_s": 2.68,
+   "end_s": 2.88,
+   "duration_ms": 200,
+   "delay_from_trigger_ms": 133,
+   "properties": [
+    {
+     "prop": "scale",
+     "from": 0.4,
+     "peak": 1.033,
+     "to": 1.0,
+     "unit": "",
+     "notes": "Width 23 -> 31 -> 37 -> 40 -> 40 -> 40.7 -> 41.3 -> 40.7 -> 40.7 -> 40 pt. Rest size 40 pt."
+    },
+    {
+     "prop": "translateY",
+     "from": 35,
+     "peak": -2.2,
+     "to": 0,
+     "unit": "pt",
+     "notes": "Centre y offset from 646: +25, +15, +5, +0.5, +0.5, -1.7, -2.2, -1.7, -1, -0.5, 0"
+    }
+   ],
+   "easing": "spring, ~6% overshoot, peak at ~117 ms, settled by ~180 ms",
+   "easing_css": "cubic-bezier(0.3, 1.35, 0.6, 1)",
+   "spring": {
+    "damping_ratio": 0.67,
+    "response_s": 0.17
+   },
+   "stagger_ms": 0,
+   "loop_period_ms": null,
+   "samples": {
+    "prop": "emoji diameter",
+    "unit": "pt",
+    "points": [
+     [
+      17,
+      23.0
+     ],
+     [
+      33,
+      31.0
+     ],
+     [
+      50,
+      37.3
+     ],
+     [
+      67,
+      40.0
+     ],
+     [
+      83,
+      40.0
+     ],
+     [
+      100,
+      40.7
+     ],
+     [
+      117,
+      41.3
+     ],
+     [
+      133,
+      40.7
+     ],
+     [
+      150,
+      40.7
+     ],
+     [
+      167,
+      40.0
+     ],
+     [
+      200,
+      40.0
+     ]
+    ]
+   },
+   "confidence": "medium",
+   "notes": "All 7 emojis have identical size and offset on every frame, so there is no stagger. They rise with the tray."
+  },
+  {
+   "id": "emoji-loops",
+   "name": "Emoji idle animations inside tray",
+   "element": "Reaction emoji (x7)",
+   "start_s": 2.747,
+   "end_s": 3.745,
+   "duration_ms": 1000,
+   "delay_from_trigger_ms": 200,
+   "properties": [
+    {
+     "prop": "frame-by-frame sprite animation",
+     "from": "frame 0",
+     "to": "looping",
+     "unit": "",
+     "notes": "Each emoji runs its own animated sticker, e.g. Wow blinks (eyes closed ~2.88 s), Haha bobs, and Love pulses at ~3.2-3.3 s. Like, Wow and Sad are still for long stretches."
+    }
+   ],
+   "easing": "baked into the sprite",
+   "easing_css": null,
+   "spring": null,
+   "stagger_ms": 0,
+   "loop_period_ms": null,
+   "samples": null,
+   "confidence": "low",
+   "notes": "The animations restart from frame 0 every time the tray opens. Cross-cycle frame difference is about 1-3/255, versus 10-35 within a cycle. The longest hold here is about 1.0 s and no loop repeats inside it, so the loop period is over 1 s and cannot be measured."
+  },
+  {
+   "id": "tap-tooltip",
+   "name": "Hovered reaction label",
+   "element": "Reaction name tooltip",
+   "start_s": 3.745,
+   "end_s": 3.9,
+   "duration_ms": 155,
+   "delay_from_trigger_ms": 0,
+   "properties": [
+    {
+     "prop": "opacity (in)",
+     "from": 0,
+     "to": 1,
+     "unit": "",
+     "notes": "Instant on the touch-down frame. The selected emoji does NOT scale up while touched."
+    },
+    {
+     "prop": "position",
+     "from": "centred 44 pt above the emoji (centre y ~602)",
+     "to": "follows the flying emoji, staying ~40 pt above it",
+     "unit": "pt"
+    },
+    {
+     "prop": "opacity (out)",
+     "from": 1,
+     "to": 0,
+     "unit": "",
+     "notes": "Fades and shrinks with the emoji, gone by ~150 ms after release"
+    }
+   ],
+   "easing": "in: step; out: linear-ish fade over ~150 ms",
+   "easing_css": "out: 150ms linear",
+   "spring": null,
+   "stagger_ms": 0,
+   "loop_period_ms": null,
+   "samples": null,
+   "confidence": "medium",
+   "notes": "For the Love press, touch-down was at 3.745 and release about 1 frame later (3.762)."
+  },
+  {
+   "id": "tray-out",
+   "name": "Tray dismiss on selection",
+   "element": "Reaction tray + unselected emojis",
+   "start_s": 3.745,
+   "end_s": 3.812,
+   "duration_ms": 67,
+   "delay_from_trigger_ms": 0,
+   "properties": [
+    {
+     "prop": "tray opacity",
+     "from": 1,
+     "to": 0,
+     "unit": ""
+    },
+    {
+     "prop": "tray translateY",
+     "from": 0,
+     "to": 15,
+     "unit": "pt"
+    },
+    {
+     "prop": "unselected emoji scale",
+     "from": 1,
+     "to": 0.25,
+     "unit": "",
+     "notes": "~0.72 at 17 ms, ~0.5 at 33 ms, ~0.25 at 50 ms, gone at 67 ms"
+    },
+    {
+     "prop": "unselected emoji translateY",
+     "from": 0,
+     "to": 41,
+     "unit": "pt",
+     "notes": "Centres 646 -> 663 -> 680 -> ~687 pt. They drop into the summary/count row and fade out."
+    }
+   ],
+   "easing": "ease-in (accelerating drop), very fast",
+   "easing_css": "67ms cubic-bezier(0.4, 0, 1, 1)",
+   "spring": null,
+   "stagger_ms": 0,
+   "loop_period_ms": null,
+   "samples": {
+    "prop": "unselected emoji centre y",
+    "unit": "pt",
+    "points": [
+     [
+      0,
+      646
+     ],
+     [
+      17,
+      663
+     ],
+     [
+      33,
+      680
+     ],
+     [
+      50,
+      687
+     ]
+    ]
+   },
+   "confidence": "low",
+   "notes": "Only 3-4 frames. Values come from the Love and Care cycles. The selected emoji leaves the tray on the same frame."
+  },
+  {
+   "id": "fly-love",
+   "name": "Selected reaction fly-out: Love",
+   "element": "Love emoji (selected)",
+   "start_s": 3.745,
+   "end_s": 4.078,
+   "duration_ms": 333,
+   "delay_from_trigger_ms": 0,
+   "properties": [
+    {
+     "prop": "position (path)",
+     "from": "slot centre (123, 646) pt",
+     "to": "fixed end point ~(88, 652) pt, same for every reaction",
+     "unit": "pt",
+     "notes": "Quadratic-Bezier arc: P0 = slot centre, P2 = (88, 652), P1 = (midpoint x, ~475 pt), i.e. control point ~171 pt above the start. Apex of the visible path is y = 561 pt (85 pt above the tray row) at s = 0.48 (~117 ms). Fits all six reactions within ~2 pt."
+    },
+    {
+     "prop": "path progress s",
+     "from": 0,
+     "to": 1,
+     "unit": "",
+     "notes": "Shared by all reactions; see samples. s(50 ms)=0.17, s(117)=0.49, s(233)=0.87, s(300)=0.97."
+    },
+    {
+     "prop": "size (diameter)",
+     "from": 40,
+     "peak": 43.3,
+     "to": 0,
+     "unit": "pt",
+     "notes": "scale 1.0 -> 1.08 peak at 50-67 ms -> ~0.12 at 300 ms -> gone (~0) by 317-333 ms. No opacity fade measured; it shrinks to nothing."
+    },
+    {
+     "prop": "opacity",
+     "from": 1,
+     "to": 1,
+     "unit": "",
+     "notes": "Stays opaque. It disappears by shrinking."
+    }
+   ],
+   "easing": "Path progress: ease-in-out (slow first frame, ~linear middle, decelerates into the end). Size: quick ease-out pop to 1.08 over ~55 ms, then ease-out shrink to 0 over ~270 ms.",
+   "easing_css": "progress cubic-bezier(0.35, 0, 0.35, 1) over 333 ms; size keyframes 0%:1.0, 17%:1.08, 35%:0.95, 50%:0.70, 65%:0.42, 80%:0.22, 100%:0",
+   "spring": null,
+   "stagger_ms": 0,
+   "loop_period_ms": null,
+   "samples": {
+    "prop": "centre x, centre y, diameter",
+    "unit": "pt",
+    "points": [
+     [
+      0,
+      122.8,
+      645.8,
+      39.3
+     ],
+     [
+      17,
+      121.7,
+      635.2,
+      41.3
+     ],
+     [
+      33,
+      120.1,
+      620.4,
+      42.0
+     ],
+     [
+      50,
+      117.8,
+      602.0,
+      42.7
+     ],
+     [
+      67,
+      115.0,
+      583.5,
+      42.7
+     ],
+     [
+      83,
+      112.4,
+      572.1,
+      41.3
+     ],
+     [
+      100,
+      109.7,
+      564.3,
+      38.7
+     ],
+     [
+      117,
+      106.9,
+      561.1,
+      36.0
+     ],
+     [
+      133,
+      104.3,
+      562.5,
+      32.0
+     ],
+     [
+      150,
+      102.0,
+      567.2,
+      28.7
+     ],
+     [
+      167,
+      99.7,
+      574.7,
+      24.0
+     ],
+     [
+      183,
+      97.8,
+      583.8,
+      20.7
+     ],
+     [
+      200,
+      96.1,
+      593.4,
+      17.3
+     ],
+     [
+      217,
+      94.6,
+      603.6,
+      14.0
+     ],
+     [
+      233,
+      93.3,
+      613.3,
+      11.3
+     ],
+     [
+      250,
+      92.2,
+      622.1,
+      9.3
+     ],
+     [
+      267,
+      91.3,
+      630.5,
+      7.3
+     ],
+     [
+      283,
+      90.5,
+      637.6,
+      6.0
+     ],
+     [
+      300,
+      89.8,
+      643.8,
+      4.7
+     ],
+     [
+      317,
+      89.7,
+      649.7,
+      2.7
+     ]
+    ]
+   },
+   "confidence": "high",
+   "notes": "Representative cycle. y apex 561.1 pt at 117 ms. The end point (~88-90, 650) sits on the photo's bottom edge above the reaction summary, not on the Like button. It shrinks away before reaching anything."
+  },
+  {
+   "id": "fly-care",
+   "name": "Selected reaction fly-out: Care",
+   "element": "Care emoji (selected)",
+   "start_s": 7.108,
+   "end_s": 7.441,
+   "duration_ms": 333,
+   "delay_from_trigger_ms": 0,
+   "properties": [
+    {
+     "prop": "position (path)",
+     "from": "slot centre (169, 646) pt",
+     "to": "fixed end point ~(88, 652) pt, same for every reaction",
+     "unit": "pt",
+     "notes": "Quadratic-Bezier arc: P0 = slot centre, P2 = (88, 652), P1 = (midpoint x, ~475 pt), i.e. control point ~171 pt above the start. Apex of the visible path is y = 561 pt (85 pt above the tray row) at s = 0.48 (~117 ms). Fits all six reactions within ~2 pt."
+    },
+    {
+     "prop": "path progress s",
+     "from": 0,
+     "to": 1,
+     "unit": "",
+     "notes": "Shared by all reactions; see samples. s(50 ms)=0.17, s(117)=0.49, s(233)=0.87, s(300)=0.97."
+    },
+    {
+     "prop": "size (diameter)",
+     "from": 40,
+     "peak": 43.3,
+     "to": 0,
+     "unit": "pt",
+     "notes": "scale 1.0 -> 1.08 peak at 50-67 ms -> ~0.12 at 300 ms -> gone (~0) by 317-333 ms. No opacity fade measured; it shrinks to nothing."
+    },
+    {
+     "prop": "opacity",
+     "from": 1,
+     "to": 1,
+     "unit": "",
+     "notes": "Stays opaque. It disappears by shrinking."
+    }
+   ],
+   "easing": "Path progress: ease-in-out (slow first frame, ~linear middle, decelerates into the end). Size: quick ease-out pop to 1.08 over ~55 ms, then ease-out shrink to 0 over ~270 ms.",
+   "easing_css": "progress cubic-bezier(0.35, 0, 0.35, 1) over 333 ms; size keyframes 0%:1.0, 17%:1.08, 35%:0.95, 50%:0.70, 65%:0.42, 80%:0.22, 100%:0",
+   "spring": null,
+   "stagger_ms": 0,
+   "loop_period_ms": null,
+   "samples": {
+    "prop": "centre y",
+    "unit": "pt",
+    "points": [
+     [
+      33,
+      614.3
+     ],
+     [
+      50,
+      596.0
+     ],
+     [
+      67,
+      580.3
+     ],
+     [
+      83,
+      569.7
+     ],
+     [
+      100,
+      563.0
+     ],
+     [
+      117,
+      561.3
+     ],
+     [
+      133,
+      564.0
+     ],
+     [
+      150,
+      569.7
+     ],
+     [
+      167,
+      577.3
+     ],
+     [
+      183,
+      587.0
+     ],
+     [
+      200,
+      596.7
+     ],
+     [
+      217,
+      606.7
+     ],
+     [
+      233,
+      616.0
+     ],
+     [
+      250,
+      625.0
+     ],
+     [
+      267,
+      632.7
+     ],
+     [
+      283,
+      639.3
+     ]
+    ]
+   },
+   "confidence": "high",
+   "notes": "Same curve. Apex 561.3 pt at 117 ms. Size 42.7 -> 43.3 -> ... -> 1.3 at 283 ms."
+  },
+  {
+   "id": "fly-haha",
+   "name": "Selected reaction fly-out: Haha",
+   "element": "Haha emoji (selected)",
+   "start_s": 10.186,
+   "end_s": 10.519,
+   "duration_ms": 333,
+   "delay_from_trigger_ms": 0,
+   "properties": [
+    {
+     "prop": "position (path)",
+     "from": "slot centre (215, 646) pt",
+     "to": "fixed end point ~(88, 652) pt, same for every reaction",
+     "unit": "pt",
+     "notes": "Quadratic-Bezier arc: P0 = slot centre, P2 = (88, 652), P1 = (midpoint x, ~475 pt), i.e. control point ~171 pt above the start. Apex of the visible path is y = 561 pt (85 pt above the tray row) at s = 0.48 (~117 ms). Fits all six reactions within ~2 pt."
+    },
+    {
+     "prop": "path progress s",
+     "from": 0,
+     "to": 1,
+     "unit": "",
+     "notes": "Shared by all reactions; see samples. s(50 ms)=0.17, s(117)=0.49, s(233)=0.87, s(300)=0.97."
+    },
+    {
+     "prop": "size (diameter)",
+     "from": 40,
+     "peak": 43.3,
+     "to": 0,
+     "unit": "pt",
+     "notes": "scale 1.0 -> 1.08 peak at 50-67 ms -> ~0.12 at 300 ms -> gone (~0) by 317-333 ms. No opacity fade measured; it shrinks to nothing."
+    },
+    {
+     "prop": "opacity",
+     "from": 1,
+     "to": 1,
+     "unit": "",
+     "notes": "Stays opaque. It disappears by shrinking."
+    }
+   ],
+   "easing": "Path progress: ease-in-out (slow first frame, ~linear middle, decelerates into the end). Size: quick ease-out pop to 1.08 over ~55 ms, then ease-out shrink to 0 over ~270 ms.",
+   "easing_css": "progress cubic-bezier(0.35, 0, 0.35, 1) over 333 ms; size keyframes 0%:1.0, 17%:1.08, 35%:0.95, 50%:0.70, 65%:0.42, 80%:0.22, 100%:0",
+   "spring": null,
+   "stagger_ms": 0,
+   "loop_period_ms": null,
+   "samples": {
+    "prop": "centre x",
+    "unit": "pt",
+    "points": [
+     [
+      33,
+      200.7
+     ],
+     [
+      50,
+      190.7
+     ],
+     [
+      67,
+      181.7
+     ],
+     [
+      83,
+      171.7
+     ],
+     [
+      100,
+      161.7
+     ],
+     [
+      117,
+      152.0
+     ],
+     [
+      133,
+      143.3
+     ],
+     [
+      150,
+      134.7
+     ],
+     [
+      167,
+      127.7
+     ],
+     [
+      183,
+      120.7
+     ],
+     [
+      200,
+      114.7
+     ],
+     [
+      217,
+      109.7
+     ],
+     [
+      233,
+      105.7
+     ],
+     [
+      250,
+      102.0
+     ],
+     [
+      267,
+      99.0
+     ],
+     [
+      283,
+      96.3
+     ],
+     [
+      300,
+      94.3
+     ]
+    ]
+   },
+   "confidence": "high",
+   "notes": "Same curve. Apex 562.0 at 117 ms."
+  },
+  {
+   "id": "fly-wow",
+   "name": "Selected reaction fly-out: Wow",
+   "element": "Wow emoji (selected)",
+   "start_s": 12.885,
+   "end_s": 13.218,
+   "duration_ms": 333,
+   "delay_from_trigger_ms": 0,
+   "properties": [
+    {
+     "prop": "position (path)",
+     "from": "slot centre (261, 646) pt",
+     "to": "fixed end point ~(88, 652) pt, same for every reaction",
+     "unit": "pt",
+     "notes": "Quadratic-Bezier arc: P0 = slot centre, P2 = (88, 652), P1 = (midpoint x, ~475 pt), i.e. control point ~171 pt above the start. Apex of the visible path is y = 561 pt (85 pt above the tray row) at s = 0.48 (~117 ms). Fits all six reactions within ~2 pt."
+    },
+    {
+     "prop": "path progress s",
+     "from": 0,
+     "to": 1,
+     "unit": "",
+     "notes": "Shared by all reactions; see samples. s(50 ms)=0.17, s(117)=0.49, s(233)=0.87, s(300)=0.97."
+    },
+    {
+     "prop": "size (diameter)",
+     "from": 40,
+     "peak": 43.3,
+     "to": 0,
+     "unit": "pt",
+     "notes": "scale 1.0 -> 1.08 peak at 50-67 ms -> ~0.12 at 300 ms -> gone (~0) by 317-333 ms. No opacity fade measured; it shrinks to nothing."
+    },
+    {
+     "prop": "opacity",
+     "from": 1,
+     "to": 1,
+     "unit": "",
+     "notes": "Stays opaque. It disappears by shrinking."
+    }
+   ],
+   "easing": "Path progress: ease-in-out (slow first frame, ~linear middle, decelerates into the end). Size: quick ease-out pop to 1.08 over ~55 ms, then ease-out shrink to 0 over ~270 ms.",
+   "easing_css": "progress cubic-bezier(0.35, 0, 0.35, 1) over 333 ms; size keyframes 0%:1.0, 17%:1.08, 35%:0.95, 50%:0.70, 65%:0.42, 80%:0.22, 100%:0",
+   "spring": null,
+   "stagger_ms": 0,
+   "loop_period_ms": null,
+   "samples": {
+    "prop": "centre x",
+    "unit": "pt",
+    "points": [
+     [
+      50,
+      232.0
+     ],
+     [
+      67,
+      217.7
+     ],
+     [
+      83,
+      204.7
+     ],
+     [
+      100,
+      191.3
+     ],
+     [
+      117,
+      178.3
+     ],
+     [
+      133,
+      166.0
+     ],
+     [
+      150,
+      154.7
+     ],
+     [
+      167,
+      144.0
+     ],
+     [
+      183,
+      135.0
+     ],
+     [
+      200,
+      126.7
+     ],
+     [
+      217,
+      119.7
+     ],
+     [
+      233,
+      113.7
+     ],
+     [
+      250,
+      108.3
+     ],
+     [
+      267,
+      104.0
+     ],
+     [
+      283,
+      100.3
+     ],
+     [
+      300,
+      97.3
+     ]
+    ]
+   },
+   "confidence": "high",
+   "notes": "Same curve. Apex 561.3 at 117 ms."
+  },
+  {
+   "id": "fly-sad",
+   "name": "Selected reaction fly-out: Sad",
+   "element": "Sad emoji (selected)",
+   "start_s": 15.746,
+   "end_s": 16.079,
+   "duration_ms": 333,
+   "delay_from_trigger_ms": 0,
+   "properties": [
+    {
+     "prop": "position (path)",
+     "from": "slot centre (307, 646) pt",
+     "to": "fixed end point ~(88, 652) pt, same for every reaction",
+     "unit": "pt",
+     "notes": "Quadratic-Bezier arc: P0 = slot centre, P2 = (88, 652), P1 = (midpoint x, ~475 pt), i.e. control point ~171 pt above the start. Apex of the visible path is y = 561 pt (85 pt above the tray row) at s = 0.48 (~117 ms). Fits all six reactions within ~2 pt."
+    },
+    {
+     "prop": "path progress s",
+     "from": 0,
+     "to": 1,
+     "unit": "",
+     "notes": "Shared by all reactions; see samples. s(50 ms)=0.17, s(117)=0.49, s(233)=0.87, s(300)=0.97."
+    },
+    {
+     "prop": "size (diameter)",
+     "from": 40,
+     "peak": 43.3,
+     "to": 0,
+     "unit": "pt",
+     "notes": "scale 1.0 -> 1.08 peak at 50-67 ms -> ~0.12 at 300 ms -> gone (~0) by 317-333 ms. No opacity fade measured; it shrinks to nothing."
+    },
+    {
+     "prop": "opacity",
+     "from": 1,
+     "to": 1,
+     "unit": "",
+     "notes": "Stays opaque. It disappears by shrinking."
+    }
+   ],
+   "easing": "Path progress: ease-in-out (slow first frame, ~linear middle, decelerates into the end). Size: quick ease-out pop to 1.08 over ~55 ms, then ease-out shrink to 0 over ~270 ms.",
+   "easing_css": "progress cubic-bezier(0.35, 0, 0.35, 1) over 333 ms; size keyframes 0%:1.0, 17%:1.08, 35%:0.95, 50%:0.70, 65%:0.42, 80%:0.22, 100%:0",
+   "spring": null,
+   "stagger_ms": 0,
+   "loop_period_ms": null,
+   "samples": {
+    "prop": "centre x",
+    "unit": "pt",
+    "points": [
+     [
+      50,
+      270.7
+     ],
+     [
+      67,
+      254.3
+     ],
+     [
+      83,
+      236.3
+     ],
+     [
+      100,
+      218.7
+     ],
+     [
+      117,
+      202.3
+     ],
+     [
+      133,
+      186.0
+     ],
+     [
+      150,
+      171.3
+     ],
+     [
+      167,
+      158.7
+     ],
+     [
+      183,
+      147.7
+     ],
+     [
+      200,
+      137.3
+     ],
+     [
+      217,
+      128.3
+     ],
+     [
+      233,
+      120.7
+     ],
+     [
+      250,
+      113.7
+     ],
+     [
+      267,
+      108.0
+     ],
+     [
+      283,
+      103.7
+     ],
+     [
+      300,
+      100.0
+     ]
+    ]
+   },
+   "confidence": "high",
+   "notes": "Same curve. Apex 561.3 at 117 ms."
+  },
+  {
+   "id": "fly-angry",
+   "name": "Selected reaction fly-out: Angry",
+   "element": "Angry emoji (selected)",
+   "start_s": 18.345,
+   "end_s": 18.678,
+   "duration_ms": 333,
+   "delay_from_trigger_ms": 0,
+   "properties": [
+    {
+     "prop": "position (path)",
+     "from": "slot centre (353, 646) pt",
+     "to": "fixed end point ~(88, 652) pt, same for every reaction",
+     "unit": "pt",
+     "notes": "Quadratic-Bezier arc: P0 = slot centre, P2 = (88, 652), P1 = (midpoint x, ~475 pt), i.e. control point ~171 pt above the start. Apex of the visible path is y = 561 pt (85 pt above the tray row) at s = 0.48 (~117 ms). Fits all six reactions within ~2 pt."
+    },
+    {
+     "prop": "path progress s",
+     "from": 0,
+     "to": 1,
+     "unit": "",
+     "notes": "Shared by all reactions; see samples. s(50 ms)=0.17, s(117)=0.49, s(233)=0.87, s(300)=0.97."
+    },
+    {
+     "prop": "size (diameter)",
+     "from": 40,
+     "peak": 43.3,
+     "to": 0,
+     "unit": "pt",
+     "notes": "scale 1.0 -> 1.08 peak at 50-67 ms -> ~0.12 at 300 ms -> gone (~0) by 317-333 ms. No opacity fade measured; it shrinks to nothing."
+    },
+    {
+     "prop": "opacity",
+     "from": 1,
+     "to": 1,
+     "unit": "",
+     "notes": "Stays opaque. It disappears by shrinking."
+    }
+   ],
+   "easing": "Path progress: ease-in-out (slow first frame, ~linear middle, decelerates into the end). Size: quick ease-out pop to 1.08 over ~55 ms, then ease-out shrink to 0 over ~270 ms.",
+   "easing_css": "progress cubic-bezier(0.35, 0, 0.35, 1) over 333 ms; size keyframes 0%:1.0, 17%:1.08, 35%:0.95, 50%:0.70, 65%:0.42, 80%:0.22, 100%:0",
+   "spring": null,
+   "stagger_ms": 0,
+   "loop_period_ms": null,
+   "samples": {
+    "prop": "path progress s",
+    "unit": "",
+    "points": [
+     [
+      0,
+      0.0
+     ],
+     [
+      50,
+      0.167
+     ],
+     [
+      67,
+      0.244
+     ],
+     [
+      83,
+      0.323
+     ],
+     [
+      100,
+      0.404
+     ],
+     [
+      117,
+      0.48
+     ],
+     [
+      133,
+      0.552
+     ],
+     [
+      150,
+      0.62
+     ],
+     [
+      167,
+      0.68
+     ],
+     [
+      183,
+      0.731
+     ],
+     [
+      200,
+      0.779
+     ],
+     [
+      217,
+      0.82
+     ],
+     [
+      233,
+      0.854
+     ],
+     [
+      250,
+      0.885
+     ],
+     [
+      267,
+      0.91
+     ],
+     [
+      283,
+      0.932
+     ],
+     [
+      300,
+      0.948
+     ]
+    ]
+   },
+   "confidence": "high",
+   "notes": "Longest travel (265 pt horizontally) but the same 333 ms duration, so the duration is fixed rather than distance-based. Samples are path progress s, derived from x with end x = 88.2."
+  },
+  {
+   "id": "label-count-swap",
+   "name": "Button label and count update",
+   "element": "Like button label / reaction summary",
+   "start_s": 3.762,
+   "end_s": 3.812,
+   "duration_ms": 50,
+   "delay_from_trigger_ms": 17,
+   "properties": [
+    {
+     "prop": "button label",
+     "from": "grey thumb 'Like'",
+     "to": "reaction icon + coloured name (Love = red #E4405F-ish; Care/Haha/Wow/Sad/Angry = amber-yellow text)",
+     "unit": "",
+     "notes": "Instant, on the first frame after release"
+    },
+    {
+     "prop": "count text",
+     "from": "66",
+     "to": "You and 66 others",
+     "unit": "",
+     "notes": "Instant, 50-67 ms after release. The summary icon cluster gains the chosen reaction's icon on the same frame if it wasn't already shown (e.g. Care)."
+    }
+   ],
+   "easing": "instant",
+   "easing_css": "steps(1)",
+   "spring": null,
+   "stagger_ms": 0,
+   "loop_period_ms": null,
+   "samples": null,
+   "confidence": "high",
+   "notes": ""
+  },
+  {
+   "id": "unreact-tap",
+   "name": "Tap to remove reaction",
+   "element": "Like button",
+   "start_s": 5.26,
+   "end_s": 5.393,
+   "duration_ms": 133,
+   "delay_from_trigger_ms": 0,
+   "properties": [
+    {
+     "prop": "highlight",
+     "from": "#E3E3E3 on touch-down",
+     "to": "fades out over 83 ms after release",
+     "unit": ""
+    },
+    {
+     "prop": "label",
+     "from": "reaction (e.g. red Love)",
+     "to": "grey 'Like'",
+     "unit": "",
+     "notes": "Instant at release (5.327)"
+    },
+    {
+     "prop": "count",
+     "from": "You and 66 others",
+     "to": "66",
+     "unit": "",
+     "notes": "Instant at 5.377, 50 ms after release"
+    }
+   ],
+   "easing": "instant swaps; highlight ease-in fade",
+   "easing_css": "83ms cubic-bezier(0.5,0,1,1)",
+   "spring": null,
+   "stagger_ms": 0,
+   "loop_period_ms": null,
+   "samples": null,
+   "confidence": "high",
+   "notes": "No fly-out or other animation on removal. The summary icon goes away instantly too."
+  }
+ ],
+ "keyframe_images": [
+  {
+   "t": 2.58,
+   "file": "img/v1_press.png",
+   "caption": "Long-press: grey highlight on Like (instant)"
+  },
+  {
+   "t": 2.697,
+   "file": "img/v1_tray-entering.png",
+   "caption": "Tray 17 ms in: translucent, low, emojis at ~0.58x; helper text already swapped"
+  },
+  {
+   "t": 2.797,
+   "file": "img/v1_tray-peak.png",
+   "caption": "Tray/emoji overshoot peak (emojis 1.03x, tray 1.5 pt high)"
+  },
+  {
+   "t": 3.745,
+   "file": "img/v1_tap-tooltip.png",
+   "caption": "Touch on Love: 'Love' tooltip appears, emoji not scaled"
+  },
+  {
+   "t": 3.762,
+   "file": "img/v1_release.png",
+   "caption": "Release: tray drops/fades, others shrink, heart lifts; button reads 'Love' instantly"
+  },
+  {
+   "t": 3.862,
+   "file": "img/v1_fly-apex.png",
+   "caption": "Fly-out apex (117 ms): 85 pt above row, 0.9x, drifting left"
+  },
+  {
+   "t": 4.095,
+   "file": "img/v1_after.png",
+   "caption": "Final: 'Love' label, 'You and 66 others'"
+  }
+ ],
+ "observations": [
+  "All six fly-outs share one 333 ms timeline and end at the same point (~88, 652 pt), whatever the starting slot. Horizontal speed scales with distance (Love travels 35 pt, Angry 265 pt), and the apex height and timing (561 pt at 117 ms) are identical. A designer can reuse one motion path and change only P0.",
+  "The fly-out end point is not the Like button icon (~20, 716 pt). The emoji shrinks to zero just above the summary row near x ≈ 88 pt.",
+  "Text and state changes are all instant cuts with no cross-fades: action row ↔ helper text, the button label, the count text, and the summary icons.",
+  "The selected emoji does not grow while touched in this tap-to-select flow. Only the name tooltip appears. The 1.08x pop happens after release.",
+  "Tray and emoji entrance share one spring (no stagger). The emojis start at ~0.4x and ~35 pt lower, so they appear to rise out of the action row.",
+  "Emoji sticker animations restart from frame 0 on each tray open.",
+  "Removing a reaction has no motion beyond the button's highlight fade."
+ ],
+ "open_questions": [
+  "Real touch-down time and long-press threshold. There are no touch indicators, and the highlight-to-tray gap varies from 50 to 133 ms, so the highlight is probably delayed by the scroll view.",
+  "Emoji idle loop periods are over 1 s. The tray is never held long enough to see a loop repeat.",
+  "Whether the tray's first frame is a clip/reveal or a scale from the bottom: only 1-2 frames, partly translucent over a busy photo.",
+  "The 'Slide finger across' path (dragging across emojis without lifting) was not exercised, so drag-hover scaling of emojis is unseen.",
+  "Possible haptic on tray open (can't be seen in a recording).",
+  "One duplicated frame at 2.763 s (identical to 2.747), so the tray-in timing may be off by ~17 ms."
+ ]
+}

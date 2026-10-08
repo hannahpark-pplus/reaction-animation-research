@@ -1,0 +1,115 @@
+{
+ "id": "v5",
+ "app": "Instagram",
+ "video": "ScreenRecording_10-08-2026 11-49-42_1.MP4",
+ "fps": 60,
+ "summary": "Instagram feed post with a playing video, in dark mode. On like, the filled heart jumps out of the action-row Like button. It fades in, tilts about 18° counter-clockwise, grows to 2x and rises about 83 pt over 150 ms. Then it eases back down, shrinking, into the button and lands at 1.0x about 480 ms after the trigger, with no bounce. The flying heart has a random gradient (orange-to-red in one like, purple-to-magenta in the other), which starts tweening to the standard Instagram red about 850 ms after the trigger. On unlike, the count drops by one immediately and the fill cross-fades out to the white outline over about 200 ms. There is no big heart burst over the media in this recording.",
+ "trigger": "Like, from either the action-row heart or a double-tap on the media (the recording has no touch indicators, so we can't tell which). Unlike, from tapping the filled heart.",
+ "interactions": [
+  {"t": 0.867, "label": "Like animation replays while the post is already liked (count stays at 446). Probably a double-tap on the media."},
+  {"t": 1.898, "label": "Unlike (446 to 445)"},
+  {"t": 2.830, "label": "Like (445 to 446)"},
+  {"t": 3.863, "label": "Unlike (446 to 445)"},
+  {"t": 4.70, "label": "Control Center pulled down (end of recording, ignore)"}
+ ],
+ "representative_cycle": {"start": 2.83, "end": 4.10},
+ "elements": [
+  {"name": "Like button heart (filled, at rest)", "w_pt": 21.7, "h_pt": 18.7, "radius_pt": null, "fill": "#FE0028", "notes": "Center at (24.0, 553.0) pt on screen, the left end of the action row. The like count text sits to its right and is white."},
+  {"name": "Like button heart (outline)", "w_pt": 23.3, "h_pt": 20.3, "radius_pt": null, "fill": "#E1E1E1 stroke, no fill", "notes": "Measured to the outer edge of the stroke, about 2 pt stroke. Same center as the filled heart."},
+  {"name": "Flying heart", "w_pt": 44.0, "h_pt": 38.3, "radius_pt": null, "fill": "Diagonal linear gradient, top-left to bottom-right. Orange variant: #FE9100 / #FE7E00 to #FF1A05. Magenta variant: #B70BC9 to #DF009E.", "notes": "Size is at peak (2.03x the rest heart). It's the same heart glyph as the button. The gradient changes between likes (orange-red at 0.867 s, purple-magenta at 2.830 s), so it's probably picked at random from a palette."}
+ ],
+ "animations": [
+  {"id": "heart-launch", "name": "Heart jumps up out of the Like button", "element": "Flying heart",
+   "start_s": 2.830, "end_s": 2.980, "duration_ms": 150, "delay_from_trigger_ms": 0,
+   "properties": [
+    {"prop": "translateY", "from": 0, "to": -82.7, "unit": "pt"},
+    {"prop": "translateX", "from": 0, "to": 0, "unit": "pt"},
+    {"prop": "scale", "from": 1.0, "peak": 2.03, "to": 2.03, "unit": ""},
+    {"prop": "rotation", "from": 0, "peak": -18, "to": 0, "unit": "deg (negative = counter-clockwise; peak at about 80 ms, back to 0 by about 150 ms)"},
+    {"prop": "opacity", "from": 0, "to": 1, "unit": "", "notes": "Fully opaque by about 100 ms, roughly linear"}
+   ],
+   "easing": "Strong ease-out with no overshoot. Fits a critically damped spring (response about 0.16 s).",
+   "easing_css": "cubic-bezier(0.19,0.21,0.26,0.91)",
+   "spring": {"damping_ratio": 1.0, "response_s": 0.156},
+   "stagger_ms": 0, "loop_period_ms": null,
+   "samples": {"prop": "translateY", "unit": "pt", "points": [[0, 0], [33, -34.0], [50, -49.3], [67, -60.7], [83, -68.7], [100, -74.3], [117, -78.3], [133, -81.0], [150, -82.7]]},
+   "confidence": "high",
+   "notes": "Scale is coupled linearly to height for the whole flight: scale ≈ 1 + 0.0124 × |translateY in pt|. Scale samples (ms, scale): [50,1.60],[67,1.85],[83,1.97],[100,2.00],[117,2.03],[150,2.03]. Rotation samples (ms, deg): [50,-11],[67,-17],[83,-19],[100,-16],[117,-9],[133,-4],[150,-1] (event 1: peak -16°). Opacity samples (ms, opacity): [17,~0.2],[33,0.49],[50,0.63],[67,0.79],[83,0.95],[100,1.0]. The 0.867 s event measures within 1 px and 1 frame of these values. Its timeline is offset by about 35 ms, because we used the icon-swap frame as t0."},
+  {"id": "heart-fall", "name": "Heart falls back into the button", "element": "Flying heart",
+   "start_s": 2.980, "end_s": 3.313, "duration_ms": 333, "delay_from_trigger_ms": 150,
+   "properties": [
+    {"prop": "translateY", "from": -82.7, "to": 0, "unit": "pt"},
+    {"prop": "scale", "from": 2.03, "to": 1.0, "unit": ""},
+    {"prop": "opacity", "from": 1, "to": 1, "unit": ""}
+   ],
+   "easing": "Ease-in-out with a gentle start and a long soft landing. No bounce or squash when it lands. Fits a spring with damping ratio 0.87 and response 0.39 s almost perfectly.",
+   "easing_css": "cubic-bezier(0.24,0.12,0.28,1.0)",
+   "spring": {"damping_ratio": 0.87, "response_s": 0.39},
+   "stagger_ms": 0, "loop_period_ms": null,
+   "samples": {"prop": "translateY", "unit": "pt", "points": [[0, -82.7], [17, -80.0], [33, -74.0], [50, -66.0], [67, -57.0], [83, -48.7], [100, -40.0], [117, -32.7], [133, -26.0], [150, -20.7], [167, -15.7], [183, -12.0], [200, -8.7], [217, -6.3], [233, -4.3], [250, -3.0], [267, -2.0], [283, -1.3], [300, -0.7], [317, -0.3], [333, 0]]},
+   "confidence": "high",
+   "notes": "Scale samples (ms, scale): [0,2.03],[17,2.00],[33,1.91],[50,1.82],[67,1.69],[83,1.60],[100,1.49],[117,1.40],[133,1.32],[150,1.25],[167,1.18],[183,1.15],[200,1.11],[217,1.08],[233,1.06],[250,1.03],[300,1.0]. Scale follows the same height coupling as the launch. Peak downward speed is about 9 pt per frame, roughly 70 ms into the fall. The heart has no x drift, and its center stays at x = 24 pt. After landing it becomes the button's filled state, still showing the gradient."},
+  {"id": "outline-pop", "name": "Outline icon pops while the heart is in flight, then fades", "element": "Like button heart (outline)",
+   "start_s": 2.830, "end_s": 3.163, "duration_ms": 333, "delay_from_trigger_ms": 0,
+   "properties": [
+    {"prop": "scale", "from": 0.71, "peak": 1.06, "to": 1.0, "unit": ""},
+    {"prop": "opacity", "from": 1, "to": 0, "unit": "", "notes": "The fade starts at about 170 ms and is finished by about 330 ms, when the falling heart covers the button"}
+   ],
+   "easing": "Scale-up is roughly linear to slight ease-out, peaking at 150 ms. The fade-out looks linear.",
+   "easing_css": "cubic-bezier(0.25,0.5,0.5,1)",
+   "spring": null, "stagger_ms": 0, "loop_period_ms": null,
+   "samples": {"prop": "scale", "unit": "", "points": [[0, 0.71], [17, 0.74], [33, 0.80], [50, 0.86], [67, 0.91], [83, 0.96], [100, 1.0], [117, 1.03], [133, 1.03], [150, 1.06], [167, 1.06], [183, 1.06], [200, 1.03], [233, 1.0], [267, 1.0], [300, 0.97]]},
+   "confidence": "medium",
+   "notes": "As soon as the like registers, the filled heart in the button is swapped for the outline. The outline starts small and grows back, which reads as the heart 'leaving' the button. Stroke luminance samples (ms, 0–255 grey): [0,208],[100,214],[167,205],[200,177],[233,140],[267,114],[300,77],[317,62]."},
+  {"id": "fill-to-red", "name": "Gradient fill tweens to the standard like red", "element": "Like button heart (filled, at rest)",
+   "start_s": 3.680, "end_s": 3.98, "duration_ms": 300, "delay_from_trigger_ms": 850,
+   "properties": [
+    {"prop": "fill", "from": "random gradient (e.g. #C700B3 average magenta, or #FC5103 average orange)", "to": "#FE0028", "unit": "color"}
+   ],
+   "easing": "Roughly linear",
+   "easing_css": "linear",
+   "spring": null, "stagger_ms": 0, "loop_period_ms": null,
+   "samples": {"prop": "mean fill R,G,B (magenta variant)", "unit": "rgb", "points": [[0, "198,4,179"], [17, "202,4,169"], [33, "205,4,161"], [50, "207,4,154"], [67, "211,3,145"], [83, "213,3,138"], [100, "216,3,129"], [117, "218,3,123"], [133, "221,3,116"], [150, "224,3,108"], [167, "226,3,101"]]},
+   "confidence": "low",
+   "notes": "It starts about 850 ms after the trigger, or about 370 ms after landing, and lands on the same frame in both likes. Both times the unlike interrupted it, at about 56–62% progress after about 170 ms. The duration of about 300 ms and the end color are extrapolations. The end color is assumed to be the solid red seen at the start of the video, #FE0028."},
+  {"id": "unlike", "name": "Unlike: fill cross-fades out to the outline", "element": "Like button heart (filled, at rest)",
+   "start_s": 3.863, "end_s": 4.06, "duration_ms": 200, "delay_from_trigger_ms": 0,
+   "properties": [
+    {"prop": "fill opacity", "from": 1, "to": 0, "unit": ""},
+    {"prop": "outline stroke color", "from": "red-tinted #A02030", "to": "#E1E1E1", "unit": "color"},
+    {"prop": "scale", "from": 1.0, "peak": 1.06, "to": 1.03, "unit": "", "notes": "Outline is slightly enlarged right after it appears, a subtle change"}
+   ],
+   "easing": "Fill darkens and fades out, roughly ease-in-out. There is no jump or particle effect.",
+   "easing_css": "ease-in-out",
+   "spring": null, "stagger_ms": 0, "loop_period_ms": null,
+   "samples": {"prop": "mean fill R (event at 1.898 s)", "unit": "0-255", "points": [[0, 249], [17, 230], [33, 213], [50, 196], [67, 180], [83, 167], [100, 157], [117, 132], [133, 114], [150, 100], [167, 70], [183, 40]]},
+   "confidence": "medium",
+   "notes": "The count changes on the first frame. From about 100 ms the outline stroke fades in over the fading fill, starting pinkish and ending white at about 200 ms. Fill values after 100 ms are approximate, because the low-chroma mask loses the fill there."}
+ ],
+ "keyframe_images": [
+  {"t": 2.813, "file": "img/v5_unliked-rest.png", "caption": "Unliked rest state: outline heart and 445"},
+  {"t": 2.897, "file": "img/v5_launch.png", "caption": "67 ms after the like: heart fading in, tilted about 17° counter-clockwise, outline shrunk inside the button, count already 446"},
+  {"t": 2.980, "file": "img/v5_peak-magenta.png", "caption": "Peak at 150 ms: 2.03x, 83 pt above the button, upright, purple-to-magenta gradient"},
+  {"t": 1.015, "file": "img/v5_peak-orange.png", "caption": "Same peak in the earlier like, with an orange-to-red gradient"},
+  {"t": 3.080, "file": "img/v5_falling.png", "caption": "Mid-fall at 250 ms: 1.49x, 40 pt above the button, outline fading"},
+  {"t": 3.497, "file": "img/v5_landed.png", "caption": "Landed: button filled with the gradient heart, before the tween to red"},
+  {"t": 2.032, "file": "img/v5_unlike.png", "caption": "Unlike mid-crossfade: dark fill fading under a pinkish outline"}
+ ],
+ "observations": [
+  "This recording does NOT show Instagram's classic big white heart over the media on double-tap. Every like plays the same 'heart hops out of the Like button and drops back in' animation at the left of the action row. The heart rises over the bottom of the media, peaking at y ≈ 470 pt; the media's bottom edge is at about y ≈ 530 pt.",
+  "Both likes are timed identically, to the frame: launch 150 ms, fall 333 ms, landed at about 483 ms. It reads as a fixed, designed animation rather than physics.",
+  "Scale and height are tied together (scale = 1 + 0.0124 per pt of lift). The designer can drive one progress value for both: up 83 pt with scale 2.03, then back.",
+  "The flying heart's gradient differs per like (orange→red, then purple→magenta). The button keeps that gradient for about 850 ms after the trigger, then starts tweening to the standard red #FE0028.",
+  "The like count swaps on the trigger frame with no rolling-digit or fade animation. This applies to both like and unlike.",
+  "The heart tilts counter-clockwise by up to about 18° on the way up and is upright again at the peak. It has no rotation on the way down.",
+  "The landing has no bounce, squash or haptic-looking pulse. It eases in softly.",
+  "The 0.867 s event happens while the post is already liked, and the count stays at 446. The animation replays without changing the like state, which matches a double-tap on media that's already liked."
+ ],
+ "open_questions": [
+  "Trigger method: the recording has no touch indicators, so we can't tell whether each like was a double-tap on the media or a tap on the heart button. The animation is identical either way.",
+  "The heart's starting rotation and opacity in the first 1–2 frames (0–33 ms) are uncertain. The heart is tiny and mostly hidden inside the button.",
+  "The gradient-to-red tween was interrupted by the unlike both times, so its full duration and end state are extrapolated.",
+  "We don't know whether the gradient palette is random or cycles through a set (only 2 samples), or how many variants there are.",
+  "The video keeps playing under the heart, and nothing pauses or dims during the animation."
+ ]
+}

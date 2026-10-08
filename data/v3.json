@@ -1,0 +1,1356 @@
+{
+ "id": "v3",
+ "app": "LinkedIn",
+ "video": "ScreenRecording_10-08-2026 11-48-35_1.MP4",
+ "fps": 60,
+ "summary": "Feed post action bar. A plain tap on Like pops the Like button to its blue 'liked' state. A long-press shows a white pill tray of 6 reactions (Like, Celebrate, Support, Love, Insightful, Funny) whose icons rise and fade in one after another, 50 ms apart. Tapping a reaction makes the tray vanish instantly. The chosen icon then flies in an arc down to the Like button, shrinking to nothing, and the button swaps to that reaction's icon, label and color with a shrink-then-pop. The user picked a different reaction in each of the 5 long-press cycles.",
+ "trigger": "Long-press on the Like button in the post action bar (tap = plain Like). Hold duration can't be measured because touch-down isn't visible. The Like cell's pressed highlight appears 33–67 ms before the tray.",
+ "interactions": [
+  {
+   "t": 1.963,
+   "label": "Tap Like: Like button pops to blue 'Like' (summary text changes at 1.898)"
+  },
+  {
+   "t": 3.147,
+   "label": "Tap to remove Like (instant revert, no animation)"
+  },
+  {
+   "t": 3.828,
+   "label": "Long-press Like: pressed highlight, tray appears at 3.895"
+  },
+  {
+   "t": 4.76,
+   "label": "Select Like (slot 1): tray vanishes, icon flies to button; button pops at 5.443"
+  },
+  {
+   "t": 6.075,
+   "label": "Tap to remove reaction (instant)"
+  },
+  {
+   "t": 6.675,
+   "label": "Long-press Like: tray at 6.708"
+  },
+  {
+   "t": 7.34,
+   "label": "Select Celebrate (slot 2); button pops at 8.057"
+  },
+  {
+   "t": 8.822,
+   "label": "Tap to remove reaction (instant)"
+  },
+  {
+   "t": 9.355,
+   "label": "Long-press Like: tray at 9.405"
+  },
+  {
+   "t": 10.103,
+   "label": "Select Support (slot 3); button pops at 10.803"
+  },
+  {
+   "t": 11.368,
+   "label": "Tap to remove reaction (instant)"
+  },
+  {
+   "t": 11.968,
+   "label": "Long-press Like: tray at 12.002"
+  },
+  {
+   "t": 12.683,
+   "label": "Select Love (slot 4); button pops at 13.400"
+  },
+  {
+   "t": 14.065,
+   "label": "Tap to remove reaction (instant)"
+  },
+  {
+   "t": 14.68,
+   "label": "Long-press Like: tray at 14.730"
+  },
+  {
+   "t": 15.563,
+   "label": "Select Insightful (slot 5); button pops at 16.262"
+  },
+  {
+   "t": 16.845,
+   "label": "Tap to remove reaction (instant)"
+  }
+ ],
+ "representative_cycle": {
+  "start": 3.83,
+  "end": 5.7
+ },
+ "elements": [
+  {
+   "name": "Reaction tray",
+   "w_pt": 320,
+   "h_pt": 56,
+   "radius_pt": 28,
+   "fill": "#FFFFFF",
+   "notes": "Full pill, always centered horizontally on screen (x 55–375 pt on a 430 pt screen; same position every cycle), top at y≈517 pt, about 28 pt above the Like row. Padding is 8 pt left/right and 6 pt top/bottom. There's a soft drop shadow below it (about 2–3 pt, roughly 20% black; low confidence). The tray overlaps the bottom of the post photo and the summary text row."
+  },
+  {
+   "name": "Reaction icon (in tray)",
+   "w_pt": 44,
+   "h_pt": 44,
+   "radius_pt": 22,
+   "fill": "per reaction: Like blue, Celebrate green, Support lavender, Love red-orange, Insightful amber, Funny teal",
+   "notes": "6 circles with 8 pt gaps (52 pt pitch). Centers x = 85, 137, 189, 241, 293, 345 pt; center y = 544.7 pt. No labels or tooltips are shown."
+  },
+  {
+   "name": "Like button (action bar cell)",
+   "w_pt": 107.5,
+   "h_pt": 40,
+   "radius_pt": 0,
+   "fill": "#FFFFFF (pressed #E7E7E7)",
+   "notes": "Leftmost of 4 action cells, x 0–107.5 pt, top at y≈594 pt (bottom not measured, ≥633). The content group (14 pt icon above a label about 9 pt cap height) is centered at (53.7, 616.3) pt. Icon is 14×14 pt at y 601.5–615.7; label at y 623–632."
+  },
+  {
+   "name": "Like button label/icon states",
+   "w_pt": 0,
+   "h_pt": 0,
+   "radius_pt": 0,
+   "fill": "see notes",
+   "notes": "Approximate text colors (anti-aliased median): Like (off) #404040 outline thumb; Like #2262A1 (LinkedIn blue, filled icon); Celebrate #476F30 green; Support #6B607C purple-gray; Love #9B452C red-brown; Insightful #905807 amber-brown. Label widths: Like 22 pt, Celebrate 56 pt, Support 46 pt, Love 25.7 pt, Insightful 53.7 pt. The icon becomes a small colored version of the reaction circle."
+  },
+  {
+   "name": "Reaction summary text",
+   "w_pt": 0,
+   "h_pt": 0,
+   "radius_pt": 0,
+   "fill": "#616161 text",
+   "notes": "Text 'Anna Larrea and 45 others' becomes 'You and 46 others'. Instant swap, no animation, at y≈570–582 pt next to the reaction-icon stack (x 13–51 pt)."
+  }
+ ],
+ "animations": [
+  {
+   "id": "press-highlight",
+   "name": "Like cell pressed highlight",
+   "element": "Like button (action bar cell)",
+   "start_s": 3.828,
+   "end_s": 4.095,
+   "duration_ms": 267,
+   "delay_from_trigger_ms": 0,
+   "properties": [
+    {
+     "prop": "backgroundColor",
+     "from": "#FFFFFF",
+     "peak": "#E7E7E7",
+     "to": "#FFFFFF",
+     "unit": ""
+    }
+   ],
+   "easing": "Instant on (1 frame), held ~83 ms, then fades out over ~183 ms (roughly linear, slightly ease-in-out).",
+   "easing_css": "linear",
+   "spring": null,
+   "stagger_ms": 0,
+   "loop_period_ms": null,
+   "samples": {
+    "prop": "background gray level (0-255)",
+    "unit": "",
+    "points": [
+     [
+      0,
+      231
+     ],
+     [
+      17,
+      231
+     ],
+     [
+      33,
+      231
+     ],
+     [
+      50,
+      231
+     ],
+     [
+      67,
+      232
+     ],
+     [
+      83,
+      232
+     ],
+     [
+      100,
+      234
+     ],
+     [
+      117,
+      235
+     ],
+     [
+      133,
+      237
+     ],
+     [
+      150,
+      240
+     ],
+     [
+      167,
+      242
+     ],
+     [
+      183,
+      245
+     ],
+     [
+      200,
+      248
+     ],
+     [
+      217,
+      250
+     ],
+     [
+      233,
+      252
+     ],
+     [
+      250,
+      253
+     ],
+     [
+      267,
+      254
+     ]
+    ]
+   },
+   "confidence": "high",
+   "notes": "The highlight shows up 33–67 ms before the tray in every cycle (67, 33, 50, 33, 50 ms) and starts fading as the icons come in. It most likely marks long-press recognition, not touch-down."
+  },
+  {
+   "id": "tray-in",
+   "name": "Tray appears",
+   "element": "Reaction tray",
+   "start_s": 3.895,
+   "end_s": 3.895,
+   "duration_ms": 0,
+   "delay_from_trigger_ms": 67,
+   "properties": [
+    {
+     "prop": "opacity",
+     "from": 0,
+     "to": 1,
+     "unit": ""
+    },
+    {
+     "prop": "scale",
+     "from": 1,
+     "to": 1,
+     "unit": ""
+    }
+   ],
+   "easing": "None. The white pill shows at full size and opacity in one frame, empty, and the icons then animate in on top of it.",
+   "easing_css": "step-start",
+   "spring": null,
+   "stagger_ms": 0,
+   "loop_period_ms": null,
+   "samples": {
+    "prop": "opacity",
+    "unit": "",
+    "points": [
+     [
+      -17,
+      0
+     ],
+     [
+      0,
+      1
+     ]
+    ]
+   },
+   "confidence": "high",
+   "notes": "Same in all 5 cycles. The tray top edge is at y=1551–1552 px from its first frame, so there's no scale or slide."
+  },
+  {
+   "id": "icons-in",
+   "name": "Reaction icons rise and fade in (staggered)",
+   "element": "Reaction icon (in tray)",
+   "start_s": 3.895,
+   "end_s": 4.262,
+   "duration_ms": 200,
+   "delay_from_trigger_ms": 67,
+   "properties": [
+    {
+     "prop": "translateY",
+     "from": 24,
+     "peak": -2,
+     "to": 0,
+     "unit": "pt"
+    },
+    {
+     "prop": "opacity",
+     "from": 0,
+     "to": 1,
+     "unit": ""
+    },
+    {
+     "prop": "scale",
+     "from": 1,
+     "to": 1,
+     "unit": ""
+    }
+   ],
+   "easing": "translateY: underdamped spring, overshoot ≈2 pt (~9%), settles in ~200 ms. Opacity: about linear 0→1 over ~83 ms.",
+   "easing_css": "cubic-bezier(0.34,1.4,0.64,1)",
+   "spring": {
+    "damping_ratio": 0.6,
+    "response_s": 0.19
+   },
+   "stagger_ms": 50,
+   "loop_period_ms": null,
+   "samples": {
+    "prop": "translateY (icon 1, t from 3.895)",
+    "unit": "pt",
+    "points": [
+     [
+      17,
+      18.0
+     ],
+     [
+      33,
+      12.0
+     ],
+     [
+      50,
+      6.0
+     ],
+     [
+      67,
+      2.0
+     ],
+     [
+      83,
+      -0.7
+     ],
+     [
+      100,
+      -2.0
+     ],
+     [
+      117,
+      -2.0
+     ],
+     [
+      133,
+      -2.0
+     ],
+     [
+      150,
+      -1.3
+     ],
+     [
+      167,
+      -0.7
+     ],
+     [
+      183,
+      0
+     ],
+     [
+      200,
+      0
+     ]
+    ]
+   },
+   "samples_opacity": {
+    "prop": "opacity (icon 1)",
+    "unit": "",
+    "points": [
+     [
+      0,
+      0.02
+     ],
+     [
+      17,
+      0.21
+     ],
+     [
+      33,
+      0.46
+     ],
+     [
+      50,
+      0.69
+     ],
+     [
+      67,
+      0.89
+     ],
+     [
+      83,
+      0.99
+     ],
+     [
+      100,
+      1.0
+     ]
+    ]
+   },
+   "confidence": "high",
+   "notes": "Fitted per icon by template matching (scale, dy and alpha solved per frame). Scale stays 1.0, so this is a pure slide-up plus fade. Icons start left to right, exactly 3 frames (50 ms) apart: icon k starts at 3.895 + 0.05·k. The last (Funny) icon settles at 4.262, so the whole entrance takes 367 ms. Icons start 24 pt low, which pokes past the tray's bottom edge (they aren't clipped). Spring fit: ζ=0.60, ω=32.5 rad/s (rms 0.13 pt). SwiftUI .spring(response:0.19, dampingFraction:0.6)."
+  },
+  {
+   "id": "tray-out",
+   "name": "Tray dismiss on selection",
+   "element": "Reaction tray",
+   "start_s": 4.76,
+   "end_s": 4.76,
+   "duration_ms": 0,
+   "delay_from_trigger_ms": 932,
+   "properties": [
+    {
+     "prop": "opacity",
+     "from": 1,
+     "to": 0,
+     "unit": ""
+    }
+   ],
+   "easing": "None. The tray and the 5 unselected icons disappear in one frame. Only the selected icon stays, at its tray position and full size.",
+   "easing_css": "step-start",
+   "spring": null,
+   "stagger_ms": 0,
+   "loop_period_ms": null,
+   "samples": {
+    "prop": "opacity",
+    "unit": "",
+    "points": [
+     [
+      -17,
+      1
+     ],
+     [
+      0,
+      0
+     ]
+    ]
+   },
+   "confidence": "high",
+   "notes": "Same in every cycle. No hover state or enlarged 'selected' icon shows before the tap (the user tapped; there was no drag-to-hover)."
+  },
+  {
+   "id": "fly-to-button",
+   "name": "Selected reaction flies to the Like button",
+   "element": "Reaction icon (in tray)",
+   "start_s": 4.743,
+   "end_s": 5.333,
+   "duration_ms": 590,
+   "delay_from_trigger_ms": 915,
+   "properties": [
+    {
+     "prop": "position",
+     "from": "(slot center x, 544.7)",
+     "to": "(53.7, ~618.6) = Like button content center",
+     "unit": "pt"
+    },
+    {
+     "prop": "translateY path",
+     "from": 0,
+     "peak": -36.5,
+     "to": 74,
+     "unit": "pt"
+    },
+    {
+     "prop": "scale",
+     "from": 1.0,
+     "to": 0.0,
+     "unit": ""
+    }
+   ],
+   "easing": "A single progress value u(t), ease-in-out, drives x and scale (scale = 1 − u, x linear in u). y follows a quadratic Bézier in u: y(u) = (1−u)²·544.7 + 2u(1−u)·444.5 + u²·618.6, which makes an upward arc peaking 36.5 pt above the start at ~233 ms and then dropping onto the button.",
+   "easing_css": "cubic-bezier(0.42,0.06,0.55,1)",
+   "spring": null,
+   "stagger_ms": 0,
+   "loop_period_ms": null,
+   "samples": {
+    "prop": "scale (Insightful cycle, t from 15.563)",
+    "unit": "",
+    "points": [
+     [
+      0,
+      1.0
+     ],
+     [
+      17,
+      1.0
+     ],
+     [
+      33,
+      0.99
+     ],
+     [
+      50,
+      0.97
+     ],
+     [
+      67,
+      0.96
+     ],
+     [
+      83,
+      0.94
+     ],
+     [
+      100,
+      0.92
+     ],
+     [
+      117,
+      0.9
+     ],
+     [
+      133,
+      0.87
+     ],
+     [
+      150,
+      0.84
+     ],
+     [
+      167,
+      0.8
+     ],
+     [
+      183,
+      0.77
+     ],
+     [
+      200,
+      0.73
+     ],
+     [
+      217,
+      0.69
+     ],
+     [
+      233,
+      0.64
+     ],
+     [
+      250,
+      0.6
+     ],
+     [
+      267,
+      0.55
+     ],
+     [
+      283,
+      0.5
+     ],
+     [
+      300,
+      0.45
+     ],
+     [
+      317,
+      0.41
+     ],
+     [
+      333,
+      0.36
+     ],
+     [
+      350,
+      0.32
+     ],
+     [
+      367,
+      0.28
+     ],
+     [
+      382,
+      0.24
+     ],
+     [
+      399,
+      0.2
+     ],
+     [
+      415,
+      0.16
+     ],
+     [
+      432,
+      0.13
+     ],
+     [
+      449,
+      0.1
+     ]
+    ]
+   },
+   "samples_y": {
+    "prop": "center y",
+    "unit": "pt",
+    "points": [
+     [
+      0,
+      544.5
+     ],
+     [
+      17,
+      543.7
+     ],
+     [
+      33,
+      542.2
+     ],
+     [
+      50,
+      540.0
+     ],
+     [
+      67,
+      537.5
+     ],
+     [
+      83,
+      534.5
+     ],
+     [
+      100,
+      531.0
+     ],
+     [
+      117,
+      527.2
+     ],
+     [
+      133,
+      523.5
+     ],
+     [
+      150,
+      519.7
+     ],
+     [
+      167,
+      516.2
+     ],
+     [
+      183,
+      513.0
+     ],
+     [
+      200,
+      510.3
+     ],
+     [
+      217,
+      508.8
+     ],
+     [
+      233,
+      508.2
+     ],
+     [
+      250,
+      508.5
+     ],
+     [
+      267,
+      510.2
+     ],
+     [
+      283,
+      513.0
+     ],
+     [
+      300,
+      517.2
+     ],
+     [
+      317,
+      522.7
+     ],
+     [
+      333,
+      529.0
+     ],
+     [
+      350,
+      536.2
+     ],
+     [
+      367,
+      544.2
+     ],
+     [
+      382,
+      552.3
+     ],
+     [
+      399,
+      561.0
+     ],
+     [
+      415,
+      570.0
+     ],
+     [
+      432,
+      578.3
+     ],
+     [
+      449,
+      585.7
+     ]
+    ]
+   },
+   "samples_x": {
+    "prop": "center x (Insightful, start 292.7 pt)",
+    "unit": "pt",
+    "points": [
+     [
+      0,
+      292.7
+     ],
+     [
+      17,
+      291.5
+     ],
+     [
+      33,
+      289.7
+     ],
+     [
+      50,
+      287.0
+     ],
+     [
+      67,
+      283.5
+     ],
+     [
+      83,
+      279.5
+     ],
+     [
+      100,
+      274.3
+     ],
+     [
+      117,
+      268.7
+     ],
+     [
+      133,
+      261.8
+     ],
+     [
+      150,
+      254.3
+     ],
+     [
+      167,
+      246.3
+     ],
+     [
+      183,
+      237.7
+     ],
+     [
+      200,
+      227.7
+     ],
+     [
+      217,
+      217.5
+     ],
+     [
+      233,
+      207.0
+     ],
+     [
+      250,
+      196.0
+     ],
+     [
+      267,
+      184.5
+     ],
+     [
+      283,
+      173.3
+     ],
+     [
+      300,
+      161.8
+     ],
+     [
+      317,
+      150.5
+     ],
+     [
+      333,
+      139.5
+     ],
+     [
+      350,
+      128.8
+     ],
+     [
+      367,
+      118.5
+     ],
+     [
+      382,
+      109.2
+     ],
+     [
+      399,
+      100.2
+     ],
+     [
+      415,
+      91.7
+     ],
+     [
+      432,
+      84.2
+     ],
+     [
+      449,
+      78.0
+     ]
+    ]
+   },
+   "samples_progress": {
+    "prop": "u = normalized x progress toward x=53.7",
+    "unit": "",
+    "points": [
+     [
+      0,
+      0.0
+     ],
+     [
+      17,
+      0.01
+     ],
+     [
+      33,
+      0.01
+     ],
+     [
+      50,
+      0.02
+     ],
+     [
+      67,
+      0.04
+     ],
+     [
+      83,
+      0.06
+     ],
+     [
+      100,
+      0.08
+     ],
+     [
+      117,
+      0.1
+     ],
+     [
+      133,
+      0.13
+     ],
+     [
+      150,
+      0.16
+     ],
+     [
+      167,
+      0.19
+     ],
+     [
+      183,
+      0.23
+     ],
+     [
+      200,
+      0.27
+     ],
+     [
+      217,
+      0.31
+     ],
+     [
+      233,
+      0.36
+     ],
+     [
+      250,
+      0.4
+     ],
+     [
+      267,
+      0.45
+     ],
+     [
+      283,
+      0.5
+     ],
+     [
+      300,
+      0.55
+     ],
+     [
+      317,
+      0.59
+     ],
+     [
+      333,
+      0.64
+     ],
+     [
+      350,
+      0.69
+     ],
+     [
+      367,
+      0.73
+     ],
+     [
+      382,
+      0.77
+     ],
+     [
+      399,
+      0.81
+     ],
+     [
+      415,
+      0.84
+     ],
+     [
+      432,
+      0.87
+     ],
+     [
+      449,
+      0.9
+     ]
+    ]
+   },
+   "confidence": "medium",
+   "notes": "Measured in all 5 cycles. Normalized progress, y path and size match within ±0.5 pt across all of them; only the start x differs, by slot. The icon is visible for ~450 ms and disappears once u≈0.9, at y≈587 pt and ~4 pt diameter. It seems to pass under the action-bar layer, whose top is ≈590 pt. The 590 ms total comes from the curve fit (fit rms 0.016 in u; y-path fit rms 0.3 pt), so the last ~140 ms is extrapolated. Standard ease-in-out (0.42,0,0.58,1) with D=590 ms fits just as well (rms 0.017)."
+  },
+  {
+   "id": "button-swap-out",
+   "name": "Like button content swaps and shrinks out",
+   "element": "Like button (action bar cell)",
+   "start_s": 5.443,
+   "end_s": 5.493,
+   "duration_ms": 50,
+   "delay_from_trigger_ms": 683,
+   "properties": [
+    {
+     "prop": "content",
+     "from": "Like (gray)",
+     "to": "selected reaction icon+label+color",
+     "unit": ""
+    },
+    {
+     "prop": "scale",
+     "from": 1.0,
+     "to": 0.35,
+     "unit": ""
+    },
+    {
+     "prop": "opacity",
+     "from": 1.0,
+     "to": 0.15,
+     "unit": ""
+    }
+   ],
+   "easing": "ease-in (accelerating): 1.0 → 0.75 → 0.35 over 3 frames, then hidden",
+   "easing_css": "cubic-bezier(0.42,0,1,1)",
+   "spring": null,
+   "stagger_ms": 0,
+   "loop_period_ms": null,
+   "samples": {
+    "prop": "scale (Love cycle, t from 13.383)",
+    "unit": "",
+    "points": [
+     [
+      0,
+      1.0
+     ],
+     [
+      17,
+      1.0
+     ],
+     [
+      33,
+      0.75
+     ],
+     [
+      50,
+      0.35
+     ],
+     [
+      67,
+      0.0
+     ]
+    ]
+   },
+   "samples_opacity": {
+    "prop": "opacity",
+    "unit": "",
+    "points": [
+     [
+      0,
+      1.0
+     ],
+     [
+      17,
+      0.9
+     ],
+     [
+      33,
+      0.67
+     ],
+     [
+      50,
+      0.15
+     ],
+     [
+      67,
+      0.0
+     ]
+    ]
+   },
+   "confidence": "medium",
+   "notes": "The new reaction's content is already showing on the first changed frame; it's the new state that shrinks away. The swap comes 683–717 ms after the tray disappears (≈700 ms in all 5 cycles), about 110 ms after the fly would have landed. The summary text changes on the same frame. Scale and opacity are fitted jointly from one template, so they partly trade off against each other."
+  },
+  {
+   "id": "button-hidden",
+   "name": "Button content hidden gap",
+   "element": "Like button (action bar cell)",
+   "start_s": 5.493,
+   "end_s": 5.56,
+   "duration_ms": 67,
+   "delay_from_trigger_ms": 733,
+   "properties": [
+    {
+     "prop": "opacity",
+     "from": 0,
+     "to": 0,
+     "unit": ""
+    }
+   ],
+   "easing": "hold",
+   "easing_css": "linear",
+   "spring": null,
+   "stagger_ms": 0,
+   "loop_period_ms": null,
+   "samples": {
+    "prop": "opacity",
+    "unit": "",
+    "points": [
+     [
+      0,
+      0
+     ],
+     [
+      67,
+      0
+     ]
+    ]
+   },
+   "confidence": "high",
+   "notes": "The cell is fully blank for 4 frames (67 ms) in every instance, including the plain tap. It's probably the near-zero part of a 1→0→1 scale animation."
+  },
+  {
+   "id": "button-pop-in",
+   "name": "Reaction state pops in with overshoot",
+   "element": "Like button (action bar cell)",
+   "start_s": 13.515,
+   "end_s": 13.665,
+   "duration_ms": 150,
+   "delay_from_trigger_ms": 832,
+   "properties": [
+    {
+     "prop": "scale",
+     "from": 0.0,
+     "peak": 1.2,
+     "to": 1.0,
+     "unit": ""
+    },
+    {
+     "prop": "opacity",
+     "from": 0.0,
+     "to": 1.0,
+     "unit": ""
+    }
+   ],
+   "easing": "Close to linear growth (+0.15 to +0.2 scale per frame) up to a 1.175–1.225 overshoot at ~100–117 ms, then a hard snap to 1.0 in one frame. There's no eased settle.",
+   "easing_css": "cubic-bezier(0.2,0,0.6,1.6)",
+   "spring": null,
+   "stagger_ms": 0,
+   "loop_period_ms": null,
+   "samples": {
+    "prop": "scale (Love cycle, t from 13.515)",
+    "unit": "",
+    "points": [
+     [
+      0,
+      0.08
+     ],
+     [
+      17,
+      0.4
+     ],
+     [
+      33,
+      0.55
+     ],
+     [
+      50,
+      0.7
+     ],
+     [
+      67,
+      0.9
+     ],
+     [
+      83,
+      1.05
+     ],
+     [
+      100,
+      1.175
+     ],
+     [
+      117,
+      1.225
+     ],
+     [
+      133,
+      1.225
+     ],
+     [
+      150,
+      1.0
+     ]
+    ]
+   },
+   "samples_opacity": {
+    "prop": "opacity",
+    "unit": "",
+    "points": [
+     [
+      0,
+      0.0
+     ],
+     [
+      17,
+      0.12
+     ],
+     [
+      33,
+      0.26
+     ],
+     [
+      50,
+      0.49
+     ],
+     [
+      67,
+      0.71
+     ],
+     [
+      83,
+      0.86
+     ],
+     [
+      100,
+      0.94
+     ],
+     [
+      117,
+      0.98
+     ],
+     [
+      150,
+      1.0
+     ]
+    ]
+   },
+   "confidence": "medium",
+   "notes": "Grow-in frames are identical across all 6 pops, but the overshoot shows only in 3: plain-tap Like (peak 1.175 at 2.163), Support (1.175 at 11.018) and Love (1.225 held 2 frames). In the other 3 (reaction-Like at 5.627, Celebrate at 8.257, Insightful at 16.445) the scale jumps straight from 0.7–0.9 to 1.0. That looks like a re-render cutting the animation short, not a different design. Recommended rebuild: 0→1.2 in ~117 ms, then 1.2→1.0 quickly (≤50 ms). The representative cycle's own pop (Like) is 5.560–5.627 and snaps at 0.7."
+  },
+  {
+   "id": "tap-like",
+   "name": "Plain tap Like (no tray)",
+   "element": "Like button (action bar cell)",
+   "start_s": 1.947,
+   "end_s": 2.18,
+   "duration_ms": 233,
+   "delay_from_trigger_ms": 0,
+   "properties": [
+    {
+     "prop": "scale",
+     "from": 1.0,
+     "peak": 1.175,
+     "to": 1.0,
+     "unit": ""
+    },
+    {
+     "prop": "color",
+     "from": "#404040 outline",
+     "to": "#2262A1 filled",
+     "unit": ""
+    }
+   ],
+   "easing": "Same sequence as the reaction swap: shrink out over 2 frames (0.9→0.5) → hidden 67 ms → linear grow to 1.175 → snap to 1.0",
+   "easing_css": "cubic-bezier(0.42,0,1,1) then cubic-bezier(0.2,0,0.6,1.6)",
+   "spring": null,
+   "stagger_ms": 0,
+   "loop_period_ms": null,
+   "samples": {
+    "prop": "scale (t from 1.947)",
+    "unit": "",
+    "points": [
+     [
+      0,
+      1.0
+     ],
+     [
+      17,
+      0.9
+     ],
+     [
+      33,
+      0.5
+     ],
+     [
+      50,
+      0
+     ],
+     [
+      117,
+      0.08
+     ],
+     [
+      133,
+      0.35
+     ],
+     [
+      150,
+      0.5
+     ],
+     [
+      167,
+      0.7
+     ],
+     [
+      183,
+      0.9
+     ],
+     [
+      200,
+      1.05
+     ],
+     [
+      217,
+      1.175
+     ],
+     [
+      233,
+      1.0
+     ]
+    ]
+   },
+   "confidence": "medium",
+   "notes": "On a tap, the summary text updates 65 ms before the button starts animating (1.898 vs 1.963)."
+  },
+  {
+   "id": "remove-reaction",
+   "name": "Remove reaction (tap reacted button)",
+   "element": "Like button (action bar cell)",
+   "start_s": 6.158,
+   "end_s": 6.158,
+   "duration_ms": 0,
+   "delay_from_trigger_ms": 0,
+   "properties": [
+    {
+     "prop": "content",
+     "from": "reaction state",
+     "to": "Like (gray)",
+     "unit": ""
+    }
+   ],
+   "easing": "None. Instant swap back to gray 'Like', no scale or fade.",
+   "easing_css": "step-start",
+   "spring": null,
+   "stagger_ms": 0,
+   "loop_period_ms": null,
+   "samples": {
+    "prop": "scale",
+    "unit": "",
+    "points": [
+     [
+      0,
+      1
+     ],
+     [
+      17,
+      1
+     ]
+    ]
+   },
+   "confidence": "high",
+   "notes": "The summary text goes back to 'Anna Larrea and 45 others' 0–83 ms before the button does (6.075 vs 6.158 in cycle 3)."
+  }
+ ],
+ "keyframe_images": [
+  {
+   "t": 4.028,
+   "file": "img/v3_tray-stagger-in.png",
+   "caption": "Tray entrance mid-stagger: Like and Celebrate settled, Support rising and fading in, Love just starting"
+  },
+  {
+   "t": 4.378,
+   "file": "img/v3_tray-open.png",
+   "caption": "Tray fully open: 320×56 pt pill with six 44 pt reaction circles"
+  },
+  {
+   "t": 4.977,
+   "file": "img/v3_fly-apex.png",
+   "caption": "Selected Like icon near the top of its arc (~36 pt above start, scale ≈0.69), tray already gone"
+  },
+  {
+   "t": 13.632,
+   "file": "img/v3_button-pop.png",
+   "caption": "Love button pop: grow (s≈0.7), overshoot peak (s≈1.22), settled (1.0)"
+  },
+  {
+   "t": 16.528,
+   "file": "img/v3_button-states.png",
+   "caption": "Like-button end states: Like (off), Like, Celebrate, Support, Love, Insightful, each with its own label color"
+  }
+ ],
+ "observations": [
+  "A different reaction was picked in each long-press cycle: Like (slot 1), Celebrate (2), Support (3), Love (4), Insightful (5). Funny (slot 6) was never picked.",
+  "The tray-in, fly path and button swap are frame-identical across cycles. Only the fly's start x changes with the slot; the target is always the Like button center (53.7 pt).",
+  "The tray appears and disappears with no transition. All the motion is in the icons: a 50 ms staggered spring rise on entrance and a single flying icon on exit.",
+  "There's a deliberate ~110 ms pause between the fly finishing and the button changing. The button then changes with a shrink → blank → overshoot-pop, the same as a plain tap Like.",
+  "The button's label text and color change to the reaction's own name and color. The summary line changes from 'Anna Larrea and 45 others' to 'You and 46 others' with no animation.",
+  "Removing a reaction by tapping is instant, with no animation.",
+  "Tray position is fixed (screen-centered) and doesn't follow the touch point."
+ ],
+ "open_questions": [
+  "Long-press hold duration: touch-down isn't visible. The pressed highlight leads the tray by only 33–67 ms, so it probably marks long-press recognition, not touch-down.",
+  "Hover/drag-scrub behavior (icon enlarging, labels) wasn't exercised: the user tapped reactions after lifting their finger.",
+  "The fly's last ~10% (u > 0.9) is hidden, likely behind the action bar, so the end point and the 590 ms total are extrapolated.",
+  "Button pop overshoot is inconsistent (3 of 6 instances snap to 1.0 early). It's unclear whether the intended settle is a spring or a hard set.",
+  "No haptics can be seen in a recording; LinkedIn probably plays a light impact when the tray opens and on selection.",
+  "Tray shadow values are estimates (the shadow is faint against the photo)."
+ ]
+}

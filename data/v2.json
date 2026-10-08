@@ -1,0 +1,935 @@
+{
+ "id": "v2",
+ "app": "YouTube",
+ "video": "ScreenRecording_10-08-2026 11-47-55_1.MP4",
+ "fps": 60,
+ "summary": "Tapping Like swaps the outline thumb for a filled thumb with a pop: the outline collapses to ~30% in 50 ms, the filled thumb springs up to 1.20x while tilting back ~12 deg, and a ring of 10 red/pink rays bursts outward and decays to dots (~420 ms). On a comedy video the watch-page Like instead plays a themed variant: the thumb morphs into a laughing-face emoji orbited by red dots for ~0.5 s before the filled thumb pops in. Unlike, Dislike and Un-dislike have no icon animation (instant glyph swap) and only show the press highlight / ripple.",
+ "trigger": "Single tap on the Like button (watch-page action row or feed video card). Animation starts on touch-up, not touch-down.",
+ "interactions": [
+  {
+   "t": 1.015,
+   "label": "Tap Like - watch page (comedy video) -> laughing-emoji themed like animation"
+  },
+  {
+   "t": 2.68,
+   "label": "Tap Like again - unlike (instant swap, press highlight only)"
+  },
+  {
+   "t": 3.345,
+   "label": "Tap Dislike - watch page (instant swap to filled)"
+  },
+  {
+   "t": 4.162,
+   "label": "Tap Dislike again - un-dislike (instant swap)"
+  },
+  {
+   "t": 8.023,
+   "label": "Tap Like - feed video card (standard thumb pop + ray burst, count '15K' unchanged)"
+  },
+  {
+   "t": 9.155,
+   "label": "Tap Like again on feed card - unlike (instant swap)"
+  },
+  {
+   "t": 9.687,
+   "label": "Tap Dislike on feed card - circular ripple, instant swap"
+  },
+  {
+   "t": 10.487,
+   "label": "Tap Dislike again on feed card - un-dislike, ripple"
+  },
+  {
+   "t": 15.878,
+   "label": "Tap Like - second watch page (standard thumb pop + ray burst) [representative]"
+  },
+  {
+   "t": 17.16,
+   "label": "Tap Like again - unlike (instant swap; time +/-33 ms, from 15 fps sheet)"
+  }
+ ],
+ "representative_cycle": {
+  "start": 15.85,
+  "end": 16.8
+ },
+ "elements": [
+  {
+   "name": "Like icon (outline)",
+   "w_pt": 19.7,
+   "h_pt": 20.7,
+   "radius_pt": 0,
+   "fill": "#FFFFFF",
+   "notes": "Measured glyph bbox 59x62 px; sits in a ~24 pt icon box. ~2 pt stroke. Watch-page center (245.5, 394.8) pt on 2nd video, (245.3, 454) pt on 1st; feed card center (27.3, 553.7) pt."
+  },
+  {
+   "name": "Like icon (filled)",
+   "w_pt": 19.0,
+   "h_pt": 19.7,
+   "radius_pt": 0,
+   "fill": "#FFFFFF",
+   "notes": "Filled glyph bbox 57x59 px. Final rest state of a liked button."
+  },
+  {
+   "name": "Ray burst",
+   "w_pt": 46,
+   "h_pt": 46,
+   "radius_pt": 0,
+   "fill": "#FF0033 (long rays) / #FF2893 (short rays)",
+   "notes": "10 rays at 36 deg spacing, alternating 5 long red (#FF0033, ~3 pt wide, ~7 pt long) and 5 short pink (#FF2893, ~2.5 pt wide, ~4.5 pt long). Long rays at approx 22, 90, 158, 232, 309 deg; short at 55, 123, 194, 271, 346 deg (0 deg = right, CCW). Centered on icon. Max outer radius ~21 pt (64 px)."
+  },
+  {
+   "name": "Press highlight (watch page)",
+   "w_pt": 41,
+   "h_pt": 48.7,
+   "radius_pt": 20.5,
+   "fill": "#1A1A1A",
+   "notes": "Vertical capsule 123x146 px centered on the icon, appears instantly on touch-down. On touch-up the fill fades and a 1 pt ring #474747 appears and fades."
+  },
+  {
+   "name": "Press highlight (feed card)",
+   "w_pt": 40,
+   "h_pt": 40,
+   "radius_pt": 20,
+   "fill": "#272727",
+   "notes": "On touch-down the entire card action bar background goes #0F0F0F -> #272727 plus a 40 pt circle (slightly lighter, ~#2D2D2D) around the like icon; fades after release."
+  },
+  {
+   "name": "Dislike ripple (feed card)",
+   "w_pt": 40,
+   "h_pt": 40,
+   "radius_pt": 20,
+   "fill": "#3F3F3F",
+   "notes": "Material-style touch ripple: circle grows from the touch point to a 40 pt circle centered on the dislike icon, then fades."
+  },
+  {
+   "name": "Laughing emoji (themed variant)",
+   "w_pt": 23,
+   "h_pt": 23,
+   "radius_pt": 11.5,
+   "fill": "#FFFFFF",
+   "notes": "White laughing face (squinting >< eyes, open D mouth) with black features; 69 px at full size. Orbited by 2-4 red #FF0033 dots, 3-4 pt diameter, at 12-20 pt radius."
+  },
+  {
+   "name": "Like count",
+   "w_pt": 0,
+   "h_pt": 0,
+   "radius_pt": 0,
+   "fill": "#FFFFFF",
+   "notes": "Feed card shows '15K' next to the thumb; it did not change (rounded). Watch page 1 shows '28K likes' in metadata, unchanged. No count animation observed."
+  }
+ ],
+ "animations": [
+  {
+   "id": "press-highlight",
+   "name": "Press highlight on touch-down, ring fade on touch-up (watch page)",
+   "element": "Press highlight (watch page)",
+   "start_s": 15.878,
+   "end_s": 16.245,
+   "duration_ms": 367,
+   "delay_from_trigger_ms": 0,
+   "properties": [
+    {
+     "prop": "fill luminance",
+     "from": 26,
+     "to": 0,
+     "unit": "0-255 (#1A1A1A -> transparent)"
+    },
+    {
+     "prop": "ring luminance",
+     "from": 71,
+     "to": 0,
+     "unit": "0-255 (#474747 -> transparent)"
+    }
+   ],
+   "easing": "Fill: instant on at touch-down, ~linear-to-ease-out fade ~280 ms from touch-up. Ring: appears at touch-up (~34 ms after touch-down on a quick tap), fades roughly linearly over ~330 ms.",
+   "easing_css": "linear",
+   "spring": null,
+   "stagger_ms": 0,
+   "loop_period_ms": null,
+   "samples": {
+    "prop": "ring luminance (0-255), t from touch-up 15.912",
+    "unit": "",
+    "points": [
+     [
+      0,
+      71
+     ],
+     [
+      17,
+      66
+     ],
+     [
+      33,
+      62
+     ],
+     [
+      50,
+      58
+     ],
+     [
+      67,
+      55
+     ],
+     [
+      83,
+      51
+     ],
+     [
+      100,
+      46
+     ],
+     [
+      117,
+      43
+     ],
+     [
+      133,
+      38
+     ],
+     [
+      150,
+      35
+     ],
+     [
+      167,
+      32
+     ],
+     [
+      183,
+      29
+     ],
+     [
+      200,
+      25
+     ],
+     [
+      217,
+      20
+     ],
+     [
+      233,
+      15
+     ],
+     [
+      250,
+      14
+     ],
+     [
+      267,
+      11
+     ],
+     [
+      283,
+      10
+     ],
+     [
+      300,
+      7
+     ],
+     [
+      317,
+      4
+     ],
+     [
+      333,
+      3
+     ],
+     [
+      350,
+      2
+     ],
+     [
+      367,
+      1
+     ],
+     [
+      383,
+      0
+     ]
+    ]
+   },
+   "confidence": "high",
+   "notes": "Identical timing on all 4 watch-page taps (like, unlike, dislike, un-dislike). Fill samples from touch-down: [[0, 26], [17, 26], [33, 25], [50, 20], [67, 15], [83, 14], [100, 11], [117, 10], [133, 8], [150, 7], [167, 6], [183, 6], [200, 4], [217, 3], [233, 3], [250, 2], [267, 2], [283, 1], [300, 1], [317, 0]]"
+  },
+  {
+   "id": "outline-collapse",
+   "name": "Outline thumb collapses",
+   "element": "Like icon (outline)",
+   "start_s": 15.945,
+   "end_s": 15.995,
+   "duration_ms": 50,
+   "delay_from_trigger_ms": 67,
+   "properties": [
+    {
+     "prop": "scale",
+     "from": 1.0,
+     "to": 0.32,
+     "unit": ""
+    },
+    {
+     "prop": "rotate (CCW +)",
+     "from": 0,
+     "to": -9,
+     "unit": "deg"
+    }
+   ],
+   "easing": "ease-in (fast collapse; only 3 frames)",
+   "easing_css": "cubic-bezier(0.4,0,1,1)",
+   "spring": null,
+   "stagger_ms": 0,
+   "loop_period_ms": null,
+   "samples": {
+    "prop": "scale",
+    "unit": "",
+    "points": [
+     [
+      0,
+      1.0
+     ],
+     [
+      33,
+      0.7
+     ],
+     [
+      50,
+      0.32
+     ]
+    ]
+   },
+   "confidence": "medium",
+   "notes": "Starts ~33 ms after touch-up. At ~0.3 scale the glyph is swapped to the filled thumb (frame at +50 ms is already filled). Feed card: collapse 8.107-8.140 (same)."
+  },
+  {
+   "id": "filled-pop",
+   "name": "Filled thumb pop (overshoot, hold, settle) with tilt",
+   "element": "Like icon (filled)",
+   "start_s": 15.995,
+   "end_s": 16.762,
+   "duration_ms": 767,
+   "delay_from_trigger_ms": 117,
+   "properties": [
+    {
+     "prop": "scale",
+     "from": 0.32,
+     "peak": 1.2,
+     "to": 1.0,
+     "unit": ""
+    },
+    {
+     "prop": "rotate (CCW +, i.e. thumb tips back toward the left)",
+     "from": -12,
+     "peak": 12,
+     "to": 0,
+     "unit": "deg",
+     "notes": "overshoots to -6 deg (clockwise) after settle, then 0"
+    }
+   ],
+   "easing": "Keyframed (Lottie-like), not a single spring: grow 0.32->1.20 in ~167 ms ease-out; hold 1.20 for ~200 ms; return 1.20->1.0 in ~167 ms ease-in-out; rotation swings +12 -> -6 -> 0 over the last ~270 ms.",
+   "easing_css": "grow: cubic-bezier(0.25,0.8,0.4,1); return: cubic-bezier(0.45,0,0.55,1)",
+   "spring": null,
+   "stagger_ms": 0,
+   "loop_period_ms": null,
+   "samples": {
+    "prop": "scale (t from collapse start 15.945)",
+    "unit": "",
+    "points": [
+     [
+      0,
+      1.0
+     ],
+     [
+      33,
+      0.7
+     ],
+     [
+      50,
+      0.32
+     ],
+     [
+      67,
+      0.54
+     ],
+     [
+      83,
+      0.54
+     ],
+     [
+      100,
+      0.84
+     ],
+     [
+      117,
+      0.96
+     ],
+     [
+      133,
+      1.06
+     ],
+     [
+      150,
+      1.06
+     ],
+     [
+      167,
+      1.12
+     ],
+     [
+      183,
+      1.14
+     ],
+     [
+      200,
+      1.18
+     ],
+     [
+      217,
+      1.2
+     ],
+     [
+      300,
+      1.2
+     ],
+     [
+      417,
+      1.2
+     ],
+     [
+      433,
+      1.16
+     ],
+     [
+      467,
+      1.16
+     ],
+     [
+      483,
+      1.14
+     ],
+     [
+      500,
+      1.12
+     ],
+     [
+      533,
+      1.12
+     ],
+     [
+      550,
+      1.06
+     ],
+     [
+      567,
+      1.04
+     ],
+     [
+      583,
+      1.0
+     ],
+     [
+      817,
+      1.0
+     ]
+    ]
+   },
+   "confidence": "medium",
+   "notes": "Rotation samples (CCW +, deg; t from 15.945; fitted in 3 deg steps): [[0, 0], [33, -9], [50, -9], [67, -12], [100, -3], [117, 3], [133, 6], [167, 9], [200, 12], [417, 12], [433, 9], [500, 6], [533, 6], [550, 0], [567, -3], [583, -6], [717, -6], [733, -3], [800, -3], [817, 0]]. Fitting IoU ~0.84 at peak, so the glyph may also deform slightly. Feed card repeat (8.140-8.905) matched within one frame: peak 1.20 at +198 ms from blob, hold to +382 ms, 1.0 at +548 ms. Frame duplicates at 16.012/16.028 and 16.078/16.095 are recorder drops."
+  },
+  {
+   "id": "ray-burst",
+   "name": "Radial ray burst",
+   "element": "Ray burst",
+   "start_s": 16.078,
+   "end_s": 16.495,
+   "duration_ms": 417,
+   "delay_from_trigger_ms": 200,
+   "properties": [
+    {
+     "prop": "outer radius (long rays)",
+     "from": 15.7,
+     "peak": 21.3,
+     "to": 20,
+     "unit": "pt"
+    },
+    {
+     "prop": "inner radius (long rays)",
+     "from": 8.3,
+     "to": 18.3,
+     "unit": "pt"
+    },
+    {
+     "prop": "ray length (long)",
+     "from": 7.3,
+     "to": 1.5,
+     "unit": "pt",
+     "notes": "tail catches up with the head -> ray shrinks into a dot"
+    },
+    {
+     "prop": "opacity",
+     "from": 1,
+     "to": 0,
+     "unit": "",
+     "notes": "full until ~300 ms, fades last ~100 ms while shrinking"
+    }
+   ],
+   "easing": "Head: strong ease-out, reaches max radius in ~130 ms then stops. Tail: ease-out over ~300 ms. Classic trim-path burst.",
+   "easing_css": "head: cubic-bezier(0.1,0.7,0.3,1); tail: cubic-bezier(0.3,0.5,0.4,1)",
+   "spring": null,
+   "stagger_ms": 0,
+   "loop_period_ms": null,
+   "samples": {
+    "prop": "long-ray outer radius (pt) from icon center; t from 8.223 (feed card burst start)",
+    "unit": "pt",
+    "points": [
+     [
+      0,
+      15.7
+     ],
+     [
+      65,
+      20.0
+     ],
+     [
+      132,
+      21.3
+     ],
+     [
+      215,
+      21.0
+     ],
+     [
+      299,
+      21.0
+     ],
+     [
+      365,
+      20.0
+     ]
+    ]
+   },
+   "confidence": "medium",
+   "notes": "Starts when the filled thumb passes ~1.06x (first visible frame already at 8-9 pt inner radius, so it may start 1 frame earlier inside the glyph). Inner-radius samples (pt): [[0, 8.3], [65, 12.0], [132, 14.0], [215, 17.0], [299, 17.7], [365, 18.3]]. Long and short rays start together (no stagger); short rays start ~2 pt further out. Burst is identical on the feed card (8.223-8.638) and 2nd watch page (16.078-16.495)."
+  },
+  {
+   "id": "emoji-variant",
+   "name": "Themed like: thumb -> laughing emoji -> filled thumb (watch page, comedy video)",
+   "element": "Laughing emoji (themed variant)",
+   "start_s": 1.115,
+   "end_s": 2.08,
+   "duration_ms": 965,
+   "delay_from_trigger_ms": 100,
+   "properties": [
+    {
+     "prop": "outline thumb scale",
+     "from": 1.0,
+     "to": 0.3,
+     "unit": "",
+     "notes": "1.115-1.148 (33 ms)"
+    },
+    {
+     "prop": "emoji scale (in)",
+     "from": 0.28,
+     "to": 1.0,
+     "unit": "",
+     "notes": "1.165-1.315, ease-out, no overshoot; emoji 23 pt"
+    },
+    {
+     "prop": "emoji hold",
+     "from": 1.0,
+     "to": 1.0,
+     "unit": "",
+     "notes": "1.315-1.698 (~385 ms), drifts ~1.7 pt left; 2-4 red dots orbit 1.265-1.815"
+    },
+    {
+     "prop": "emoji scale (out)",
+     "from": 1.0,
+     "to": 0.48,
+     "unit": "",
+     "notes": "1.698-1.865, ease-in, ~170 ms"
+    },
+    {
+     "prop": "filled thumb scale",
+     "from": 0.56,
+     "peak": 1.12,
+     "to": 1.0,
+     "unit": "",
+     "notes": "1.865-2.063, peak at +83 ms; tilt -18 -> +9 -> 0 deg (CCW +)"
+    }
+   ],
+   "easing": "Emoji in: ease-out (~cubic-bezier(0.2,0.7,0.3,1)). Emoji out: ease-in. Final thumb: quick overshoot ~12%, no ray burst.",
+   "easing_css": "cubic-bezier(0.2,0.7,0.3,1)",
+   "spring": {
+    "damping_ratio": 0.6,
+    "response_s": 0.25
+   },
+   "stagger_ms": 0,
+   "loop_period_ms": null,
+   "samples": {
+    "prop": "emoji scale-in (t from 1.165)",
+    "unit": "",
+    "points": [
+     [
+      0,
+      0.28
+     ],
+     [
+      17,
+      0.41
+     ],
+     [
+      33,
+      0.59
+     ],
+     [
+      50,
+      0.59
+     ],
+     [
+      67,
+      0.83
+     ],
+     [
+      83,
+      0.88
+     ],
+     [
+      100,
+      0.94
+     ],
+     [
+      117,
+      0.97
+     ],
+     [
+      133,
+      0.99
+     ],
+     [
+      150,
+      1.0
+     ]
+    ]
+   },
+   "confidence": "medium",
+   "notes": "Emoji-out samples (t from 1.698): [[0, 1.0], [17, 0.99], [33, 0.97], [50, 0.96], [67, 0.93], [83, 0.88], [100, 0.84], [117, 0.84], [134, 0.72], [150, 0.57], [167, 0.48]]. Final thumb scale (t from 1.865): [[0, 0.56], [17, 0.8], [33, 0.96], [50, 1.06], [67, 1.08], [83, 1.12], [100, 1.12], [115, 1.08], [132, 1.08], [148, 1.04], [165, 1.04], [182, 1.0], [198, 1.0]]. Spring only describes the final thumb pop. Press pill/ring identical to standard (touch-down 1.015, ring at 1.048)."
+  },
+  {
+   "id": "feed-card-press",
+   "name": "Feed card action-bar highlight",
+   "element": "Press highlight (feed card)",
+   "start_s": 8.023,
+   "end_s": 8.34,
+   "duration_ms": 317,
+   "delay_from_trigger_ms": 0,
+   "properties": [
+    {
+     "prop": "background luminance",
+     "from": 39,
+     "to": 15,
+     "unit": "0-255 (#272727 -> #0F0F0F)"
+    }
+   ],
+   "easing": "Instant on at touch-down; fades ~250 ms ease-out after touch-up (~8.09).",
+   "easing_css": "ease-out",
+   "spring": null,
+   "stagger_ms": 0,
+   "loop_period_ms": null,
+   "samples": {
+    "prop": "bar bg luminance, t from touch-down 9.155 (unlike tap, clean bg)",
+    "unit": "",
+    "points": [
+     [
+      0,
+      39
+     ],
+     [
+      67,
+      39
+     ],
+     [
+      83,
+      35
+     ],
+     [
+      100,
+      32
+     ],
+     [
+      117,
+      29
+     ],
+     [
+      133,
+      26
+     ],
+     [
+      150,
+      25
+     ],
+     [
+      183,
+      24
+     ],
+     [
+      200,
+      21
+     ],
+     [
+      233,
+      20
+     ],
+     [
+      267,
+      18
+     ],
+     [
+      283,
+      17
+     ],
+     [
+      317,
+      15
+     ]
+    ]
+   },
+   "confidence": "high",
+   "notes": "Same highlight appears for like and unlike on the card. A 40 pt circle ring around the like icon is visible during the fade."
+  },
+  {
+   "id": "dislike-ripple",
+   "name": "Dislike ripple (feed card) + instant glyph swap",
+   "element": "Dislike ripple (feed card)",
+   "start_s": 9.687,
+   "end_s": 9.97,
+   "duration_ms": 283,
+   "delay_from_trigger_ms": 0,
+   "properties": [
+    {
+     "prop": "diameter",
+     "from": 0,
+     "to": 40,
+     "unit": "pt",
+     "notes": "origin = touch point (slightly left of icon center), recenters on icon"
+    },
+    {
+     "prop": "fill luminance",
+     "from": 63,
+     "to": 15,
+     "unit": "0-255 (#3F3F3F -> bg)",
+     "notes": "full until ~9.82, fades ~150 ms"
+    }
+   ],
+   "easing": "Expansion ease-out ~200 ms; fade ~150 ms overlapping the end.",
+   "easing_css": "cubic-bezier(0.2,0,0,1)",
+   "spring": null,
+   "stagger_ms": 0,
+   "loop_period_ms": null,
+   "samples": {
+    "prop": "ripple diameter (pt) once larger than the icon, t from 9.753",
+    "unit": "pt",
+    "points": [
+     [
+      0,
+      25.0
+     ],
+     [
+      17,
+      25.7
+     ],
+     [
+      34,
+      28.0
+     ],
+     [
+      50,
+      31.3
+     ],
+     [
+      67,
+      34.0
+     ],
+     [
+      84,
+      36.7
+     ],
+     [
+      100,
+      38.3
+     ],
+     [
+      117,
+      39.7
+     ],
+     [
+      134,
+      40.0
+     ]
+    ]
+   },
+   "confidence": "medium",
+   "notes": "Glyph swaps outline->filled instantly at 9.753 (no scale). Un-dislike at 10.487 is the same ripple (expansion 10.487-10.653, fade to 10.72) with instant swap back to outline."
+  },
+  {
+   "id": "dislike-watch",
+   "name": "Dislike / un-dislike / unlike on watch page",
+   "element": "Like icon (outline)",
+   "start_s": 3.345,
+   "end_s": 3.795,
+   "duration_ms": 450,
+   "delay_from_trigger_ms": 0,
+   "properties": [
+    {
+     "prop": "glyph",
+     "from": "outline",
+     "to": "filled",
+     "unit": "",
+     "notes": "instant swap at 3.445 (~33 ms after touch-up), no scale/rotation"
+    }
+   ],
+   "easing": "none (cut)",
+   "easing_css": "steps(1)",
+   "spring": null,
+   "stagger_ms": 0,
+   "loop_period_ms": null,
+   "samples": {
+    "prop": "press ring luminance, t from touch-up 3.412",
+    "unit": "",
+    "points": [
+     [
+      0,
+      71
+     ],
+     [
+      17,
+      66
+     ],
+     [
+      33,
+      63
+     ],
+     [
+      50,
+      58
+     ],
+     [
+      67,
+      55
+     ],
+     [
+      83,
+      50
+     ],
+     [
+      100,
+      46
+     ],
+     [
+      117,
+      43
+     ],
+     [
+      133,
+      39
+     ],
+     [
+      150,
+      35
+     ],
+     [
+      167,
+      32
+     ],
+     [
+      183,
+      26
+     ],
+     [
+      200,
+      26
+     ],
+     [
+      217,
+      21
+     ],
+     [
+      233,
+      18
+     ],
+     [
+      250,
+      14
+     ],
+     [
+      267,
+      11
+     ],
+     [
+      283,
+      9
+     ],
+     [
+      300,
+      7
+     ],
+     [
+      317,
+      4
+     ],
+     [
+      333,
+      4
+     ],
+     [
+      350,
+      2
+     ],
+     [
+      367,
+      1
+     ],
+     [
+      383,
+      0
+     ]
+    ]
+   },
+   "confidence": "high",
+   "notes": "Only the press capsule/ring animates. Same for un-dislike (4.162/4.212) and unlike (2.680; swap to outline at 2.763)."
+  }
+ ],
+ "keyframe_images": [
+  {
+   "t": 16.162,
+   "file": "img/v2_standard-like-sequence.png",
+   "caption": "Standard like: rest -> collapse (+117 ms) -> 1.2x peak with ray burst -> ray tails -> liked rest"
+  },
+  {
+   "t": 16.162,
+   "file": "img/v2_burst-peak.png",
+   "caption": "Peak: filled thumb at 1.20x tilted back ~12 deg, 10 alternating red/pink rays"
+  },
+  {
+   "t": 1.432,
+   "file": "img/v2_emoji-like-sequence.png",
+   "caption": "Themed like (comedy video): pressed capsule -> emoji in -> emoji with orbiting red dots -> emoji out -> thumb 1.12x -> rest"
+  },
+  {
+   "t": 9.82,
+   "file": "img/v2_feed-card-states.png",
+   "caption": "Feed card: card-wide press highlight, like burst, dislike ripple, disliked rest"
+  }
+ ],
+ "observations": [
+  "Like animation fires on touch-up: ~33 ms after release the outline collapses; touch-down only shows the press highlight.",
+  "The like animation varies by context: on a comedy podcast watch page the thumb morphs into a laughing-face emoji with orbiting red dots (~0.95 s total, no ray burst). On the feed card and on another watch page it is the standard pop + 10-ray burst (~0.82 s from collapse to settled rotation). Probably YouTube's content-themed like animations; that cause is a guess.",
+  "Burst colors are YouTube red #FF0033 (long rays) and pink #FF2893 (short rays). Everything else is monochrome white on #000000 (watch) or #0F0F0F (feed).",
+  "Unlike, dislike and un-dislike use an instant glyph swap. Only the press feedback animates (capsule + fading 1 pt ring on the watch page; card-wide highlight or 40 pt ripple on the feed card).",
+  "Counts ('15K', '28K likes') did not change, because they are rounded. No number roll animation.",
+  "The thumb's rotation pivot looks like roughly the glyph center (centroid moves under 2 pt)."
+ ],
+ "open_questions": [
+  "Whether the laughing-emoji variant is driven by video category or some other signal can't be told from the recording.",
+  "The filled thumb's shape may deform a little during the pop (template fit IoU ~0.84 at peak). Scale/rotation is an approximation of a Lottie animation.",
+  "Some frames are duplicated by the recorder (e.g. 16.012/16.028, 1.198/1.215), so per-frame timings are +/-17 ms.",
+  "Haptics can't be observed. On iOS, YouTube likely fires a light impact on like.",
+  "Watch-page capsule measured 41x48.7 pt. It may be a 41 pt circle stretched by the row height. Check against the YouTube iOS layout if precision matters."
+ ]
+}

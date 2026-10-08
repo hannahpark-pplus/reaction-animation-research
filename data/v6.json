@@ -1,0 +1,109 @@
+{
+ "id": "v6", "app": "Reddit", "video": "ScreenRecording_10-08-2026 11-50-49_1.MP4", "fps": 60,
+ "summary": "Reddit feed (light mode). Tapping upvote fills the arrow Reddit-orange and makes it hop up about 14 pt, past the top of the vote pill, then drop back with a small undershoot. All of that takes about 400 ms. Downvote does the same thing in purple, pointing down, with a smaller ~6 pt dip. Removing a vote is an instant one-frame swap. The score never animates: it switches value and color on the same frame as the arrow fill, and the pill background never changes.",
+ "trigger": "Single tap on the up-arrow or down-arrow in the post's vote pill",
+ "interactions": [
+  {"t": 0.78, "label": "Upvote (661 -> 662)"},
+  {"t": 1.83, "label": "Remove upvote (662 -> 661), instant"},
+  {"t": 2.51, "label": "Downvote (661 -> 660)"},
+  {"t": 3.445, "label": "Remove downvote (660 -> 661), instant"},
+  {"t": 4.18, "label": "Upvote (661 -> 662), same as 0.78"},
+  {"t": 5.077, "label": "Remove upvote (662 -> 661), instant"},
+  {"t": 5.21, "label": "Neutral score changes 661 -> 662 without a tap (looks like a server count reconcile), instant"}
+ ],
+ "representative_cycle": {"start": 0.765, "end": 1.17},
+ "elements": [
+  {"name": "Vote pill", "w_pt": 94, "h_pt": 28, "radius_pt": 14, "fill": "#FFFFFF", "notes": "Capsule with a 1 px light-grey stroke (~#E4E4E4). Holds the up-arrow, the score, a thin divider and the down-arrow. Fill and stroke do not change in any vote state. Size is approximate, plus or minus 1 pt."},
+  {"name": "Up-arrow icon", "w_pt": 12.7, "h_pt": 15, "radius_pt": 0, "fill": "#FF4500", "notes": "At rest it is an outline arrow, #1D1D20. Upvoted, it becomes a solid filled arrow, #FF4500 (measured 255,69,0). The outline and filled glyphs share the same bounding box. Full-res bounding box x 87-124 px, top 2127 px."},
+  {"name": "Score label", "w_pt": 20.7, "h_pt": 9, "radius_pt": 0, "fill": "#1D1D20", "notes": "Semibold, ~cap height 9 pt. Neutral color #1D1D20. Upvoted color ~#AE2B00 (dark orange, measured core 174,43,0; medium confidence because of anti-aliasing). Downvoted color #6A5BFE. The digits swap instantly with no roll and no crossfade."},
+  {"name": "Down-arrow icon", "w_pt": 12.7, "h_pt": 15, "radius_pt": 0, "fill": "#6A5BFE", "notes": "At rest it is an outline arrow, #1D1D20. Downvoted, it becomes a solid filled arrow, #6A5BFE (measured 106,91,254), close to Reddit's #6A5CFF. Its x position moves about 1.7 pt (5 px) whenever the score text width changes (for example 661 vs 662). That shift is an instant layout reflow, not animated."}
+ ],
+ "animations": [
+  {"id": "upvote-hop", "name": "Upvote arrow hop", "element": "Up-arrow icon",
+   "start_s": 0.765, "end_s": 1.165, "duration_ms": 400, "delay_from_trigger_ms": 0,
+   "properties": [
+    {"prop": "translateY", "from": 0, "peak": -14.3, "to": 0, "unit": "pt"},
+    {"prop": "translateY_undershoot", "from": -14.3, "peak": 2.7, "to": 0, "unit": "pt"},
+    {"prop": "scale", "from": 1, "to": 1, "unit": ""},
+    {"prop": "fill", "from": "outline #1D1D20", "to": "solid #FF4500", "unit": "instant swap on frame 1"}
+   ],
+   "easing": "Three keyframe segments: (1) 0 to -14.3 pt over 0-85 ms with a strong ease-out (closely matches easeOutCubic: 0.49 at 20%, 0.77 at 40%, 0.91 at 60%); (2) a short apex dwell, then a fall from -14.3 to +2.7 pt over 85-317 ms with an ease-in-out (slow start, fastest around 230-250 ms); (3) a return from +2.7 to 0 pt over 317-400 ms with an ease-out. It reads as a quick jump followed by a heavier fall and a soft landing. The arrow is not clipped by the pill and briefly overlaps the poster above it.",
+   "easing_css": "seg1 cubic-bezier(0.33,1,0.68,1) 85ms; seg2 cubic-bezier(0.45,0,0.55,1) 232ms; seg3 cubic-bezier(0.33,1,0.68,1) 83ms",
+   "spring": null,
+   "stagger_ms": 0, "loop_period_ms": null,
+   "samples": {"prop": "translateY", "unit": "pt", "points": [[0,0],[17,-7.0],[33,-11.0],[50,-13.0],[67,-13.7],[83,-14.3],[100,-14.3],[117,-14.0],[133,-13.3],[150,-12.0],[167,-10.3],[183,-9.0],[200,-7.7],[217,-6.3],[233,-4.0],[250,-0.7],[267,1.3],[283,2.0],[300,2.3],[317,2.7],[333,1.7],[350,1.0],[367,0.3],[383,0.3],[400,0]]},
+   "confidence": "high",
+   "notes": "Measured by tracking the top edge of the orange-pixel bounding box at full resolution, 60 fps. Accuracy is about ±1 px (±0.3 pt). The repeat at 4.178-4.577 s matches frame for frame. Width and height stay at 38x45 px on every frame, so there is no scale bounce. No particles, burst, glow or ring appear anywhere in the crop. t=0 is the last rest frame (0.765 s); the first changed frame (0.782 s) already shows the solid fill and -7 pt."},
+  {"id": "upvote-score", "name": "Score update on upvote", "element": "Score label",
+   "start_s": 0.782, "end_s": 0.782, "duration_ms": 0, "delay_from_trigger_ms": 0,
+   "properties": [
+    {"prop": "text", "from": "661", "to": "662", "unit": ""},
+    {"prop": "color", "from": "#1D1D20", "to": "#AE2B00", "unit": ""}
+   ],
+   "easing": "none (hard cut)", "easing_css": "steps(1,start)", "spring": null,
+   "stagger_ms": 0, "loop_period_ms": null,
+   "samples": {"prop": "color_r", "unit": "0-255", "points": [[-17,33],[0,169],[17,169],[400,169]]},
+   "confidence": "high",
+   "notes": "The text top and bottom stay at 2138-2164 px on every frame, so the digits do not roll or slide. The color goes from the old value to the new one within a single frame, so there is no crossfade."},
+  {"id": "downvote-dip", "name": "Downvote arrow dip", "element": "Down-arrow icon",
+   "start_s": 2.497, "end_s": 2.88, "duration_ms": 383, "delay_from_trigger_ms": 0,
+   "properties": [
+    {"prop": "translateY", "from": 0, "peak": 6.3, "to": 0, "unit": "pt"},
+    {"prop": "translateY_overshoot", "from": 6.3, "peak": -1.0, "to": 0, "unit": "pt"},
+    {"prop": "scale", "from": 1, "to": 1, "unit": ""},
+    {"prop": "fill", "from": "outline #1D1D20", "to": "solid #6A5BFE", "unit": "instant swap on frame 1"}
+   ],
+   "easing": "Mirror of the upvote hop at about 45% of the travel: down 6.3 pt over 0-85 ms with an ease-out, a dwell at the bottom until ~117 ms, a return over 117-300 ms that overshoots to -1 pt above rest, then a settle by ~370 ms. Unlike the upvote, the first frame shows the fill and color but almost no movement (+0.3 pt).",
+   "easing_css": "seg1 cubic-bezier(0.33,1,0.68,1) 85ms; seg2 cubic-bezier(0.45,0,0.55,1) 215ms; seg3 cubic-bezier(0.33,1,0.68,1) 70ms",
+   "spring": null,
+   "stagger_ms": 0, "loop_period_ms": null,
+   "samples": {"prop": "translateY", "unit": "pt", "points": [[0,0],[17,0.3],[33,3.0],[50,5.0],[67,5.7],[83,6.3],[100,6.3],[117,6.3],[133,6.0],[150,5.3],[167,4.7],[183,4.0],[200,3.3],[217,3.0],[233,1.7],[250,0.3],[267,-0.3],[283,-0.7],[300,-1.0],[317,-1.0],[333,-0.7],[350,-0.3],[367,0],[383,0]]},
+   "confidence": "medium",
+   "notes": "Tracked from the top of the left half of the purple arrowhead, because the crop slice ended mid-icon. Vertical travel is still accurate to about ±0.3 pt. There is only one downvote in the recording, so this curve could not be checked against a repeat. No scale change and no particles."},
+  {"id": "downvote-score", "name": "Score update on downvote", "element": "Score label",
+   "start_s": 2.513, "end_s": 2.513, "duration_ms": 0, "delay_from_trigger_ms": 0,
+   "properties": [
+    {"prop": "text", "from": "661", "to": "660", "unit": ""},
+    {"prop": "color", "from": "#1D1D20", "to": "#6A5BFE", "unit": ""}
+   ],
+   "easing": "none (hard cut)", "easing_css": "steps(1,start)", "spring": null,
+   "stagger_ms": 0, "loop_period_ms": null,
+   "samples": {"prop": "color_b", "unit": "0-255", "points": [[-17,35],[0,224],[383,225]]},
+   "confidence": "high", "notes": "This is the same frame as the arrow fill swap."},
+  {"id": "unvote", "name": "Remove vote (un-upvote / un-downvote)", "element": "Up-arrow icon / Down-arrow icon / Score label",
+   "start_s": 1.83, "end_s": 1.83, "duration_ms": 0, "delay_from_trigger_ms": 0,
+   "properties": [
+    {"prop": "fill", "from": "solid colored", "to": "outline #1D1D20", "unit": ""},
+    {"prop": "score", "from": "662 / 660", "to": "661", "unit": ""},
+    {"prop": "translateY", "from": 0, "to": 0, "unit": "pt"}
+   ],
+   "easing": "none (hard cut, single frame)", "easing_css": "steps(1,start)", "spring": null,
+   "stagger_ms": 0, "loop_period_ms": null,
+   "samples": {"prop": "arrow_top_offset", "unit": "pt", "points": [[-17,0],[0,0],[17,0],[83,0]]},
+   "confidence": "high",
+   "notes": "Checked at 1.83 s (un-upvote), 3.445 s (un-downvote) and 5.077 s (un-upvote). In every case the icon, number and color change on one frame with zero motion."}
+ ],
+ "keyframe_images": [
+  {"t": 0.698, "file": "img/v6_rest.png", "caption": "Rest: outline arrows, 661 in near-black"},
+  {"t": 0.865, "file": "img/v6_upvote-peak.png", "caption": "Upvote apex: solid #FF4500 arrow raised 14.3 pt, overlapping the poster above; score already 662 in dark orange"},
+  {"t": 1.082, "file": "img/v6_upvote-undershoot.png", "caption": "Upvote landing undershoot: arrow 2.7 pt below rest"},
+  {"t": 2.613, "file": "img/v6_downvote-peak.png", "caption": "Downvote bottom of dip: solid purple arrow 6.3 pt below rest, score 660 in purple"},
+  {"t": 2.997, "file": "img/v6_downvoted.png", "caption": "Downvoted, settled"}
+ ],
+ "observations": [
+  "The only motion is a vertical translate of the arrow icon in the direction it points. There is no scale bounce, rotation, particle burst or confetti.",
+  "The upvote travel (14.3 pt) is about 2.3x the downvote travel (6.3 pt). Upvote feels celebratory and downvote feels muted.",
+  "The arrow is allowed to overflow the pill bounds (no clipping). At the apex it overlaps the bottom of the image above it.",
+  "The fill swap (outline to solid), the score text and the score color all change on the first frame after the tap. Motion follows on top of the already-swapped state.",
+  "The vote pill background and border stay white with a grey stroke in every state. The color lives only in the arrow and the number.",
+  "Upvoted score text is a darker orange (~#AE2B00) than the arrow (#FF4500), probably for contrast. Downvoted text and arrow share the same purple, #6A5BFE.",
+  "Removing a vote has no animation at all.",
+  "At 5.21 s the neutral score goes from 661 to 662 with no tap, probably a server count reconcile. It is a hard cut, and the down-arrow reflows 1.7 pt to the right because the text gets wider."
+ ],
+ "open_questions": [
+  "Whether there is a haptic on upvote (it can't be seen in the video).",
+  "The exact rise curve in the first 17 ms. The first changed frame is already at -7 pt (about half the travel), so the motion may start before the first visible frame, or the rise is extremely fast.",
+  "The downvote curve comes from one occurrence only.",
+  "Score label colors are measured from anti-aliased 9 pt text, so the exact token values may differ slightly. Likely Reddit tokens: #FF4500 / #D93A00-family text and #6A5CFF."
+ ]
+}
